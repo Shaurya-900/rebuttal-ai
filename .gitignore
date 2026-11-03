@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+consent.html
+node_modules/
+.next/
+dist/
+coverage/
+*.log
+.DS_Store
+.llm-cache/
+*.tsbuildinfo
+next-env.d.ts
