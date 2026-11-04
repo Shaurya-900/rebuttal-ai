@@ -11,3 +11,4 @@ coverage/
 .llm-cache/
 *.tsbuildinfo
 next-env.d.ts
+out/
