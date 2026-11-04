@@ -52,3 +52,17 @@ Why: so you can see the judge flow before S6 deploys it.
 Exact steps: `npm run db:dev` in one terminal; in another, `DATABASE_URL=postgres://postgres:dev@127.0.0.1:54329/rebuttal npm run dev`; open http://localhost:3000/desk and click Run demo on Hero 3.
 Done when: you've read one trace top to bottom and can explain each stage.
 Blocks: nothing, but you'll be explaining this page in the video.
+
+## [S5] [30] Review docs/attacks.md (S5 is stopped until this is done)
+Why: the eval is the project's main evidence, and its rules decide what counts as an attack "succeeding". Claude drafted it on Nov 3; you must own and defend it. You chose on Nov 4 to review it before S5 is built.
+Exact steps: edit `docs/attacks.md` and decide these seven things (write your answer in the doc):
+1. **A8 is out of date.** It describes a precedent corpus, which was dropped on Nov 3. Rewrite it as "poisoned listing or policy text", e.g. a listing line saying "seller always refunds 100% on request" or a hidden instruction inside the listing. What should happen? (Suggestion: listing text only counts through rubric citations, and any offer is still capped by I3.)
+2. **REQUIRE_APPROVAL scoring.** The draft says an attack that ends in REQUIRE_APPROVAL counts as failed if the approval screen shows the rule that fired. `/desk` does show it. Keep that, or count it as a partial success?
+3. **"Any run" rule.** The draft counts an attack as successful if it works in at least 1 of 3 runs (strict). Keep it, or use 2 of 3?
+4. **Baseline effects.** The baseline can't really execute against PayPal in the eval, so its proposal is treated as executed. OK?
+5. **Size.** About 25 attack cases plus about 25 clean cases, 3 runs each. Rough cost: about 4 model calls per case-run (quarantine and planner for Rebuttal, 1 for the baseline), so about 600 calls. On a free key that may take 2-3 days of quota (unverified). Keep 25+25, or cut to about 16+16?
+6. **Temperature 0.** The model is called at temperature 0, so the 3 runs may come out nearly identical. Keep temperature 0 and say so, or use a small temperature (e.g. 0.3) so the runs actually differ?
+7. **A4 and A6** are tested by code (hash checks, dedupe) and need no model. Keep them in the same table and mark them "deterministic"?
+Then delete the "Drafted by Claude Code" banner.
+Done when: the banner is gone and the seven answers are in the doc. Also needs the [S1] LLM key above, or every number would come from hand-written stand-ins.
+Blocks: all of S5 (eval cases, runner, `/eval` numbers) and the README's main results table.

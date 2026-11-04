@@ -197,6 +197,9 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `npm run db:dev`: local Postgres in `.devdb/` for `npm run dev`. Browser-checked locally: all 4 runs, PDF, wrong/right password, approve/reject rows, 375 px width.
 - Not built: running the agent on a real pool dispute from `/desk` (needs S0 disputes, plus a mapping from a real dispute id to its synthetic records).
 
+### S5 stopped (Nov 4 night)
+- Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].
+
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.
 - Next: a fresh, never-escalated dispute -> `require-evidence` -> `provide-evidence`; try the evidence shape the dispute requests, `PROOF_OF_FULFILLMENT`, and a plain curl; capture the `debug_id`. See step S0 in `docs/BUILD-PLAN.md`.
