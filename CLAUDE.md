@@ -171,7 +171,7 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - Zod env validation; Drizzle schema and migrations (`dispute`, `action_intent`, `outbox`, `webhook_event`, `event_log` with an append-only trigger); intent and outbox written in one transaction; lease claim with `FOR UPDATE SKIP LOCKED`.
 - Webhook ingestion logic (Zod plus PayPal's verify-webhook-signature), tested with a stand-in verifier. The route and the real verification call are untested.
 - New env var `PAYPAL_WEBHOOK_ID`, needed once a public URL exists.
-- Not built yet: executor with reconcile, Render deploy.
+- Not built yet: Render deploy.
 
 ### S1 done (Nov 4 afternoon; 38 tests pass)
 - `src/lib/llm.ts`: JSON-only calls, Zod-validated, Gemini/Groq fallback on 429, record/replay cache in `fixtures/llm-cache/`. Provider calls are **unverified** (no key yet).
@@ -183,6 +183,12 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `src/lib/paypal/`: `disputes.ts` (get, list, action requests; every action re-fetches the dispute and POSTs to the HATEOAS href or refuses), `orders.ts` (create, get, capture, get capture), `sync.ts` (webhook events and the 30 s poll both re-fetch and upsert the dispute), `src/worker.ts` loop.
 - `/store` checkout (server action -> PayPal approve -> `/store/return` captures idempotently). `npm run sandbox:order` verifies create -> approve -> capture with a human buyer login.
 - Verified vs unverified per call: table in `docs/paypal-notes.md` ("S2 adapter"). No dispute action (offer, accept, message, evidence) has succeeded against the sandbox yet.
+
+### S3 done (Nov 4 evening; 60 unit tests pass)
+- `src/lib/exec/executor.ts`: claim with lease -> if attempt > 1, RECONCILE -> re-gate on a fresh snapshot -> send with a stable PayPal-Request-Id and a `[ref]` tag -> confirm, fenced on the lease. Unknown outcomes (timeouts, 5xx) never retry blind. `paypal-effects.ts` has a reconcile strategy per action; refunds rely on the idempotency key.
+- New `exhibit` table (migration 0002) for evidence bytes and hashes (I8). `src/worker.ts` now runs the executor.
+- `npm run chaos` (real Postgres via embedded-postgres, FAKE PayPal): N=200 messages and N=200 refunds, ~400 kill -9s, **0 duplicates, 0 missing**. The negative control (a fake PayPal that ignores the key) gives 19 double refunds out of 50, so refunds depend on PayPal honouring PayPal-Request-Id (unverified). Details: `docs/chaos/README.md`.
+- Chaos found two real bugs before they reached the sandbox: an `any(array)` SQL query that failed on Postgres, and http links being double-prefixed.
 
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.

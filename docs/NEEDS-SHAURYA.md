@@ -17,6 +17,12 @@ Exact steps: run `npm run sandbox:order`, open the printed link, log in as the s
 Done when: "captured: capture id …" and "SAME: idempotent" are in the notes.
 Blocks: marking capture VERIFIED; it also gives you a payment for the S0 dispute.
 
+## [S3] [10, after sandbox:order] Check that PayPal honours PayPal-Request-Id on refunds
+Why: refund exactly-once rests on it (docs/chaos/README.md); without it the chaos control double-refunds 19/50.
+Exact steps: after `npm run sandbox:order` prints a capture id, tell Claude Code that id. It will run two 0.01 USD refunds with the same PayPal-Request-Id and check that the second returns the first refund's id. (Two cents of sandbox money at most.)
+Done when: the result is in `docs/paypal-notes.md`.
+Blocks: saying "exactly-once refunds" without the word "simulated".
+
 ## [S2] [5 each, after S0] Run one dispute action per fresh INQUIRY dispute
 Why: no offer/accept/message call has succeeded yet. Each one changes or closes the dispute, so use a dispute you don't need for the demo.
 Exact steps: `SANDBOX_MUTATE_DISPUTE_ID=PP-R-... SANDBOX_MUTATE_ACTION=make_offer npm run test:sandbox` (then `send_message` on the same dispute; `accept_claim` last, since it closes it).

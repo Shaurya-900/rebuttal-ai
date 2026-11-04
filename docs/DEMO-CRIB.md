@@ -13,7 +13,9 @@
 - **PayPal adapter** (`src/lib/paypal/`): every action re-reads the dispute and uses the link PayPal gives. No link, nothing sent.
 - **Sync**: webhooks and a 30 s poll both re-fetch the dispute; duplicate webhooks are stored once.
 - **/store**: real sandbox checkout (create -> approve on PayPal -> capture).
-- Not built yet: executor with reconcile, UI, eval run.
+- **Executor** (`src/lib/exec/executor.ts`): after a crash it asks PayPal "did this already happen?" (reconcile) before sending. Retries reuse the same PayPal-Request-Id, and the firewall runs again on fresh data right before sending.
+- **Chaos** (`npm run chaos`): kill -9 hundreds of times; count effects per intent on a fake PayPal.
+- Not built yet: UI, eval run.
 
 ## One sentence per invariant
 - I1: never refund or offer more than was captured minus what is already refunded or pending.
@@ -31,15 +33,19 @@
 | Number | Status |
 | --- | --- |
 | Firewall: 9 rules broken one at a time, all caught by tests | real (run Nov 4) |
-| Unit tests: 47 passing; real-sandbox checks: 5 passing | real (run Nov 4, after S2) |
+| Unit tests: 60 passing; real-sandbox checks: 5 passing | real (run Nov 4, after S3) |
 | Hero decisions: 1 FIGHT (score 85), 2 OFFER $3, 3 FIGHT + baseline's $500 refund DENIED (I1) | real code, but LLM answers are **hand-written stand-ins**. Don't say "the model did X" until re-recorded |
 | Maturation delay (dispute creation -> first action link) | not measured yet. A hand-made dispute already had action links 15 min after creation (first check). |
 | provide-evidence | **500 on the escalated dispute** (debug_id f649595c408c8). Untested on a fresh one. |
 | Orders honor PayPal-Request-Id (same id -> same order) | real (sandbox, Nov 4) |
 | Dispute actions (offer, accept, message) through our adapter | **not yet run** against the sandbox |
-| Attack success rates, chaos N | do not exist yet |
+| Chaos (FAKE PayPal, real Postgres): messages N=200, refunds N=200, ~400 kill -9s, 0 duplicates, 0 missing | real (Nov 4). Say "against a simulated PayPal" |
+| Chaos negative control: a PayPal that ignores the idempotency key -> 19/50 double refunds | real (Nov 4). It shows the test can catch a double-send |
+| Chaos against the real sandbox | does not exist yet |
+| Attack success rates | do not exist yet |
 
 ## Likely judge questions (honest answers)
 1. **"Isn't this what Chargeflow does?"** Yes, commercial tools exist; we credit them. Ours is open source, gates every money action in code, and publishes its attack evaluation.
 2. **"Can a buyer still trick it?"** Less easily: buyer text is reduced to fixed fields before the planner sees it, and the firewall caps any action. Enums reduce risk but do not remove it; our eval measures only the attack classes we wrote.
 3. **"Is this real PayPal?"** Real sandbox API calls. Disputes were created by hand (API creation was blocked), and simulator endpoints are labelled. All buyers, carriers and emails are synthetic.
+4. **"How do you know it never refunds twice?"** Chaos test: about 400 kill -9s, 0 duplicates against a simulated PayPal. For refunds that relies on PayPal honouring PayPal-Request-Id, and we say so; the deliberately broken control produced 19 double refunds out of 50.
