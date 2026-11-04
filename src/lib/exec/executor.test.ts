@@ -8,7 +8,7 @@ import { dispute } from "../db/schema";
 import { DEFAULT_POLICY, type ProposedAction, type Snapshot } from "../firewall/types";
 import { PayPalError } from "../paypal/client";
 import { executeNext, refFor, type Effects } from "./executor";
-import { claimNext, recordDecision, type Db } from "./intents";
+import { answerApproval, claimNext, recordDecision, type Db } from "./intents";
 
 let db: Db;
 const D = "PP-R-EXEC-1";
@@ -25,7 +25,7 @@ beforeEach(async () => {
 });
 
 /** Fake PayPal. `effects` counts real effects per ref; `idempotent` models PayPal-Request-Id replay. */
-function fakePaypal(over: Partial<{ links: string[]; sendError: () => Error | null; idempotent: boolean }> = {}) {
+function fakePaypal(over: Partial<{ links: string[]; sendError: () => Error | null; idempotent: boolean; buyerDisputes60d: number }> = {}) {
   const effects = new Map<string, number>();
   const seenRequestIds = new Set<string>();
   let sends = 0;
@@ -34,7 +34,7 @@ function fakePaypal(over: Partial<{ links: string[]; sendError: () => Error | nu
       return {
         dispute: { id: D, status: "WAITING_FOR_SELLER_RESPONSE", links: over.links ?? ["self", "send_message"], sellerResponseDueMs: Date.UTC(2026, 10, 20), amountCents: 1000, currency: "USD", orderId: "CAP" },
         capture: { amountCents: 1000, currency: "USD" }, refundedCents: 0, pendingRefundCents: 0, refundsTodayCents: 0, refundsToBuyer30dCents: 0,
-        buyerDisputes60d: 1, executed: new Set(), evidenceStore: new Map(), exhibitBytesSha256: new Map(),
+        buyerDisputes60d: over.buyerDisputes60d ?? 1, executed: new Set(), evidenceStore: new Map(), exhibitBytesSha256: new Map(),
       };
     },
     async reconcile(a, ref) {
@@ -139,5 +139,40 @@ describe("executor", () => {
   it("ref is stable per idempotency key", () => {
     expect(refFor("a|b|c")).toBe(refFor("a|b|c"));
     expect(refFor("a|b|c")).not.toBe(refFor("a|b|d"));
+  });
+});
+
+describe("seller approval", () => {
+  const needs = { kind: "REQUIRE_APPROVAL" as const, rule: "I10", fired: [{ rule: "I10", outcome: "REQUIRE_APPROVAL" as const }] };
+
+  it("a PROPOSED intent is not sent until the seller approves; then it is sent once", async () => {
+    const p = fakePaypal({ links: ["self"], buyerDisputes60d: 3 });
+    const id = (await recordDecision(db, refund, needs))!;
+    expect(await executeNext(db, "w1", p.fx, opts)).toEqual({ kind: "idle" });
+    expect(await answerApproval(db, id, "approve")).toBe(true);
+    expect(await answerApproval(db, id, "approve")).toBe(false); // only PROPOSED moves
+    expect(await executeNext(db, "w1", p.fx, opts)).toMatchObject({ kind: "confirmed", via: "send" });
+    expect(p.sends()).toBe(1);
+  });
+
+  it("reject -> FAILED, never sent", async () => {
+    const p = fakePaypal({ links: ["self"], buyerDisputes60d: 3 });
+    const id = (await recordDecision(db, refund, needs))!;
+    expect(await answerApproval(db, id, "reject")).toBe(true);
+    expect(await executeNext(db, "w1", p.fx, opts)).toEqual({ kind: "idle" });
+    expect((await status())!.status).toBe("FAILED");
+    expect(p.sends()).toBe(0);
+  });
+
+  it("auto-ALLOWed, but fresh state now needs approval (3rd dispute): parked for the seller, not sent", async () => {
+    const p = fakePaypal({ links: ["self"], buyerDisputes60d: 3 });
+    const id = (await recordDecision(db, refund, allow))!;
+    expect(await executeNext(db, "w1", p.fx, opts)).toEqual({ kind: "needs_approval", intentId: id, rule: "I10" });
+    expect((await status())!.status).toBe("PROPOSED");
+    expect(await executeNext(db, "w1", p.fx, opts)).toEqual({ kind: "idle" });
+    expect(p.sends()).toBe(0);
+    await answerApproval(db, id, "approve");
+    expect(await executeNext(db, "w1", p.fx, opts)).toMatchObject({ kind: "confirmed", via: "send" });
+    expect(p.sends()).toBe(1);
   });
 });

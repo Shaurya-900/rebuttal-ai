@@ -40,7 +40,7 @@ export async function recordDecision(db: Db, action: ProposedAction, decision: D
   });
 }
 
-export type Claimed = { id: number; disputeId: string; actionType: string; params: unknown; attempt: number; idempotencyKey: string };
+export type Claimed = { id: number; disputeId: string; actionType: string; params: unknown; attempt: number; idempotencyKey: string; humanApproved: boolean };
 
 /**
  * Claims one sendable intent with a lease. attempt > 1 means a previous worker died mid-send:
@@ -60,7 +60,7 @@ export async function claimNext(db: Db, owner: string, leaseMs: number): Promise
     set status = 'SENDING', lease_owner = ${owner}, lease_expires_at = now() + ${leaseMs} * interval '1 millisecond',
         attempt = i.attempt + 1, updated_at = now()
     from next where i.id = next.id
-    returning i.id, i.dispute_id, i.action_type, i.params, i.attempt, i.idempotency_key`);
+    returning i.id, i.dispute_id, i.action_type, i.params, i.attempt, i.idempotency_key, i.approved_at`);
   const row = (r as unknown as { rows: Record<string, unknown>[] }).rows[0];
   if (!row) return null;
   return {
@@ -70,5 +70,28 @@ export async function claimNext(db: Db, owner: string, leaseMs: number): Promise
     params: row.params,
     attempt: Number(row.attempt),
     idempotencyKey: String(row.idempotency_key),
+    humanApproved: row.approved_at != null,
   };
+}
+
+/**
+ * The seller's answer to a REQUIRE_APPROVAL intent. Only PROPOSED intents move. Approve -> APPROVED + outbox row (the
+ * executor still re-gates on fresh PayPal state; approval satisfies REQUIRE_APPROVAL only, never a DENY).
+ * Reject -> FAILED. Returns false if the intent was not PROPOSED (already answered, or never needed approval).
+ */
+export async function answerApproval(db: Db, intentId: number, answer: "approve" | "reject"): Promise<boolean> {
+  return db.transaction(async (tx) => {
+    const r = await tx.execute(sql`
+      update action_intent
+      set status = ${answer === "approve" ? "APPROVED" : "FAILED"}::intent_status,
+          last_error = ${answer === "reject" ? "rejected by seller" : null}, updated_at = now(),
+          approved_at = ${answer === "approve" ? sql`now()` : null}
+      where id = ${intentId} and status = 'PROPOSED'
+      returning dispute_id`);
+    const row = (r as unknown as { rows: { dispute_id: string }[] }).rows[0];
+    if (!row) return false;
+    if (answer === "approve") await tx.insert(outbox).values({ intentId });
+    await tx.insert(eventLog).values({ disputeId: row.dispute_id, kind: answer === "approve" ? "approved" : "rejected", data: { intentId } });
+    return true;
+  });
 }

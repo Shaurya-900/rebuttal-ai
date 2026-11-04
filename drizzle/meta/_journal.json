@@ -22,6 +22,13 @@
       "when": 1793789776495,
       "tag": "0002_exhibit",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793794778874,
+      "tag": "0003_usage_counter_and_approval",
+      "breakpoints": true
     }
   ]
 }

@@ -26,7 +26,8 @@ export type StepResult =
   | { kind: "denied"; intentId: number; reason: string }
   | { kind: "failed"; intentId: number; error: string }
   | { kind: "retry_later"; intentId: number; error: string }
-  | { kind: "lease_lost"; intentId: number };
+  | { kind: "lease_lost"; intentId: number }
+  | { kind: "needs_approval"; intentId: number; rule: string };
 
 /** Short, stable tag derived from the idempotency key; it goes into PayPal notes/messages so reconcile can find it. */
 export const refFor = (idempotencyKey: string) => createHash("sha256").update(idempotencyKey).digest("hex").slice(0, 12);
@@ -52,8 +53,10 @@ export async function executeNext(
     }
     if (c.attempt > o.maxAttempts) return finish(db, c.id, owner, "FAILED", { error: "max attempts" }, () => ({ kind: "failed", intentId: c.id, error: "max attempts" }));
 
-    // Approval satisfies REQUIRE_APPROVAL rules only; every DENY rule is re-checked against PayPal's state right now.
-    const decision = gate(action, await fx.snapshot(action, c.id), o.policy, o.now(), { approved: true });
+    // Every rule is re-checked against PayPal's state right now. Only a human's answer satisfies REQUIRE_APPROVAL
+    // (never a DENY): an action that was auto-ALLOWed but now needs approval goes back to the seller.
+    const decision = gate(action, await fx.snapshot(action, c.id), o.policy, o.now(), { approved: c.humanApproved });
+    if (decision.kind === "REQUIRE_APPROVAL") return parkForApproval(db, c.id, owner, decision.rule);
     if (decision.kind === "DENY") {
       await log("regate_deny", { decision });
       return finish(db, c.id, owner, "FAILED", { error: decision.reason }, () => ({ kind: "denied", intentId: c.id, reason: decision.reason }));
@@ -84,6 +87,20 @@ async function stillOwner(db: Db, id: number, owner: string): Promise<boolean> {
 }
 
 /** Terminal state, outbox done and log row in one transaction, fenced on the lease so a stale worker cannot overwrite. */
+/** Back to PROPOSED for the seller. Safe even after a crash: we only get here once reconcile found no effect. */
+async function parkForApproval(db: Db, id: number, owner: string, rule: string): Promise<StepResult> {
+  const parked = await db.transaction(async (tx) => {
+    const r = await tx.execute(sql`update action_intent set status = 'PROPOSED', lease_owner = null, lease_expires_at = null, updated_at = now()
+      where id = ${id} and status = 'SENDING' and lease_owner = ${owner} returning dispute_id`);
+    const row = (r as unknown as { rows: { dispute_id: string }[] }).rows[0];
+    if (!row) return false;
+    await tx.execute(sql`update outbox set processed_at = now() where intent_id = ${id} and processed_at is null`);
+    await tx.execute(sql`insert into event_log (dispute_id, kind, data) values (${row.dispute_id}, 'needs_approval', ${JSON.stringify({ intentId: id, rule })}::jsonb)`);
+    return true;
+  });
+  return parked ? { kind: "needs_approval", intentId: id, rule } : { kind: "lease_lost", intentId: id };
+}
+
 async function finish(db: Db, id: number, owner: string, status: "CONFIRMED" | "FAILED", data: object, ok: () => StepResult): Promise<StepResult> {
   const updated = await db.transaction(async (tx) => {
     const r = await tx.execute(sql`update action_intent set status = ${status}, lease_owner = null, lease_expires_at = null, updated_at = now(),
