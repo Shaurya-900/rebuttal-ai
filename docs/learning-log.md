@@ -41,3 +41,17 @@
 1. A worker sends a refund, PayPal makes it, and the worker is killed before writing anything. Walk through exactly what the next worker does, and what would happen if PayPal ignored PayPal-Request-Id.
 2. Why does `finish()` update the intent only `where lease_owner = owner`? Describe the bug this prevents.
 3. Why was the negative-control chaos run (which FAILs) worth running at all?
+
+## S4 — the desk (Nov 4)
+
+**What was built, in plain English**
+1. `/desk` lets a judge click "Run demo" on a made-up dispute. The agent runs with recorded model answers, so a click costs nothing and never touches PayPal.
+2. The trace page shows each stage: the buyer's raw text beside the fixed fields it was reduced to, every rubric point with the record it came from, the decision, and what the firewall said.
+3. For the injection demo it also shows a naive agent obeying "refund $500", and our firewall refusing that action (I1).
+4. Actions that need a human show Approve/Reject buttons behind a seller password. While wiring them we found the executor treated every action as human-approved; now only a real approval counts.
+5. Postgres counters cap runs per IP per hour and real model calls per day, so the public demo can't be run up.
+
+**Recall questions**
+1. An action was ALLOWed yesterday. Today it's the buyer's 3rd dispute (I10). What does the executor do now, and what did it do before this fix?
+2. Why does the per-IP limit use the *last* X-Forwarded-For entry rather than the first?
+3. A judge clicks Run demo 50 times. Why does that cost zero model calls, and what would make it start costing?

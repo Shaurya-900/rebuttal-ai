@@ -15,7 +15,9 @@
 - **/store**: real sandbox checkout (create -> approve on PayPal -> capture).
 - **Executor** (`src/lib/exec/executor.ts`): after a crash it asks PayPal "did this already happen?" (reconcile) before sending. Retries reuse the same PayPal-Request-Id, and the firewall runs again on fresh data right before sending.
 - **Chaos** (`npm run chaos`): kill -9 hundreds of times; count effects per intent on a fake PayPal.
-- Not built yet: UI, eval run.
+- **/desk**: "Run demo" replays recorded model answers on a seeded dispute and shows the trace stage by stage. Nothing is sent to PayPal from there. Approve/Reject needs the seller password.
+- **Limits**: per-IP runs per hour, a global hourly ceiling, and a daily cap on real model calls, all as Postgres counters.
+- Not built yet: eval run, agent runs on real pool disputes from the desk.
 
 ## One sentence per invariant
 - I1: never refund or offer more than was captured minus what is already refunded or pending.
@@ -33,7 +35,7 @@
 | Number | Status |
 | --- | --- |
 | Firewall: 9 rules broken one at a time, all caught by tests | real (run Nov 4) |
-| Unit tests: 60 passing; real-sandbox checks: 5 passing | real (run Nov 4, after S3) |
+| Unit tests: 68 passing; real-sandbox checks: 5 passing | real (run Nov 4, after S4) |
 | Hero decisions: 1 FIGHT (score 85), 2 OFFER $3, 3 FIGHT + baseline's $500 refund DENIED (I1) | real code, but LLM answers are **hand-written stand-ins**. Don't say "the model did X" until re-recorded |
 | Maturation delay (dispute creation -> first action link) | not measured yet. A hand-made dispute already had action links 15 min after creation (first check). |
 | provide-evidence | **500 on the escalated dispute** (debug_id f649595c408c8). Untested on a fresh one. |
@@ -49,3 +51,5 @@
 2. **"Can a buyer still trick it?"** Less easily: buyer text is reduced to fixed fields before the planner sees it, and the firewall caps any action. Enums reduce risk but do not remove it; our eval measures only the attack classes we wrote.
 3. **"Is this real PayPal?"** Real sandbox API calls. Disputes were created by hand (API creation was blocked), and simulator endpoints are labelled. All buyers, carriers and emails are synthetic.
 4. **"How do you know it never refunds twice?"** Chaos test: about 400 kill -9s, 0 duplicates against a simulated PayPal. For refunds that relies on PayPal honouring PayPal-Request-Id, and we say so; the deliberately broken control produced 19 double refunds out of 50.
+5. **"What stops someone hammering your demo?"** Per-IP limit per hour, a global hourly ceiling, and a daily cap on real model calls. Seeded runs replay recorded answers, so a click costs no model call.
+6. **"Can a human override the firewall?"** Only for REQUIRE_APPROVAL rules (big accepts, repeat disputers). A DENY can't be approved, and the firewall runs again on fresh PayPal data right before sending.

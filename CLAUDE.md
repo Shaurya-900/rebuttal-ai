@@ -190,6 +190,13 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `npm run chaos` (real Postgres via embedded-postgres, FAKE PayPal): N=200 messages and N=200 refunds, ~400 kill -9s, **0 duplicates, 0 missing**. The negative control (a fake PayPal that ignores the key) gives 19 double refunds out of 50, so refunds depend on PayPal honouring PayPal-Request-Id (unverified). Details: `docs/chaos/README.md`.
 - Chaos found two real bugs before they reached the sandbox: an `any(array)` SQL query that failed on Postgres, and http links being double-prefixed.
 
+### S4 done (Nov 4 night; 68 unit tests pass, `next build` passes)
+- `/desk`: "Run demo" on the 4 seeded scenarios replays recorded LLM answers (no LLM cost, nothing sent to PayPal), stores the trace in `event_log` (kind `agent_trace`) and opens `/desk/run/<id>`: quarantine, rubric with source ids, decision, firewall, packet PDF, and for hero 3 the naive agent's $500 refund DENIED by I1. `/eval` is a placeholder with no numbers.
+- Seller approvals: Approve/Reject on PROPOSED intents, gated by `DESK_APPROVER_TOKEN` (unset = off). Fixed a real gap: the executor used to re-gate every intent as "approved", so an auto-ALLOWed action that newly needed approval (e.g. I10) would have been sent. Now only `approved_at` (set by a human) counts; otherwise the intent goes back to PROPOSED.
+- Limits: `usage_counter` table (migration 0003). Per-IP runs per hour (IP stored as a salted hash; last X-Forwarded-For entry, **unverified on Render**), a global hourly ceiling, and a shared daily LLM cap through the adapter's `reserve` hook.
+- `npm run db:dev`: local Postgres in `.devdb/` for `npm run dev`. Browser-checked locally: all 4 runs, PDF, wrong/right password, approve/reject rows, 375 px width.
+- Not built: running the agent on a real pool dispute from `/desk` (needs S0 disputes, plus a mapping from a real dispute id to its synthetic records).
+
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.
 - Next: a fresh, never-escalated dispute -> `require-evidence` -> `provide-evidence`; try the evidence shape the dispute requests, `PROOF_OF_FULFILLMENT`, and a plain curl; capture the `debug_id`. See step S0 in `docs/BUILD-PLAN.md`.

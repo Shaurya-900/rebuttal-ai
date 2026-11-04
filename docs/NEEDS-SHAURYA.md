@@ -40,3 +40,15 @@ Why: both were drafted by Claude Code, not by you. You must be able to defend ev
 Exact steps: read both, change any value you disagree with, delete the "Drafted by Claude Code" banner when you accept it.
 Done when: banners removed. (Code is being built against the current drafts; changes later are cheap.)
 Blocks: nothing hard, by Nov 6.
+
+## [S4] [5] Pick a desk approver password
+Why: Approve/Reject on `/desk` leads to real sandbox actions, so it needs a seller password. Without one, approvals are switched off on the hosted demo.
+Exact steps: in `.env` (and later in Render's env vars) set `DESK_APPROVER_TOKEN=` to a random string of 12+ characters, e.g. the output of `openssl rand -hex 16`. Also set `RATE_LIMIT_SALT=` to another random string. Don't paste either into chat.
+Done when: `/desk` shows the password box on a waiting action.
+Blocks: the approval demo on the live URL.
+
+## [S4] [2, look only] Try the desk locally
+Why: so you can see the judge flow before S6 deploys it.
+Exact steps: `npm run db:dev` in one terminal; in another, `DATABASE_URL=postgres://postgres:dev@127.0.0.1:54329/rebuttal npm run dev`; open http://localhost:3000/desk and click Run demo on Hero 3.
+Done when: you've read one trace top to bottom and can explain each stage.
+Blocks: nothing, but you'll be explaining this page in the video.
