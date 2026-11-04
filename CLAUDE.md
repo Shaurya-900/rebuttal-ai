@@ -171,13 +171,18 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - Zod env validation; Drizzle schema and migrations (`dispute`, `action_intent`, `outbox`, `webhook_event`, `event_log` with an append-only trigger); intent and outbox written in one transaction; lease claim with `FOR UPDATE SKIP LOCKED`.
 - Webhook ingestion logic (Zod plus PayPal's verify-webhook-signature), tested with a stand-in verifier. The route and the real verification call are untested.
 - New env var `PAYPAL_WEBHOOK_ID`, needed once a public URL exists.
-- Not built yet: storefront checkout, executor with reconcile, Render deploy.
+- Not built yet: executor with reconcile, Render deploy.
 
 ### S1 done (Nov 4 afternoon; 38 tests pass)
 - `src/lib/llm.ts`: JSON-only calls, Zod-validated, Gemini/Groq fallback on 429, record/replay cache in `fixtures/llm-cache/`. Provider calls are **unverified** (no key yet).
 - Quarantine extractor, planner (cites only), rubric in code, expected-loss decision, evidence packet PDF with `[source: id]` on every line, seeded scenarios (heroes 1-3 + a non-delivery control), naive baseline skeleton. `npm run hero -- all` prints the traces offline.
 - Heroes 1-3 and the control give the decisions in `docs/rubric.md`; hero 3's baseline proposal ($500 refund) is DENIED by I1.
-- **Caveat:** every cached LLM answer is a hand-written stand-in (`recordedFrom: "stub:hand-written"`, from `eval/stub-llm.ts`), not model output. Re-record with a real key before quoting any LLM behaviour. Rubric, decision and firewall are code and don't depend on this.
+- **Caveat (S1):** every cached LLM answer is a hand-written stand-in (`recordedFrom: "stub:hand-written"`, from `eval/stub-llm.ts`), not model output. Re-record with a real key before quoting any LLM behaviour. Rubric, decision and firewall are code and don't depend on this.
+
+### S2 done (Nov 4 evening; 47 unit tests + 5 real-sandbox checks pass)
+- `src/lib/paypal/`: `disputes.ts` (get, list, action requests; every action re-fetches the dispute and POSTs to the HATEOAS href or refuses), `orders.ts` (create, get, capture, get capture), `sync.ts` (webhook events and the 30 s poll both re-fetch and upsert the dispute), `src/worker.ts` loop.
+- `/store` checkout (server action -> PayPal approve -> `/store/return` captures idempotently). `npm run sandbox:order` verifies create -> approve -> capture with a human buyer login.
+- Verified vs unverified per call: table in `docs/paypal-notes.md` ("S2 adapter"). No dispute action (offer, accept, message, evidence) has succeeded against the sandbox yet.
 
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.

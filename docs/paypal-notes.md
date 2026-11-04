@@ -18,6 +18,26 @@
 - HATEOAS `rel` values use underscores (`provide_evidence`, `accept_claim`, `make_offer`, `send_message`), not the hyphenated path names.
 - `escalate`: POST .../escalate body {"note":"..."} → 200, body is only a `detail` link. Moves INQUIRY → CHARGEBACK stage (PayPal calls the claim stage CHARGEBACK), passing through UNDER_REVIEW for ~3 min.
 - Hand-created disputes open directly in WAITING_FOR_SELLER_RESPONSE, so `require-evidence` (needs UNDER_REVIEW) is not part of the normal path for them.
+- (Nov 4, `npm run test:sandbox`) `GET /v1/customer/disputes?update_time_after=…&page_size=50` works; items carry `dispute_id`, `status`.
+- (Nov 4) Orders v2 create with `payment_source.paypal.experience_context` returns status **PAYER_ACTION_REQUIRED** (not CREATED) and a `payer-action` link to `www.sandbox.paypal.com/checkoutnow?token=…`.
+- (Nov 4) Orders v2 create honors **PayPal-Request-Id**: same id twice → same order id (order 442927852N123632B).
+- (Nov 4) `/store` → PayPal sandbox login page with a fresh order token (checked in a browser, stopped at the login page).
+
+## S2 adapter: what is verified against the sandbox and what is not (Nov 4)
+| Call | Status |
+| --- | --- |
+| token, get dispute, list disputes | VERIFIED |
+| create order, PayPal-Request-Id on create | VERIFIED |
+| link-absent refusal (make_offer on the CHARGEBACK dispute) | VERIFIED (nothing sent) |
+| buyer approve → capture, capture idempotency | UNVERIFIED: needs a human buyer login (`npm run sandbox:order`) |
+| `/store/return` capture page | UNVERIFIED (same reason) |
+| provide_evidence (multipart `input` + `evidence-file`) | 500 on the escalated dispute; S0 |
+| make_offer `{note, offer_type, offer_amount}` | UNVERIFIED (shape matches schema.json `make_offer`) |
+| accept_claim `{note, accept_claim_type:"REFUND"}` | UNVERIFIED (schema.json documents only the file part) |
+| send_message `{message}` | UNVERIFIED (schema.json documents only the file part) |
+| PayPal-Request-Id on Disputes | UNVERIFIED |
+| verify-webhook-signature + real delivery | UNVERIFIED (needs a public URL) |
+Run one dispute action with: `SANDBOX_MUTATE_DISPUTE_ID=PP-R-… SANDBOX_MUTATE_ACTION=make_offer npm run test:sandbox`.
 
 ## Blocked
 - API create dispute as buyer: 400 invalid_request "No permissions to set target_client_id" (PayPal-Auth-Assertion rejected). Create disputes by hand instead.
