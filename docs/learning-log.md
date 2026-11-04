@@ -13,3 +13,17 @@
 1. In hero 3, why does the injected "refund $500" text not change the decision, and what would stop a $500 refund if it did?
 2. The planner cites `R4 → msg:hero1:1` (the buyer saying "never received"). What does the rubric code do, and where does the planner's knowledge of that message come from?
 3. Why does `buildPacket` fix the PDF's creation date instead of using the current time?
+
+## S2 — PayPal wiring (Nov 4)
+
+**What was built, in plain English**
+1. A small PayPal adapter that reads only the ~10 fields we use and ignores the rest, so a new PayPal field can't break the demo.
+2. Every dispute action (offer, accept, message, evidence) first re-reads the dispute and uses the exact link PayPal returns. If the link isn't there, nothing is sent. The sandbox test proved this on our escalated dispute, where `make_offer` is absent.
+3. Webhook events and a 30-second poll both go through one function: re-fetch the dispute from PayPal and save it. A webhook is treated as "go look", never as the truth.
+4. `/store` is a real sandbox checkout: our server creates the order, the buyer approves on PayPal, and our return page captures it. A refresh can't charge twice, because the capture carries a PayPal-Request-Id and a completed order is only read.
+5. Verified against the real sandbox: token, reading disputes, creating orders, and Orders honoring PayPal-Request-Id. Not yet verified: capture, and every dispute action. The table is in `docs/paypal-notes.md`.
+
+**Recall questions**
+1. A webhook says "dispute PP-R-X resolved". What does the worker do with that body, and why doesn't it just copy the status from it?
+2. Why does `/store/return` check the order's status before calling capture, when capture already sends a PayPal-Request-Id?
+3. The sandbox test "link absent → refused" passed. What exactly did it prove, and what did it not prove about `make_offer`?

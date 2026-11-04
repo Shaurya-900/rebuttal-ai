@@ -11,6 +11,18 @@ Exact steps:
 Done when: at least one new id + creation time is in `docs/paypal-notes.md`.
 Blocks: S0 (go/no-go on provide-evidence). Keep one dispute un-touched for the offer demo (hero 2): offers only exist in INQUIRY.
 
+## [S2] [10] Approve one sandbox payment (verifies capture + makes the next demo dispute)
+Why: capture can only be verified after a human buyer approves; we never automate PayPal's login.
+Exact steps: run `npm run sandbox:order`, open the printed link, log in as the sandbox BUYER, approve. The script captures and checks idempotency. Copy its last two lines into `docs/paypal-notes.md`. Then use that payment for a fresh dispute (entry above).
+Done when: "captured: capture id …" and "SAME: idempotent" are in the notes.
+Blocks: marking capture VERIFIED; it also gives you a payment for the S0 dispute.
+
+## [S2] [5 each, after S0] Run one dispute action per fresh INQUIRY dispute
+Why: no offer/accept/message call has succeeded yet. Each one changes or closes the dispute, so use a dispute you don't need for the demo.
+Exact steps: `SANDBOX_MUTATE_DISPUTE_ID=PP-R-... SANDBOX_MUTATE_ACTION=make_offer npm run test:sandbox` (then `send_message` on the same dispute; `accept_claim` last, since it closes it).
+Done when: each action shows HTTP 2xx in the output; paste the line into `docs/paypal-notes.md`.
+Blocks: hero 2 against the real sandbox.
+
 ## [S1] [10] LLM key in `.env`
 Why: S1's quarantine extractor and planner need a model. Record/replay means each prompt is paid for once.
 Exact steps: check `echo $ANTHROPIC_API_KEY` prints nothing. Get a free Gemini or Groq key, add `REBUTTAL_LLM_KEY=...` and `REBUTTAL_LLM_PROVIDER=gemini` (or `groq`) to `.env`. Never paste the key in chat.

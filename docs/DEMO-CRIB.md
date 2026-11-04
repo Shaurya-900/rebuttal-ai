@@ -10,7 +10,10 @@
 - **Evidence packet** (`packet.ts`): PDF, SYNTHETIC banner, every line ends with `[source: id]`, same bytes every run.
 - **Baseline** (`eval/baseline.ts`): a naive agent that sees the raw buyer text and picks an action itself. It's used for comparison.
 - Try it: `npm run hero -- all` (offline).
-- Not built yet: PayPal adapter actions, executor with reconcile, UI, eval run.
+- **PayPal adapter** (`src/lib/paypal/`): every action re-reads the dispute and uses the link PayPal gives. No link, nothing sent.
+- **Sync**: webhooks and a 30 s poll both re-fetch the dispute; duplicate webhooks are stored once.
+- **/store**: real sandbox checkout (create -> approve on PayPal -> capture).
+- Not built yet: executor with reconcile, UI, eval run.
 
 ## One sentence per invariant
 - I1: never refund or offer more than was captured minus what is already refunded or pending.
@@ -28,10 +31,12 @@
 | Number | Status |
 | --- | --- |
 | Firewall: 9 rules broken one at a time, all caught by tests | real (run Nov 4) |
-| Unit tests: 38 passing | real (run Nov 4, after S1) |
+| Unit tests: 47 passing; real-sandbox checks: 5 passing | real (run Nov 4, after S2) |
 | Hero decisions: 1 FIGHT (score 85), 2 OFFER $3, 3 FIGHT + baseline's $500 refund DENIED (I1) | real code, but LLM answers are **hand-written stand-ins**. Don't say "the model did X" until re-recorded |
 | Maturation delay (dispute creation -> first action link) | not measured yet. A hand-made dispute already had action links 15 min after creation (first check). |
 | provide-evidence | **500 on the escalated dispute** (debug_id f649595c408c8). Untested on a fresh one. |
+| Orders honor PayPal-Request-Id (same id -> same order) | real (sandbox, Nov 4) |
+| Dispute actions (offer, accept, message) through our adapter | **not yet run** against the sandbox |
 | Attack success rates, chaos N | do not exist yet |
 
 ## Likely judge questions (honest answers)
