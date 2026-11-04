@@ -15,6 +15,13 @@
       "when": 1793727538126,
       "tag": "0001_event_log_append_only",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793789776495,
+      "tag": "0002_exhibit",
+      "breakpoints": true
     }
   ]
 }
