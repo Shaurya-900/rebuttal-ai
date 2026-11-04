@@ -27,3 +27,17 @@
 1. A webhook says "dispute PP-R-X resolved". What does the worker do with that body, and why doesn't it just copy the status from it?
 2. Why does `/store/return` check the order's status before calling capture, when capture already sends a PayPal-Request-Id?
 3. The sandbox test "link absent → refused" passed. What exactly did it prove, and what did it not prove about `make_offer`?
+
+## S3 — crash safety (Nov 4)
+
+**What was built, in plain English**
+1. Approved actions sit in Postgres as intents. A worker borrows one with a time-limited lease, and if it dies the lease runs out so another worker can pick it up.
+2. Before trying again after a crash, the new worker first asks PayPal "did this already happen?" (reconcile). For messages and evidence it looks for the `[ref …]` tag we put in every note. Only if PayPal shows nothing does it send.
+3. Refunds can't be looked up that way (PayPal has no "list refunds" call), so every retry re-sends with the same PayPal-Request-Id. PayPal promises to return the first refund instead of making a second one. That promise is not yet tested in our sandbox.
+4. Right before sending, the firewall runs again on fresh PayPal data, so an action approved an hour ago can't go out if its link has since disappeared.
+5. `npm run chaos` kills workers with `kill -9` hundreds of times against real Postgres and a fake PayPal. It found 0 duplicates, and a deliberately broken setup found 19, which proves the test can catch double-sends. It also found two real bugs in our code.
+
+**Recall questions**
+1. A worker sends a refund, PayPal makes it, and the worker is killed before writing anything. Walk through exactly what the next worker does, and what would happen if PayPal ignored PayPal-Request-Id.
+2. Why does `finish()` update the intent only `where lease_owner = owner`? Describe the bug this prevents.
+3. Why was the negative-control chaos run (which FAILs) worth running at all?
