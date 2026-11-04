@@ -1,6 +1,8 @@
 // Postgres is the queue, outbox, lease store and dedupe table (CLAUDE.md: no Redis, no queue lib).
 import { sql } from "drizzle-orm";
-import { bigint, bigserial, integer, jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
+import { bigint, bigserial, customType, integer, jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
+
+const bytea = customType<{ data: Uint8Array; driverData: Uint8Array }>({ dataType: () => "bytea" });
 
 export const intentStatus = pgEnum("intent_status", ["PROPOSED", "APPROVED", "SENDING", "CONFIRMED", "FAILED"]);
 
@@ -65,4 +67,16 @@ export const eventLog = pgTable("event_log", {
   kind: text("kind").notNull(),
   data: jsonb("data").notNull(),
   at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+// Evidence store (I8): exhibit bytes and their hash, keyed to the order (capture) they belong to.
+export const exhibit = pgTable("exhibit", {
+  id: text("id").primaryKey(), // e.g. "packet:PP-R-…"
+  disputeId: text("dispute_id").notNull().references(() => dispute.id),
+  orderId: text("order_id").notNull(),
+  name: text("name").notNull(),
+  contentType: text("content_type").notNull(),
+  sha256: text("sha256").notNull(),
+  bytes: bytea("bytes").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
