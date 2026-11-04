@@ -13,7 +13,8 @@
     "hero": "tsx eval/hero.ts",
     "sandbox:order": "tsx --env-file=.env scripts/sandbox-order.ts",
     "worker": "tsx --env-file=.env src/worker.ts",
-    "test:sandbox": "node --env-file=.env node_modules/vitest/vitest.mjs run --config vitest.sandbox.config.ts"
+    "test:sandbox": "node --env-file=.env node_modules/vitest/vitest.mjs run --config vitest.sandbox.config.ts",
+    "chaos": "tsx scripts/chaos/run.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.4",
@@ -32,6 +33,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "drizzle-kit": "^0.31.11",
+    "embedded-postgres": "^17.10.0-beta.17",
     "fast-check": "^4.10.2",
     "tailwindcss": "^4.3.4",
     "tsx": "^4.23.15",
