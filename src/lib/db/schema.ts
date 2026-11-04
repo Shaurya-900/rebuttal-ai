@@ -1,6 +1,6 @@
 // Postgres is the queue, outbox, lease store and dedupe table (CLAUDE.md: no Redis, no queue lib).
 import { sql } from "drizzle-orm";
-import { bigint, bigserial, customType, integer, jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
+import { bigint, bigserial, customType, integer, jsonb, pgEnum, pgTable, primaryKey, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
 
 const bytea = customType<{ data: Uint8Array; driverData: Uint8Array }>({ dataType: () => "bytea" });
 
@@ -35,6 +35,7 @@ export const actionIntent = pgTable("action_intent", {
   leaseOwner: text("lease_owner"),
   leaseExpiresAt: timestamp("lease_expires_at", { withTimezone: true }),
   lastError: text("last_error"),
+  approvedAt: timestamp("approved_at", { withTimezone: true }), // set only by a human answering REQUIRE_APPROVAL
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 }, (t) => [
@@ -80,3 +81,10 @@ export const exhibit = pgTable("exhibit", {
   bytes: bytea("bytes").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+// Fixed-window counters for the per-IP run limit and the daily LLM cap (no Redis: CLAUDE.md section 10).
+export const usageCounter = pgTable("usage_counter", {
+  bucket: text("bucket").notNull(), // "run:<ip hash>" or "llm:global"
+  windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+  count: integer("count").notNull().default(0),
+}, (t) => [primaryKey({ columns: [t.bucket, t.windowStart] })]);

@@ -31,6 +31,7 @@ export function createLlm(opts: {
   providers: Provider[];
   cacheDir: string;
   maxCalls?: number; // hard cap on provider calls for this instance
+  reserve?: () => Promise<void>; // called before every provider call; throws to refuse (shared daily cap, src/lib/limits.ts)
 }): Llm {
   const calls: LlmCallRecord[] = [];
   let providerCalls = 0;
@@ -53,6 +54,7 @@ export function createLlm(opts: {
       for (const p of opts.providers) {
         try {
           providerCalls++;
+          await opts.reserve?.();
           const text = await p.call(req.system, req.user);
           const value = parseJson(req, text); // validate before saving: never cache a bad answer
           const recordedFrom = `${p.name}:${p.model}`;
@@ -123,7 +125,7 @@ export function groqProvider(key: string, model = "llama-3.3-70b-versatile"): Pr
 export const LLM_CACHE_DIR = join(process.cwd(), "fixtures", "llm-cache");
 
 /** Reads only the LLM variables, so offline tests do not need PayPal env vars. */
-export function llmFromEnv(e: NodeJS.ProcessEnv = process.env): Llm {
+export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => Promise<void>): Llm {
   const mode = (e.REBUTTAL_LLM_MODE ?? "replay") as "record" | "replay" | "live";
   const providers: Provider[] = [];
   // First provider uses REBUTTAL_LLM_KEY / REBUTTAL_LLM_MODEL; fallbacks use REBUTTAL_LLM_KEY_<NAME> / REBUTTAL_LLM_MODEL_<NAME>.
@@ -134,5 +136,5 @@ export function llmFromEnv(e: NodeJS.ProcessEnv = process.env): Llm {
     if (name === "gemini") providers.push(geminiProvider(key, model));
     if (name === "groq") providers.push(groqProvider(key, model));
   });
-  return createLlm({ mode, providers, cacheDir: LLM_CACHE_DIR, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200) });
+  return createLlm({ mode, providers, cacheDir: LLM_CACHE_DIR, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200), reserve });
 }
