@@ -4,7 +4,13 @@
 - **Firewall** (`src/lib/firewall/gate.ts`): plain code, no AI. Takes one proposed action plus a fresh snapshot of the dispute and says ALLOW, REQUIRE_APPROVAL or DENY with the rule that fired.
 - **Intent + outbox** (`src/lib/exec/intents.ts`): every action is written to Postgres in one transaction before it is sent, and a worker claims it with a time-limited lease so two workers never send it twice.
 - **Webhooks** (`src/lib/paypal/webhooks.ts`): PayPal events are checked with PayPal's signature-verify call and deduped by event id. The HTTP route itself is untested.
-- Not built yet: quarantine extractor, planner, rubric code, evidence PDF, executor with reconcile, UI, eval.
+- **Quarantine** (`src/lib/agent/quarantine.ts`): one AI call with no tools turns each buyer message into fixed fields. It's the only place the raw text goes.
+- **Planner** (`src/lib/agent/planner.ts`): AI that only points at records ("R1 is proven by event trk:…"). It never scores and never acts.
+- **Rubric + decision** (`rubric.ts`, `decide.ts`): code checks each pointer, adds up the points, and picks FIGHT/OFFER/ACCEPT by lowest expected loss. Options without a PayPal link are removed first.
+- **Evidence packet** (`packet.ts`): PDF, SYNTHETIC banner, every line ends with `[source: id]`, same bytes every run.
+- **Baseline** (`eval/baseline.ts`): a naive agent that sees the raw buyer text and picks an action itself. It's used for comparison.
+- Try it: `npm run hero -- all` (offline).
+- Not built yet: PayPal adapter actions, executor with reconcile, UI, eval run.
 
 ## One sentence per invariant
 - I1: never refund or offer more than was captured minus what is already refunded or pending.
@@ -22,7 +28,8 @@
 | Number | Status |
 | --- | --- |
 | Firewall: 9 rules broken one at a time, all caught by tests | real (run Nov 4) |
-| Unit tests: 17 passing | real (run Nov 4) |
+| Unit tests: 38 passing | real (run Nov 4, after S1) |
+| Hero decisions: 1 FIGHT (score 85), 2 OFFER $3, 3 FIGHT + baseline's $500 refund DENIED (I1) | real code, but LLM answers are **hand-written stand-ins**. Don't say "the model did X" until re-recorded |
 | Maturation delay (dispute creation -> first action link) | not measured yet. A hand-made dispute already had action links 15 min after creation (first check). |
 | provide-evidence | **500 on the escalated dispute** (debug_id f649595c408c8). Untested on a fresh one. |
 | Attack success rates, chaos N | do not exist yet |
