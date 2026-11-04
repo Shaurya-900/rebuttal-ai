@@ -1,0 +1,33 @@
+# Demo crib (read in 10 minutes before recording)
+
+## What each part does
+- **Firewall** (`src/lib/firewall/gate.ts`): plain code, no AI. Takes one proposed action plus a fresh snapshot of the dispute and says ALLOW, REQUIRE_APPROVAL or DENY with the rule that fired.
+- **Intent + outbox** (`src/lib/exec/intents.ts`): every action is written to Postgres in one transaction before it is sent, and a worker claims it with a time-limited lease so two workers never send it twice.
+- **Webhooks** (`src/lib/paypal/webhooks.ts`): PayPal events are checked with PayPal's signature-verify call and deduped by event id. The HTTP route itself is untested.
+- Not built yet: quarantine extractor, planner, rubric code, evidence PDF, executor with reconcile, UI, eval.
+
+## One sentence per invariant
+- I1: never refund or offer more than was captured minus what is already refunded or pending.
+- I2: only act if PayPal currently lists that action's link, the dispute is open, and the deadline has not passed.
+- I3: an offer is at most the policy's maximum percent of the disputed amount.
+- I4: the daily refund budget and the per-buyer cap are respected.
+- I5: the currency matches the original payment.
+- I6: outbound messages are fixed templates with typed slots; no buyer text, no unknown URLs.
+- I7: accepting a claim above a threshold needs a human.
+- I8: every exhibit exists in our evidence store and belongs to this order.
+- I9: the same action with the same parameters on the same dispute runs at most once.
+- I10: a buyer's third dispute in 60 days needs a human.
+
+## Numbers
+| Number | Status |
+| --- | --- |
+| Firewall: 9 rules broken one at a time, all caught by tests | real (run Nov 4) |
+| Unit tests: 17 passing | real (run Nov 4) |
+| Maturation delay (dispute creation -> first action link) | not measured yet. A hand-made dispute already had action links 15 min after creation (first check). |
+| provide-evidence | **500 on the escalated dispute** (debug_id f649595c408c8). Untested on a fresh one. |
+| Attack success rates, chaos N | do not exist yet |
+
+## Likely judge questions (honest answers)
+1. **"Isn't this what Chargeflow does?"** Yes, commercial tools exist; we credit them. Ours is open source, gates every money action in code, and publishes its attack evaluation.
+2. **"Can a buyer still trick it?"** Less easily: buyer text is reduced to fixed fields before the planner sees it, and the firewall caps any action. Enums reduce risk but do not remove it; our eval measures only the attack classes we wrote.
+3. **"Is this real PayPal?"** Real sandbox API calls. Disputes were created by hand (API creation was blocked), and simulator endpoints are labelled. All buyers, carriers and emails are synthetic.
