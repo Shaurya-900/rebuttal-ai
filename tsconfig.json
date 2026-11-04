@@ -31,10 +31,12 @@
     ".next/types/**/*.ts",
     "drizzle.config.ts",
     ".next/dev/types/**/*.ts",
-    "eval/**/*.ts"
+    "eval/**/*.ts",
+    "scripts/**/*.ts",
+    "sandbox/**/*.ts",
+    "vitest.sandbox.config.ts"
   ],
   "exclude": [
-    "node_modules",
-    "scripts"
+    "node_modules"
   ]
 }
