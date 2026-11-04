@@ -14,7 +14,9 @@ const schema = z.object({
   DATABASE_URL: z.string().min(1),
   FAULT: z.enum(["crash_after_send", "crash_before_confirm", "timeout", ""]).default(""),
   DAILY_LLM_CALL_CAP: z.coerce.number().int().positive().default(200),
-  PER_IP_RUNS_PER_HOUR: z.coerce.number().int().positive().default(5),
+  PER_IP_RUNS_PER_HOUR: z.coerce.number().int().positive().default(20),
+  RATE_LIMIT_SALT: z.string().optional(),
+  DESK_APPROVER_TOKEN: z.string().min(12).optional(), // unset = approvals disabled
 });
 
 export type Env = z.infer<typeof schema>;
