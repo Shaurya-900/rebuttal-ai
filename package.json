@@ -10,7 +10,10 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "hero": "tsx eval/hero.ts"
+    "hero": "tsx eval/hero.ts",
+    "sandbox:order": "tsx --env-file=.env scripts/sandbox-order.ts",
+    "worker": "tsx --env-file=.env src/worker.ts",
+    "test:sandbox": "node --env-file=.env node_modules/vitest/vitest.mjs run --config vitest.sandbox.config.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.4",
