@@ -19,6 +19,14 @@ const schema = z.object({
 
 export type Env = z.infer<typeof schema>;
 
+// Subset for scripts and the PayPal client, which must work before a database or webhook exists.
+const paypalSchema = schema.pick({ PAYPAL_CLIENT_ID: true, PAYPAL_CLIENT_SECRET: true, PAYPAL_BASE_URL: true, SANDBOX_SIMULATOR: true });
+export function paypalEnv(): z.infer<typeof paypalSchema> {
+  const r = paypalSchema.safeParse(process.env);
+  if (!r.success) throw new Error(`Invalid environment: ${r.error.issues.map((i) => i.path.join(".")).join(", ")}`);
+  return r.data;
+}
+
 let cached: Env | undefined;
 export function env(): Env {
   if (cached) return cached;
