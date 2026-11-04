@@ -14,8 +14,8 @@ Blocks: S0 (go/no-go on provide-evidence). Keep one dispute un-touched for the o
 ## [S1] [10] LLM key in `.env`
 Why: S1's quarantine extractor and planner need a model. Record/replay means each prompt is paid for once.
 Exact steps: check `echo $ANTHROPIC_API_KEY` prints nothing. Get a free Gemini or Groq key, add `REBUTTAL_LLM_KEY=...` and `REBUTTAL_LLM_PROVIDER=gemini` (or `groq`) to `.env`. Never paste the key in chat.
-Done when: both lines are in `.env`.
-Blocks: recording fresh LLM responses in S1 (code can be written without it).
+Done when: both lines are in `.env`. Then run `REBUTTAL_LLM_MODE=record npm run hero -- all`, which replaces the hand-written stand-in answers in `fixtures/llm-cache/` with real ones, and `npm test`.
+Blocks: any claim about how the model behaves (heroes currently run on stand-ins), and the S5 eval.
 
 ## [S1] [20] Review docs/rubric.md and docs/invariants.md
 Why: both were drafted by Claude Code, not by you. You must be able to defend every weight and rule to judges.
