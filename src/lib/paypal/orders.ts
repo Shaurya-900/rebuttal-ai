@@ -61,3 +61,19 @@ export async function getCapture(id: string): Promise<{ id: string; status: stri
   const c = parseOk(await ppRequest("GET", `/v2/payments/captures/${encodeURIComponent(id)}`), Capture, `get capture ${id}`);
   return { id: c.id, status: c.status, amountCents: toCents(c.amount.value), currency: c.amount.currency_code };
 }
+
+export const Refund = z.looseObject({ id: z.string(), status: z.string() });
+
+/**
+ * Refund (part of) a capture. Reconcile strategy for refunds is the idempotency key: v2 has no "list refunds of a
+ * capture" call, so a retry re-sends with the SAME PayPal-Request-Id and PayPal returns the original refund.
+ * That PayPal honours the header on refunds is documented but UNVERIFIED in our sandbox (needs a capture first).
+ */
+export async function refundCapture(o: { captureId: string; amountCents: number; currency: string; ref: string; requestId: string; timeoutMs?: number }) {
+  const res = await ppRequest("POST", `/v2/payments/captures/${encodeURIComponent(o.captureId)}/refund`, {
+    requestId: o.requestId,
+    timeoutMs: o.timeoutMs,
+    json: { amount: { currency_code: o.currency, value: fromCents(o.amountCents) }, note_to_payer: `Refund from the seller [ref ${o.ref}]` },
+  });
+  return parseOk(res, Refund, `refund capture ${o.captureId}`);
+}

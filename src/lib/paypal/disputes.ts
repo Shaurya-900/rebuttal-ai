@@ -23,6 +23,9 @@ export const PaypalDispute = z.looseObject({
   })).optional(),
   // Buyer/seller messages: UNTRUSTED text, only ever passed to the quarantine extractor.
   messages: z.array(z.looseObject({ posted_by: z.string().optional(), time_posted: z.string().optional(), content: z.string().optional() })).optional(),
+  // Read by the executor's reconcile step (S3). Shapes from schema.json; contents UNVERIFIED against the sandbox.
+  evidences: z.array(z.looseObject({ source: z.string().optional(), notes: z.string().optional() })).optional(),
+  offer: z.looseObject({}).optional(),
   links: z.array(Link).default([]),
 });
 export type PaypalDispute = z.infer<typeof PaypalDispute>;
@@ -72,13 +75,17 @@ const TEMPLATES: Record<string, (s: Record<string, string>) => string> = {
 
 export type Attachment = { name: string; bytes: Uint8Array; contentType: "application/pdf" };
 
-/** The HATEOAS rel each action needs and the request body PayPal expects. Pure; tested without the network. */
-export function buildRequest(a: ProposedAction, attachments: Attachment[] = []): { rel: string; json?: unknown; form?: FormData } {
+/**
+ * The HATEOAS rel each action needs and the request body PayPal expects. Pure; tested without the network.
+ * `ref` (from the intent's idempotency key) is appended to every note/message so reconcile can find the effect later.
+ */
+export function buildRequest(a: ProposedAction, attachments: Attachment[] = [], ref?: string): { rel: string; json?: unknown; form?: FormData } {
+  const tag = ref ? ` [ref ${ref}]` : "";
   switch (a.type) {
     case "SubmitEvidence": {
       // multipart: JSON part "input" + file part(s) "evidence-file" (schema.json; the spike used this shape).
       const input = {
-        evidences: [{ evidence_type: "OTHER", notes: "Seller records for this order are attached (Rebuttal evidence packet).", documents: attachments.map((f) => ({ name: f.name })) }],
+        evidences: [{ evidence_type: "OTHER", notes: `Seller records for this order are attached (Rebuttal evidence packet).${tag}`, documents: attachments.map((f) => ({ name: f.name })) }],
       };
       const form = new FormData();
       form.append("input", new Blob([JSON.stringify(input)], { type: "application/json" }));
@@ -88,17 +95,17 @@ export function buildRequest(a: ProposedAction, attachments: Attachment[] = []):
     case "MakeOffer":
       return {
         rel: "make_offer",
-        json: { note: "Offer from the seller.", offer_type: a.offerType, offer_amount: { currency_code: a.currency, value: fromCents(a.amountCents) } },
+        json: { note: `Offer from the seller.${tag}`, offer_type: a.offerType, offer_amount: { currency_code: a.currency, value: fromCents(a.amountCents) } },
       };
     case "AcceptClaim":
       // UNVERIFIED body: schema.json documents only the file part; fields from PayPal's reference docs.
-      return { rel: "accept_claim", json: { note: "Seller accepts the claim.", accept_claim_type: "REFUND" } };
+      return { rel: "accept_claim", json: { note: `Seller accepts the claim.${tag}`, accept_claim_type: "REFUND" } };
     case "SendMessage": {
       // UNVERIFIED body: schema.json documents only the file part.
       const render = TEMPLATES[a.templateId];
       if (!render) throw new Error(`unknown template ${a.templateId}`);
       const slots = Object.fromEntries(Object.entries(a.slots).map(([k, v]) => [k, v.value]));
-      return { rel: "send_message", json: { message: render(slots) } };
+      return { rel: "send_message", json: { message: render(slots) + tag } };
     }
     case "IssueRefund":
     case "AskSeller":
@@ -112,12 +119,15 @@ export type ActionResult = { before: PaypalDispute; res: PpResponse; href: strin
  * Sends one dispute action: re-fetch, require the link, POST to the link's href.
  * The firewall must already have ALLOWed it; this is the last-moment link check, not a replacement for the gate.
  */
-export async function sendDisputeAction(a: ProposedAction, opts: { attachments?: Attachment[]; requestId?: string } = {}): Promise<ActionResult> {
-  const req = buildRequest(a, opts.attachments);
+export async function sendDisputeAction(
+  a: ProposedAction,
+  opts: { attachments?: Attachment[]; requestId?: string; ref?: string; timeoutMs?: number } = {},
+): Promise<ActionResult> {
+  const req = buildRequest(a, opts.attachments, opts.ref);
   const before = await getDispute(a.disputeId);
   const link = before.links.find((l) => l.rel === req.rel);
   if (!link) throw new LinkAbsentError(a.disputeId, req.rel, rels(before));
-  const res = await ppRequest(link.method ?? "POST", link.href, { json: req.json, form: req.form, requestId: opts.requestId });
+  const res = await ppRequest(link.method ?? "POST", link.href, { json: req.json, form: req.form, requestId: opts.requestId, timeoutMs: opts.timeoutMs });
   if (!res.ok) throw new PayPalError(res, `${req.rel} on ${a.disputeId}`);
   return { before, res, href: link.href };
 }

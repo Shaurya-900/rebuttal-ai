@@ -35,14 +35,17 @@ export class PayPalError extends Error {
 export async function ppRequest(
   method: string,
   path: string,
-  opts: { json?: unknown; form?: FormData; requestId?: string } = {},
+  opts: { json?: unknown; form?: FormData; requestId?: string; timeoutMs?: number } = {},
 ): Promise<PpResponse> {
-  const url = path.startsWith("https://") ? path : `${paypalEnv().PAYPAL_BASE_URL}${path}`;
+  const url = /^https?:\/\//.test(path) ? path : `${paypalEnv().PAYPAL_BASE_URL}${path}`;
   if (!url.startsWith(paypalEnv().PAYPAL_BASE_URL)) throw new Error(`refusing to send the token to ${new URL(url).host}`);
   const headers: Record<string, string> = { Authorization: `Bearer ${await accessToken()}` };
   if (opts.json !== undefined) headers["Content-Type"] = "application/json";
   if (opts.requestId) headers["PayPal-Request-Id"] = opts.requestId;
-  const res = await fetch(url, { method, headers, body: opts.form ?? (opts.json !== undefined ? JSON.stringify(opts.json) : undefined) });
+  const res = await fetch(url, {
+    method, headers, body: opts.form ?? (opts.json !== undefined ? JSON.stringify(opts.json) : undefined),
+    signal: opts.timeoutMs ? AbortSignal.timeout(opts.timeoutMs) : undefined, // a timeout = unknown outcome; the executor reconciles
+  });
   const text = await res.text();
   let body: unknown = null;
   try { body = text ? JSON.parse(text) : null; } catch { body = text; }
