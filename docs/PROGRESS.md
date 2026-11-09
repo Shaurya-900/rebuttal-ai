@@ -10,7 +10,7 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M2 | Schema + seed | PARTIAL. Tables: dispute, action_intent, outbox, webhook_event, event_log, exhibit, usage_counter, approval. Synthetic records live in code (`src/lib/agent/scenarios.ts`), not in DB tables; no `npm run seed`. Not needed for the judge flow |
 | M3 | Skeleton, health, render.yaml, first deploy | DONE for web (Nov 10): https://rebuttal-web.onrender.com, `/api/health` 200 with db up, checked by Claude Code after the PR #2 deploy. `rebuttal-worker` status unknown (failed its first build) |
 | M4 | Agent pipeline offline | DONE, with the caveat that all 10 cached LLM answers are hand-written stand-ins, not model output |
-| M5 | PayPal adapter, webhook route, worker loops | PARTIAL. send_message verified through the adapter. provide_evidence works only with PROOF_OF_FULFILLMENT, which the adapter does not send yet (hard-codes OTHER): fix next. Webhook delivery unverified |
+| M5 | PayPal adapter, webhook route, worker loops | PARTIAL. send_message verified through the adapter. Adapter now sends PROOF_OF_FULFILLMENT + tracking for INR evidence (the shape that got 200; adapter path itself not yet re-run on the sandbox, it needs a fresh dispute). Webhook delivery unverified |
 | M6 | Executor, reconcile, faults, approvals | DONE in tests. A real PROPOSED→CONFIRMED sandbox action waits on M1 |
 | M7 | /desk, Run demo, limits | PARTIAL. Judge flow works on the live URL (Nov 10: hero 3 Run demo -> trace with real recorded answers). Missing: `/desk/policy`, richer `/` page. Per-IP limit behind Render's proxy still unverified |
 | M8 | /store checkout | DONE locally. Capture after a human approval is unverified (NEEDS-SHAURYA [S2]) |

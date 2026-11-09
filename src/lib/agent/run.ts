@@ -55,6 +55,8 @@ export async function runDispute(s: Scenario, llm: Llm, nowMs: number, policy: P
   if (decision.choice === "FIGHT") {
     packet = await buildPacket(s, rubric, q);
     proposal = { type: "SubmitEvidence", ...base, exhibitIds: [packet.exhibitId] };
+    // INR: PayPal requests PROOF_OF_FULFILLMENT and rejects OTHER (docs/paypal-notes.md, Nov 10). Tracking comes from trusted records.
+    if (rubric.reason === "INR") proposal.tracking = { carrier: s.tracking.carrier, trackingNumber: s.tracking.number };
   } else if (decision.choice === "OFFER") {
     proposal = { type: "MakeOffer", ...base, amountCents: decision.offerCents, currency: s.dispute.currency, offerType: "REFUND" };
   } else if (decision.choice === "ACCEPT") {
