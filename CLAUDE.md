@@ -211,7 +211,7 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 ### Go/no-go: GO (Nov 10, about 04:06 IST)
 - On fresh INQUIRY dispute PP-R-FCU-10197630: `send_message` succeeded through the adapter; `provide_evidence` returned **200** (debug_id f589977c30084) with `evidence_type: PROOF_OF_FULFILLMENT` + `evidence_info.tracking_info` + a PDF. `OTHER` returns 400 `EVIDENCE_TYPE_IS_NOT_ALLOWED`. Details in `docs/paypal-notes.md`.
 - A seller message in INQUIRY removes `make_offer` and hands the turn to the buyer. Offer first, message last (or never).
-- The adapter still sends `OTHER`; it must send `PROOF_OF_FULFILLMENT` with tracking for INR.
+- Fixed Nov 10: for INR the agent's `SubmitEvidence` carries the order's tracking, and the adapter sends `PROOF_OF_FULFILLMENT` + `tracking_info`. Same body as the 200; the adapter path itself is not yet re-run on a sandbox dispute.
 
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.

@@ -68,7 +68,7 @@ describe.skipIf(!mutateId || !mutateAction)("sandbox: ONE dispute action (opt-in
       make_offer: { type: "MakeOffer", disputeId: id, amountCents: Math.floor(amount * 0.3), currency: d.dispute_amount.currency_code as "USD", offerType: "REFUND" },
       send_message: { type: "SendMessage", disputeId: id, templateId: "EVIDENCE_SUBMITTED", slots: {} },
       accept_claim: { type: "AcceptClaim", disputeId: id, amountCents: amount, currency: d.dispute_amount.currency_code as "USD" },
-      provide_evidence: { type: "SubmitEvidence", disputeId: id, exhibitIds: ["sandbox-test"] },
+      provide_evidence: { type: "SubmitEvidence", disputeId: id, exhibitIds: ["sandbox-test"], tracking: { carrier: "USPS", trackingNumber: "9400100000000000000000" } }, // synthetic tracking number
     };
     const a = actions[mutateAction!];
     if (!a) throw new Error(`SANDBOX_MUTATE_ACTION must be one of ${Object.keys(actions).join(", ")}`);

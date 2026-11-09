@@ -15,7 +15,14 @@ export const SlotValue = z.object({
 });
 
 export const ProposedAction = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("SubmitEvidence"), disputeId: z.string(), exhibitIds: z.array(z.string()).min(1) }),
+  z.object({
+    type: z.literal("SubmitEvidence"), disputeId: z.string(), exhibitIds: z.array(z.string()).min(1),
+    // From the seller's trusted tracking record (run.ts), never from model or buyer text. Present => PROOF_OF_FULFILLMENT.
+    tracking: z.object({
+      carrier: z.string().regex(/^[A-Z0-9_]{2,40}$/),
+      trackingNumber: z.string().regex(/^[A-Za-z0-9-]{4,64}$/),
+    }).optional(),
+  }),
   z.object({ type: z.literal("MakeOffer"), disputeId: z.string(), amountCents: Cents, currency: Currency,
     offerType: z.enum(["REFUND", "REFUND_WITH_RETURN", "REFUND_WITH_REPLACEMENT", "REPLACEMENT_WITHOUT_REFUND"]) }),
   z.object({ type: z.literal("AcceptClaim"), disputeId: z.string(), amountCents: Cents, currency: Currency }),
