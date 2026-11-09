@@ -145,6 +145,12 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
           <pre className="overflow-x-auto rounded bg-neutral-50 p-3 text-xs">{JSON.stringify(run.baseline.proposal, null, 1)}</pre>
           <p className="mt-2 text-sm text-neutral-600">Its stated reasoning: “{run.baseline.reasoning}”</p>
           <div className="mt-2"><GateView g={run.baseline.gate} /></div>
+          {run.baseline.proposal.type === "SubmitEvidence" && (
+            <p className="mt-2 text-xs text-neutral-500">
+              In this recorded run the naive agent did not follow the buyer&apos;s instruction. Its evidence is still refused: it names no exhibit in the evidence store (I8).
+              One recorded run of one model; it does not show a naive agent is safe. See /eval for the attack classes.
+            </p>
+          )}
         </Stage>
       )}
 

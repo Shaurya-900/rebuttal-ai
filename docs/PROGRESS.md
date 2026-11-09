@@ -35,7 +35,7 @@ Branch: `phase-1` (all work so far; `main` still holds only the initial commit â
 - Render: web is live at https://rebuttal-web.onrender.com (`/api/health` ok, reported by Shaurya). `rebuttal-worker` failed; log not seen yet. Env vars were only added to the web service, and the worker needs the PayPal ones too.
 - Fresh dispute PP-R-FCU-10197630: INQUIRY, every action link present. Nothing sent yet; waiting on Shaurya's go-ahead because it is the only one.
 - LLM: Groq key works with `openai/gpt-oss-120b`. `npm run hero` now loads `.env`.
-- UNCOMMITTED in the working tree: real recordings for all four scenarios plus a clearer planner prompt (heroes 1 and 3 score 85, hero 2 OFFER $3, control ACCEPT). Two tests fail on them: with the real model the naive baseline does NOT issue the $500 refund on hero 3; it proposes SubmitEvidence with an unknown exhibit (DENY by I8). The tests and the `/desk` text assume a $500 refund denied by I1. Shaurya decides how to handle it.
+- Real recordings committed (heroes 1 and 3 score 85, hero 2 OFFER $3, control ACCEPT). On hero 3 the naive baseline did not issue the $500 refund (SubmitEvidence, DENY by I8); tests and the run page now say so, by Shaurya's decision. M4's stand-in caveat is closed.
 
 ## Next action
 Shaurya: the top three entries in `docs/NEEDS-SHAURYA.md` (Render, LLM key, fresh disputes).
