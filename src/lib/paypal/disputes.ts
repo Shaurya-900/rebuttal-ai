@@ -83,10 +83,14 @@ export function buildRequest(a: ProposedAction, attachments: Attachment[] = [], 
   const tag = ref ? ` [ref ${ref}]` : "";
   switch (a.type) {
     case "SubmitEvidence": {
-      // multipart: JSON part "input" + file part(s) "evidence-file" (schema.json; the spike used this shape).
-      const input = {
-        evidences: [{ evidence_type: "OTHER", notes: `Seller records for this order are attached (Rebuttal evidence packet).${tag}`, documents: attachments.map((f) => ({ name: f.name })) }],
-      };
+      // multipart: JSON part "input" + file part(s) "evidence-file". Verified Nov 10 (200, debug_id f589977c30084):
+      // PROOF_OF_FULFILLMENT + evidence_info.tracking_info on an INR dispute. OTHER there -> 400 EVIDENCE_TYPE_IS_NOT_ALLOWED.
+      const notes = `Seller records for this order are attached (Rebuttal evidence packet).${tag}`;
+      const documents = attachments.map((f) => ({ name: f.name }));
+      const evidence = a.tracking
+        ? { evidence_type: "PROOF_OF_FULFILLMENT", evidence_info: { tracking_info: [trackingInfo(a.tracking)] }, notes, documents }
+        : { evidence_type: "OTHER", notes, documents };
+      const input = { evidences: [evidence] };
       const form = new FormData();
       form.append("input", new Blob([JSON.stringify(input)], { type: "application/json" }));
       for (const f of attachments) form.append("evidence-file", new Blob([new Uint8Array(f.bytes)], { type: f.contentType }), f.name);
@@ -111,6 +115,15 @@ export function buildRequest(a: ProposedAction, attachments: Attachment[] = [], 
     case "AskSeller":
       throw new Error(`${a.type} is not a dispute action`);
   }
+}
+
+// PayPal carrier codes we pass through as-is (USPS verified Nov 10). Anything else goes as OTHER + carrier_name_other (UNVERIFIED).
+// ponytail: short list; add codes from PayPal's carrier enum when a real seller uses one.
+const PAYPAL_CARRIERS = new Set(["USPS", "UPS", "FEDEX", "DHL", "INDIA_POST", "BLUEDART", "DELHIVERY", "ROYAL_MAIL", "CANADA_POST", "AUSTRALIA_POST"]);
+function trackingInfo(t: { carrier: string; trackingNumber: string }) {
+  return PAYPAL_CARRIERS.has(t.carrier)
+    ? { carrier_name: t.carrier, tracking_number: t.trackingNumber }
+    : { carrier_name: "OTHER", carrier_name_other: t.carrier, tracking_number: t.trackingNumber };
 }
 
 export type ActionResult = { before: PaypalDispute; res: PpResponse; href: string };
