@@ -1,6 +1,6 @@
 # PROGRESS — milestones from docs/MASTER-PROMPT.md
 
-Last updated: Tue 10 Nov 2026, about 03:30 IST. Deadline: Wed 11 Nov, 23:59 IST.
+Last updated: Tue 10 Nov 2026, about 04:15 IST. Deadline: Wed 11 Nov, 23:59 IST.
 Branch: `phase-1` (all work so far; `main` still holds only the initial commit — merging is Shaurya's call).
 
 | # | Milestone | State |
@@ -30,6 +30,12 @@ Branch: `phase-1` (all work so far; `main` still holds only the initial commit �
 - Master prompt: "nothing is cut". CLAUDE.md cut order: ledger, AG Studio, Workflows, Playwright go first. With under two days left, work order is: deploy (M3) → real PayPal results (M1) → eval (M9) → ship assets (M14) → then M11-M13.
 - Master prompt: push to `origin main`. Pushing to `phase-1` until Shaurya says to merge.
 - The `CLAUDE.md` in Downloads is older than the repo's (no S1-S4 status). The repo's copy was kept.
+
+## Nov 10, 04:15 IST update
+- Render: web is live at https://rebuttal-web.onrender.com (`/api/health` ok, reported by Shaurya). `rebuttal-worker` failed; log not seen yet. Env vars were only added to the web service, and the worker needs the PayPal ones too.
+- Fresh dispute PP-R-FCU-10197630: INQUIRY, every action link present. Nothing sent yet; waiting on Shaurya's go-ahead because it is the only one.
+- LLM: Groq key works with `openai/gpt-oss-120b`. `npm run hero` now loads `.env`.
+- Real recordings committed (heroes 1 and 3 score 85, hero 2 OFFER $3, control ACCEPT). On hero 3 the naive baseline did not issue the $500 refund (SubmitEvidence, DENY by I8); tests and the run page now say so, by Shaurya's decision. M4's stand-in caveat is closed.
 
 ## Next action
 Shaurya: the top three entries in `docs/NEEDS-SHAURYA.md` (Render, LLM key, fresh disputes).

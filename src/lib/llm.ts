@@ -104,7 +104,7 @@ export function geminiProvider(key: string, model = "gemini-2.5-flash"): Provide
   };
 }
 
-export function groqProvider(key: string, model = "llama-3.3-70b-versatile"): Provider {
+export function groqProvider(key: string, model = "openai/gpt-oss-120b"): Provider {
   return {
     name: "groq",
     model,
