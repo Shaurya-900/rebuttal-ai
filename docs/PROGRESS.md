@@ -19,7 +19,7 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M11 | Ledger + /verify | TODO |
 | M12 | /dashboard (AG Studio) | TODO |
 | M13 | Render Workflows spike | TODO |
-| M14 | README, video script, Devpost text, Playwright, secret scan | TODO. README and docs can be written now |
+| M14 | README, video script, Devpost text, Playwright, secret scan | PARTIAL. Drafts written Nov 10: README.md, docs/VIDEO-SCRIPT.md, docs/DEVPOST.md (eval numbers left as placeholders). TODO: Shaurya's edit, eval numbers, Playwright, secret scan, fresh-browser run |
 
 ## Verified facts (Nov 10 audit)
 - `npm run typecheck` passes; `npm test`: 11 files, 68 tests pass.
