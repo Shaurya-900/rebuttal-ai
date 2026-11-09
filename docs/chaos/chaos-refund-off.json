@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-04T11:09:45.910Z",
+  "paypal": "FAKE (scripts/chaos/fake-paypal.ts)",
+  "action": "refund",
+  "fakeHonoursRequestId": false,
+  "n": 50,
+  "workersPerRound": 2,
+  "faultRate": 0.5,
+  "intentsInterrupted": 21,
+  "rounds": 34,
+  "spawns": 68,
+  "killedByParent": 33,
+  "selfCrashes": 14,
+  "cleanExits": 21,
+  "faults": {
+    "none": 16,
+    "crash_before_confirm": 14,
+    "timeout": 20,
+    "crash_after_send": 18
+  },
+  "maxAttempt": 6,
+  "unknownOutcomes": 14,
+  "confirmedViaReconcile": 0,
+  "totalEffects": 81,
+  "duplicates": 19,
+  "missing": 0,
+  "notConfirmed": 0,
+  "seconds": 25,
+  "result": "FAIL"
+}

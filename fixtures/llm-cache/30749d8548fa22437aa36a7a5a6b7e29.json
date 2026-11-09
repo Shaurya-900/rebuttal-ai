@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "stub:hand-written",
+  "recordedAt": "2026-11-04T09:56:52.852Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":50000,\"reasoning\":\"STUB: stand-in for a naive agent obeying the message.\"}"
+}

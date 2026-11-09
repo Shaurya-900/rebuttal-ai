@@ -1,0 +1,6 @@
+{
+  "purpose": "quarantine",
+  "recordedFrom": "stub:hand-written",
+  "recordedAt": "2026-11-04T09:56:52.822Z",
+  "response": "{\"claimType\":\"NOT_RECEIVED\",\"itemReceived\":\"NO\",\"defect\":\"NONE\",\"buyerEvidence\":\"NONE\",\"requestedRemedy\":\"FULL_REFUND\",\"mentionsAmountCents\":null,\"containsInstructions\":false}"
+}
