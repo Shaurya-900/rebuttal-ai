@@ -179,3 +179,20 @@ amount: {"currency_code":"USD","value":"10.00"}
 seller_response_due_date: 2026-11-14T04:59:59.000Z
 links (actions available): self, accept_claim, provide_evidence
 ```
+## Fresh disputes
+PP-R-FCU-10197630 (created by hand by Shaurya, Nov 9-10; creation time not recorded, so no maturation-delay measurement from this one)
+
+Read-only check, Nov 10 about 04:00 IST (`show-dispute.mjs`), nothing sent:
+```
+reason: MERCHANDISE_OR_SERVICE_NOT_RECEIVED
+status: WAITING_FOR_SELLER_RESPONSE
+stage: INQUIRY
+amount: 10.00 USD
+seller_response_due_date: 2026-11-29T22:12:33.247Z
+links: self, send_message, escalate, provide_evidence, accept_claim, make_offer
+```
+First time `make_offer` and `send_message` links have been observed. No action has been run on it yet.
+
+## Groq, Nov 10
+- `llama-3.3-70b-versatile` returns HTTP 404 for this key; it is not in the account's model list. Default Groq model is now `openai/gpt-oss-120b`.
+- The free tier returned HTTP 429 after about 9 calls in one run; a second run a minute later went through.
