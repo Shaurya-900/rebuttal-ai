@@ -1,18 +1,18 @@
 # PROGRESS — milestones from docs/MASTER-PROMPT.md
 
 Last updated: Tue 10 Nov 2026, about 04:15 IST. Deadline: Wed 11 Nov, 23:59 IST.
-Branch: `phase-1` (all work so far; `main` still holds only the initial commit — merging is Shaurya's call).
+Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 
 | # | Milestone | State |
 | --- | --- | --- |
 | M0 | Audit, PROGRESS.md, docs | DONE (Nov 10). `invariants.md`, `rubric.md`, `attacks.md` exist but are still Claude's unreviewed drafts |
-| M1 | PayPal spike resolved | BLOCKED: no fresh, never-escalated dispute id in `docs/paypal-notes.md` (NEEDS-SHAURYA [S0]) |
+| M1 | PayPal spike resolved | IN PROGRESS: fresh INQUIRY dispute PP-R-FCU-10197630 has every action link; no action run yet (waiting on Shaurya's go-ahead) |
 | M2 | Schema + seed | PARTIAL. Tables: dispute, action_intent, outbox, webhook_event, event_log, exhibit, usage_counter, approval. Synthetic records live in code (`src/lib/agent/scenarios.ts`), not in DB tables; no `npm run seed`. Not needed for the judge flow |
-| M3 | Skeleton, health, render.yaml, first deploy | IN PROGRESS. `/api/health` and `render.yaml` written Nov 10 (unverified on Render). Deploy BLOCKED on Shaurya's Render account (NEEDS-SHAURYA [M3]) |
+| M3 | Skeleton, health, render.yaml, first deploy | DONE for web (Nov 10): https://rebuttal-web.onrender.com, `/api/health` 200 with db up, checked by Claude Code after the PR #2 deploy. `rebuttal-worker` status unknown (failed its first build) |
 | M4 | Agent pipeline offline | DONE, with the caveat that all 10 cached LLM answers are hand-written stand-ins, not model output |
 | M5 | PayPal adapter, webhook route, worker loops | PARTIAL. Built and unit-tested. No dispute action has succeeded against the sandbox (waits on M1). Webhook delivery unverified (waits on M3) |
 | M6 | Executor, reconcile, faults, approvals | DONE in tests. A real PROPOSED→CONFIRMED sandbox action waits on M1 |
-| M7 | /desk, Run demo, limits | PARTIAL. Done locally: `/desk`, `/desk/run/<id>`, approvals, per-IP limit, daily cap. Missing: `/desk/policy`, richer `/` page. Live URL waits on M3 |
+| M7 | /desk, Run demo, limits | PARTIAL. Judge flow works on the live URL (Nov 10: hero 3 Run demo -> trace with real recorded answers). Missing: `/desk/policy`, richer `/` page. Per-IP limit behind Render's proxy still unverified |
 | M8 | /store checkout | DONE locally. Capture after a human approval is unverified (NEEDS-SHAURYA [S2]) |
 | M9 | Eval | BLOCKED: no LLM key (NEEDS-SHAURYA [S1]). `/eval` is a placeholder with no numbers |
 | M10 | Chaos | PARTIAL. Fake-PayPal run done Nov 4: N=200+200, 0 duplicates, 0 missing. Real-sandbox run TODO: needs one captured payment (many 0.01 refunds on one capture) |
