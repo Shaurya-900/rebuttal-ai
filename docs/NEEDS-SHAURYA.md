@@ -15,7 +15,8 @@ Exact steps:
 Done when: the health URL shows ok. Tell Claude Code the URL (not the secrets) and paste any build error.
 Blocks: M3, M7, M8, the video, the submission. `render.yaml` is unverified until this first deploy; expect one or two fixes.
 
-## [S0] [5 each] Create a fresh, never-escalated dispute (3 if you can)
+## [S0] [5 each] Create 2 more fresh, never-escalated disputes (one is used up)
+Nov 10: PP-R-FCU-10197630 answered GO for provide_evidence, but our message removed its make_offer link. The offer demo (hero 2) and the make_offer test each need an untouched INQUIRY dispute. Note the creation time (IST) for each, to measure the maturation delay.
 Why: S0 needs a dispute that never went to the CHARGEBACK stage. The only one we have (PP-R-HQO-10196189) was escalated and `provide-evidence` returned 500 on it.
 Exact steps:
 1. Sandbox personal account -> pay the business account $10 (new payment each time; one dispute per transaction, ever).

@@ -196,3 +196,39 @@ First time `make_offer` and `send_message` links have been observed. No action h
 ## Groq, Nov 10
 - `llama-3.3-70b-versatile` returns HTTP 404 for this key; it is not in the account's model list. Default Groq model is now `openai/gpt-oss-120b`.
 - The free tier returned HTTP 429 after about 9 calls in one run; a second run a minute later went through.
+
+## Nov 10 — first successful dispute action: send_message on PP-R-FCU-10197630 (INQUIRY)
+Run by Claude Code with Shaurya's go-ahead, through the app adapter (`sendDisputeAction`, the executor's code path):
+`SANDBOX_MUTATE_DISPUTE_ID=PP-R-FCU-10197630 SANDBOX_MUTATE_ACTION=send_message npm run test:sandbox` -> test passed, so HTTP 2xx (vitest hid the debug_id line).
+
+Before (22:34:48Z): `WAITING_FOR_SELLER_RESPONSE / INQUIRY`, due 2026-11-29, links `self, accept_claim, provide_evidence, send_message, escalate, make_offer`.
+After (22:35Z, read back with GET):
+```
+status=UNDER_REVIEW stage=INQUIRY due=(absent)
+links=self
+messages: BUYER "ubuw" (22:12:33Z); SELLER "We have submitted our records for this order to PayPal." (22:35:02Z)
+offer: buyer_requested_amount 10.00 USD
+```
+**Observed: sending a message in INQUIRY hands the turn to the buyer, and removes make_offer.**
+- Straight after the send (about 22:35:02Z): `UNDER_REVIEW`, due date absent, links `self` only. Transient.
+- At 22:35:35Z (about 30 s later): `WAITING_FOR_BUYER_RESPONSE`, links `self, provide_evidence, accept_claim, escalate, send_message`. **`make_offer` did not come back.**
+Consequences:
+- Order matters. On an INQUIRY dispute, make the offer FIRST; a message after it, or not at all. The offer demo (hero 2) must never send a message first.
+- Re-fetch right before acting (the executor already does): for about 30 s after a message every link is gone.
+- The sandbox test sent no `[ref]` tag (it passes no `ref`), so whether PayPal keeps our tag in messages is still unverified.
+- Also observed: at 22:35:13Z, right after our message, PayPal added an evidence request: `{source: REQUESTED_FROM_SELLER, evidence_type: PROOF_OF_FULFILLMENT}`. `allowed_response_options` = `accept_claim: [REFUND]` only.
+
+## Nov 10 — provide_evidence: GO (PP-R-FCU-10197630, INQUIRY, WAITING_FOR_BUYER_RESPONSE)
+1. **Adapter as built (`evidence_type: OTHER` + PDF), 22:36Z -> HTTP 400 `INVALID_REQUEST` / `EVIDENCE_TYPE_IS_NOT_ALLOWED`, debug_id `f804379c64204`.** Nothing changed on the dispute. `OTHER` is only for the docs' internal-testing case; this dispute requested `PROOF_OF_FULFILLMENT`.
+2. **`PROOF_OF_FULFILLMENT` with tracking + one PDF, 22:36:32Z -> HTTP 200, debug_id `f589977c30084`.** Body: only a `detail` link. Request (multipart):
+```json
+{"evidences":[{"evidence_type":"PROOF_OF_FULFILLMENT",
+  "evidence_info":{"tracking_info":[{"carrier_name":"USPS","tracking_number":"9400100000000000000000"}]},
+  "notes":"SYNTHETIC sandbox test (Rebuttal): item shipped with tracking; carrier shows delivered.",
+  "documents":[{"name":"packet.pdf"}]}]}
+```
+   plus a file part `evidence-file` (application/pdf, `packet.pdf`). Tracking number is synthetic.
+   Read back: the evidence appears as `source: SUBMITTED_BY_SELLER`, `action_info.action: PROVIDE_EVIDENCE`, our `notes` **verbatim** (so a `[ref]` tag in notes can drive reconcile), and the PDF stored at a PayPal documents URL.
+   After: `WAITING_FOR_BUYER_RESPONSE / INQUIRY`, links `self, accept_claim, escalate, send_message` (provide_evidence gone once answered).
+- The earlier HTTP 500 (PP-R-HQO-10196189, escalated, debug_id f649595c408c8) was most likely the wrong evidence type on a CHARGEBACK-stage dispute too (unverified; we did not retry it).
+- **Code consequence (not yet changed):** `buildRequest` in `src/lib/paypal/disputes.ts` hard-codes `OTHER`. For INR it must send `PROOF_OF_FULFILLMENT` with `evidence_info.tracking_info` from the order's tracking record. Ideally it reads the dispute's `REQUESTED_FROM_SELLER` evidence type.
