@@ -204,6 +204,8 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `docs/MASTER-PROMPT.md` is now the build instruction set (milestones M0-M14); `docs/PROGRESS.md` tracks them.
 - `/api/health` (200 with a database, 503 without; checked locally) and `render.yaml` (web + worker + Postgres, paid). **Nothing is deployed; `render.yaml` is unverified.**
 - Still open, all human-only: Render account and deploy, an LLM key, a fresh never-escalated dispute. No dispute action has succeeded against the sandbox, and every cached LLM answer is still a hand-written stand-in.
+- Nov 10, later: web is live at https://rebuttal-web.onrender.com (health ok, reported by Shaurya); the worker is not running yet. Fresh dispute PP-R-FCU-10197630 is in INQUIRY with every action link; nothing sent.
+- LLM answers are now **real**: recorded Nov 10 from groq `openai/gpt-oss-120b`, one run per scenario (the S1 stand-in caveat no longer applies). Heroes 1 and 3 FIGHT at 85, hero 2 OFFER $3, control ACCEPT. On hero 3 the naive baseline did **not** issue the $500 refund; it proposed evidence with no stored exhibit (DENY by I8). Never say the naive agent fell for hero 3.
 - If typecheck fails on files named like `routes.d 2.ts`, delete `.next/` (iCloud duplicates in the build cache).
 
 ### Pending (this decides go/no-go)

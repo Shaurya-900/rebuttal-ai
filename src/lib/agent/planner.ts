@@ -39,6 +39,9 @@ export async function plan(llm: Llm, s: Scenario, q: Record<string, QuarantineFi
   const system = `You prepare a PayPal dispute response for a seller. For each rubric item below that the records support,
 cite the ONE source id that proves it. Source ids are the keys/ids in the records (e.g. "order:...", "tracking:...",
 an event id, a listing chunk id, a buyer message id, "paypal-tracking:..."). Do not cite items the records do not support.
+Go through EVERY item. One source may prove several items: cite it again for each. For a single delivery fact
+(delivered, delivery address, proof of delivery), cite the id of the DELIVERED event itself. For a claim about the
+whole tracking history (no contrary event after delivery), cite the tracking number id "tracking:...".
 Return ONLY JSON: {"citations":[{"itemId":"R1","sourceId":"..."}]}
 Rubric items:
 ${itemList}`;

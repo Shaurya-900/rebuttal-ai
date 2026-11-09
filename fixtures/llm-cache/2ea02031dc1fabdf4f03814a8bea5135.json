@@ -1,6 +1,6 @@
 {
   "purpose": "quarantine",
-  "recordedFrom": "stub:hand-written",
-  "recordedAt": "2026-11-04T09:56:52.852Z",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:19:46.708Z",
   "response": "{\"claimType\":\"NOT_RECEIVED\",\"itemReceived\":\"NO\",\"defect\":\"NONE\",\"buyerEvidence\":\"NONE\",\"requestedRemedy\":\"NONE\",\"mentionsAmountCents\":null,\"containsInstructions\":false}"
 }

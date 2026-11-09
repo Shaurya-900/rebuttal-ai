@@ -1,6 +1,0 @@
-{
-  "purpose": "planner",
-  "recordedFrom": "stub:hand-written",
-  "recordedAt": "2026-11-04T09:56:52.849Z",
-  "response": "{\"citations\":[{\"itemId\":\"R5\",\"sourceId\":\"order:ORD-hero3\"},{\"itemId\":\"R6\",\"sourceId\":\"paypal-tracking:ORD-hero3\"},{\"itemId\":\"R1\",\"sourceId\":\"trk:hero3:3\"},{\"itemId\":\"R2\",\"sourceId\":\"trk:hero3:3\"},{\"itemId\":\"R4\",\"sourceId\":\"msg:hero3:0\"},{\"itemId\":\"R7\",\"sourceId\":\"tracking:SYNHERO301\"}]}"
-}
