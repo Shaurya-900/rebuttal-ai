@@ -1,0 +1,48 @@
+# Render Blueprint: web + worker + Postgres, all paid (free plans sleep or expire during judging).
+# UNVERIFIED until the first deploy: plan names, and that dev dependencies install with --include=dev.
+# Secrets are `sync: false`: Render asks for them in the dashboard; they never live in this file.
+
+databases:
+  - name: rebuttal-db
+    plan: basic-256mb
+    region: singapore
+
+services:
+  - type: web
+    name: rebuttal-web
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci --include=dev && npm run build
+    preDeployCommand: npm run db:migrate
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - { key: NODE_VERSION, value: "24" }
+      - { key: DATABASE_URL, fromDatabase: { name: rebuttal-db, property: connectionString } }
+      - { key: PAYPAL_BASE_URL, value: https://api-m.sandbox.paypal.com }
+      - { key: SANDBOX_SIMULATOR, value: "true" }
+      - { key: REBUTTAL_LLM_MODE, value: replay }
+      - { key: PAYPAL_CLIENT_ID, sync: false }
+      - { key: PAYPAL_CLIENT_SECRET, sync: false }
+      - { key: PAYPAL_WEBHOOK_ID, sync: false }
+      - { key: RATE_LIMIT_SALT, sync: false }
+      - { key: DESK_APPROVER_TOKEN, sync: false }
+      - { key: REBUTTAL_LLM_KEY, sync: false }
+
+  - type: worker
+    name: rebuttal-worker
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci --include=dev
+    startCommand: npx tsx src/worker.ts
+    envVars:
+      - { key: NODE_VERSION, value: "24" }
+      - { key: DATABASE_URL, fromDatabase: { name: rebuttal-db, property: connectionString } }
+      - { key: PAYPAL_BASE_URL, value: https://api-m.sandbox.paypal.com }
+      - { key: SANDBOX_SIMULATOR, value: "true" }
+      - { key: REBUTTAL_LLM_MODE, value: replay }
+      - { key: PAYPAL_CLIENT_ID, sync: false }
+      - { key: PAYPAL_CLIENT_SECRET, sync: false }
+      - { key: PAYPAL_WEBHOOK_ID, sync: false }

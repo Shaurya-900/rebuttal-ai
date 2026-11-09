@@ -55,3 +55,15 @@
 1. An action was ALLOWed yesterday. Today it's the buyer's 3rd dispute (I10). What does the executor do now, and what did it do before this fix?
 2. Why does the per-IP limit use the *last* X-Forwarded-For entry rather than the first?
 3. A judge clicks Run demo 50 times. Why does that cost zero model calls, and what would make it start costing?
+
+## M0 audit + M3 deploy files (Nov 10)
+1. Claude Code compared the repo with `docs/MASTER-PROMPT.md` and wrote `docs/PROGRESS.md`: one line per milestone, saying what is done, partial or blocked.
+2. Typecheck was failing because iCloud had made duplicate files ("name 2") inside `.next/`, the build cache. Deleting the cache fixed it; no source code was wrong.
+3. `/api/health` is a tiny route that runs `select 1` on Postgres. Render calls it to decide whether the web service is alive. It answers 200 with a database and 503 without (both checked locally).
+4. `render.yaml` is a "Blueprint": a file that tells Render to create the web service, the worker and the database. Secrets are marked `sync: false`, so Render asks for them in its dashboard and they never enter Git.
+5. Nothing is deployed yet. The file is unverified until Render actually builds it.
+
+Recall questions:
+1. Why does the health route not check the worker as well as the database?
+2. What does `sync: false` mean in `render.yaml`, and why does it matter for a public repo?
+3. `PAYPAL_WEBHOOK_ID` is set to `pending` at first. What happens to a webhook that arrives before the real id is set, and why is that the safe direction?

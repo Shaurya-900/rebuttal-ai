@@ -200,6 +200,12 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 ### S5 stopped (Nov 4 night)
 - Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].
 
+### Nov 10 audit (68 unit tests pass, `next build` passes)
+- `docs/MASTER-PROMPT.md` is now the build instruction set (milestones M0-M14); `docs/PROGRESS.md` tracks them.
+- `/api/health` (200 with a database, 503 without; checked locally) and `render.yaml` (web + worker + Postgres, paid). **Nothing is deployed; `render.yaml` is unverified.**
+- Still open, all human-only: Render account and deploy, an LLM key, a fresh never-escalated dispute. No dispute action has succeeded against the sandbox, and every cached LLM answer is still a hand-written stand-in.
+- If typecheck fails on files named like `routes.d 2.ts`, delete `.next/` (iCloud duplicates in the build cache).
+
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.
 - Next: a fresh, never-escalated dispute -> `require-evidence` -> `provide-evidence`; try the evidence shape the dispute requests, `PROOF_OF_FULFILLMENT`, and a plain curl; capture the `debug_id`. See step S0 in `docs/BUILD-PLAN.md`.
