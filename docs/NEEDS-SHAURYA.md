@@ -2,6 +2,19 @@
 
 Things only you can do. Newest blockers at the top. Claude Code keeps working on whatever is not blocked.
 
+**Nov 10: under two days left. Do these three first, in this order: [M3] Render, [S1] LLM key, [S0] fresh disputes. Everything a judge sees depends on them.**
+
+## [M3] [40] Deploy to Render (the hosted demo is required to submit)
+Why: Devpost needs a working hosted build, and nothing has been deployed yet. `render.yaml` describes the three paid services (web, worker, Postgres), but only you can create the account and enter a card.
+Exact steps:
+1. Sign in at dashboard.render.com with GitHub. Claim the $50 hackathon credit and add a card (check an Indian card is accepted).
+2. New -> Blueprint -> pick the `rebuttal-ai` repo, branch `phase-1`. Render reads `render.yaml`.
+3. It asks for the secret values. Copy `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET` from your `.env`. For `RATE_LIMIT_SALT` and `DESK_APPROVER_TOKEN` run `openssl rand -hex 16` twice. Set `PAYPAL_WEBHOOK_ID` to the word `pending` for now (webhooks are rejected until the real id is set, which is the safe direction). Leave `REBUTTAL_LLM_KEY` empty.
+4. Apply. When the web service is live, open `https://<your-url>/api/health`; it should show `{"ok":true,"db":"up"}`.
+5. developer.paypal.com -> your sandbox app -> Webhooks -> add `https://<your-url>/api/webhooks/paypal`, events `CUSTOMER.DISPUTE.CREATED`, `UPDATED`, `RESOLVED`. Copy the webhook id into `PAYPAL_WEBHOOK_ID` on both Render services.
+Done when: the health URL shows ok. Tell Claude Code the URL (not the secrets) and paste any build error.
+Blocks: M3, M7, M8, the video, the submission. `render.yaml` is unverified until this first deploy; expect one or two fixes.
+
 ## [S0] [5 each] Create a fresh, never-escalated dispute (3 if you can)
 Why: S0 needs a dispute that never went to the CHARGEBACK stage. The only one we have (PP-R-HQO-10196189) was escalated and `provide-evidence` returned 500 on it.
 Exact steps:
