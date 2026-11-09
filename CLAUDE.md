@@ -208,6 +208,11 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - LLM answers are now **real**: recorded Nov 10 from groq `openai/gpt-oss-120b`, one run per scenario (the S1 stand-in caveat no longer applies). Heroes 1 and 3 FIGHT at 85, hero 2 OFFER $3, control ACCEPT. On hero 3 the naive baseline did **not** issue the $500 refund; it proposed evidence with no stored exhibit (DENY by I8). Never say the naive agent fell for hero 3.
 - If typecheck fails on files named like `routes.d 2.ts`, delete `.next/` (iCloud duplicates in the build cache).
 
+### Go/no-go: GO (Nov 10, about 04:06 IST)
+- On fresh INQUIRY dispute PP-R-FCU-10197630: `send_message` succeeded through the adapter; `provide_evidence` returned **200** (debug_id f589977c30084) with `evidence_type: PROOF_OF_FULFILLMENT` + `evidence_info.tracking_info` + a PDF. `OTHER` returns 400 `EVIDENCE_TYPE_IS_NOT_ALLOWED`. Details in `docs/paypal-notes.md`.
+- A seller message in INQUIRY removes `make_offer` and hands the turn to the buyer. Offer first, message last (or never).
+- The adapter still sends `OTHER`; it must send `PROOF_OF_FULFILLMENT` with tracking for INR.
+
 ### Pending (this decides go/no-go)
 - `provide-evidence` returned HTTP 500 on the hand-made dispute (which was escalated to a claim). Unresolved. That dispute's response deadline is Nov 14.
 - Next: a fresh, never-escalated dispute -> `require-evidence` -> `provide-evidence`; try the evidence shape the dispute requests, `PROOF_OF_FULFILLMENT`, and a plain curl; capture the `debug_id`. See step S0 in `docs/BUILD-PLAN.md`.

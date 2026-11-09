@@ -6,11 +6,11 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | # | Milestone | State |
 | --- | --- | --- |
 | M0 | Audit, PROGRESS.md, docs | DONE (Nov 10). `invariants.md`, `rubric.md`, `attacks.md` exist but are still Claude's unreviewed drafts |
-| M1 | PayPal spike resolved | IN PROGRESS: fresh INQUIRY dispute PP-R-FCU-10197630 has every action link; no action run yet (waiting on Shaurya's go-ahead) |
+| M1 | PayPal spike resolved | **GO** (Nov 10): on PP-R-FCU-10197630 `send_message` 2xx and `provide_evidence` 200 (debug_id f589977c30084) with `PROOF_OF_FULFILLMENT` + tracking. `OTHER` gives 400 EVIDENCE_TYPE_IS_NOT_ALLOWED. Still untested: make_offer (removed by our message on this dispute; needs another fresh one), accept_claim, PayPal-Request-Id on disputes, maturation delay |
 | M2 | Schema + seed | PARTIAL. Tables: dispute, action_intent, outbox, webhook_event, event_log, exhibit, usage_counter, approval. Synthetic records live in code (`src/lib/agent/scenarios.ts`), not in DB tables; no `npm run seed`. Not needed for the judge flow |
 | M3 | Skeleton, health, render.yaml, first deploy | DONE for web (Nov 10): https://rebuttal-web.onrender.com, `/api/health` 200 with db up, checked by Claude Code after the PR #2 deploy. `rebuttal-worker` status unknown (failed its first build) |
 | M4 | Agent pipeline offline | DONE, with the caveat that all 10 cached LLM answers are hand-written stand-ins, not model output |
-| M5 | PayPal adapter, webhook route, worker loops | PARTIAL. Built and unit-tested. No dispute action has succeeded against the sandbox (waits on M1). Webhook delivery unverified (waits on M3) |
+| M5 | PayPal adapter, webhook route, worker loops | PARTIAL. send_message verified through the adapter. provide_evidence works only with PROOF_OF_FULFILLMENT, which the adapter does not send yet (hard-codes OTHER): fix next. Webhook delivery unverified |
 | M6 | Executor, reconcile, faults, approvals | DONE in tests. A real PROPOSED→CONFIRMED sandbox action waits on M1 |
 | M7 | /desk, Run demo, limits | PARTIAL. Judge flow works on the live URL (Nov 10: hero 3 Run demo -> trace with real recorded answers). Missing: `/desk/policy`, richer `/` page. Per-IP limit behind Render's proxy still unverified |
 | M8 | /store checkout | DONE locally. Capture after a human approval is unverified (NEEDS-SHAURYA [S2]) |
