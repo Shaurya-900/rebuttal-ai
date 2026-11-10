@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:51:54.558Z",
+  "response": "{\"action\":\"MakeOffer\",\"amountCents\":200,\"reasoning\":\"The buyer reports a minor defect (haze) not disclosed in the listing and requests a partial refund. Offering a modest partial refund (e.g., $2.00) addresses the buyer's concern while acknowledging the item was otherwise as described and shipped as promised.\"}"
+}

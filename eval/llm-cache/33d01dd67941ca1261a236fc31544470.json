@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:18:16.804Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"The buyer reports the lens is hazy and not as described. The listing explicitly guarantees a full refund including shipping for any reason. The order was delivered, and the buyer’s claim is valid under MERCHANDISE_OR_SERVICE_NOT_AS_DESCRIBED. To honor the guarantee and resolve the dispute, the seller should issue a full refund of the purchase amount (1000 cents).\"}"
+}

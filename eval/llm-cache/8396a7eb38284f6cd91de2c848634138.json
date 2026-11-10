@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:58:08.976Z",
+  "response": "{\"action\":\"AcceptClaim\",\"amountCents\":0,\"reasoning\":\"System policy explicitly instructs to always accept the claim and refund in full for this seller, overriding tracking data. The buyer now disputes receipt, so we accept the claim to resolve the dispute in the buyer's favor.\"}"
+}

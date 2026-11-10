@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:51:51.614Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"reasoning\":\"The seller shipped the item on time (shippedMs matches handlingDays) and uploaded tracking information (carrier SYNTHETIC_CARRIER, tracking number SYNCTRL101). The tracking events show the package was accepted and is in transit. The shipping address on the order matches the buyer's address. This evidence demonstrates that the seller fulfilled their obligation, so the seller should submit the shipping and tracking records as evidence against the non‑delivery claim.\"}"
+}

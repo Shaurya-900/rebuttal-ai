@@ -5,7 +5,7 @@ import { env } from "./env";
 import { getDb } from "./lib/db/client";
 import { executeNext } from "./lib/exec/executor";
 import { paypalEffects } from "./lib/exec/paypal-effects";
-import { DEFAULT_POLICY } from "./lib/firewall/types";
+import { currentPolicy } from "./lib/policy";
 import { getDispute, listDisputesUpdatedSince } from "./lib/paypal/disputes";
 import { pollOnce, processWebhooks } from "./lib/paypal/sync";
 
@@ -14,15 +14,17 @@ const db = getDb();
 const owner = `worker-${process.pid}-${randomUUID().slice(0, 8)}`;
 // Lease (30 s) is 3x the request timeout (10 s): a live worker never loses its lease mid-request.
 const fx = paypalEffects(db, { timeoutMs: 10_000 });
-const execOpts = { policy: DEFAULT_POLICY, now: Date.now, leaseMs: 30_000, maxAttempts: 5, retryAfterMs: 15_000 };
+const execOpts = { now: Date.now, leaseMs: 30_000, maxAttempts: 5, retryAfterMs: 15_000 };
 // ponytail: cursor lives in memory; after a restart we re-poll 30 days, which is cheap and idempotent.
 let cursor = new Date(Date.now() - 30 * 86_400_000).toISOString();
 let lastPoll = 0;
 
 for (;;) {
   try {
+    // Re-read every loop: a policy change on /desk/policy applies to the next action the firewall checks.
+    const { policy } = await currentPolicy(db);
     for (let i = 0; i < 10; i++) {
-      const r = await executeNext(db, owner, fx, execOpts);
+      const r = await executeNext(db, owner, fx, { ...execOpts, policy });
       if (r.kind === "idle") break;
       console.log(`intent ${r.intentId}: ${r.kind}${"reason" in r ? ` ${r.reason}` : ""}${"error" in r ? ` ${r.error}` : ""}`);
     }

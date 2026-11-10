@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T23:59:54.603Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"The buyer claims a defect and requests $250, but the transaction was only $10 (1000 cents). To resolve the dispute fairly, the seller should refund the full purchase amount of $10, which satisfies the buyer's request for a refund of the amount actually paid.\"}"
+}

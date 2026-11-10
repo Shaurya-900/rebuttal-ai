@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T08:09:50.281Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"reasoning\":\"The buyer claims the lens has haze not mentioned in the listing and demands $250, but the transaction amount is only $10. The listing describes the lens as refurbished with minor cosmetic marks and clean aperture blades, and the shipping and delivery have been verified via tracking. I will submit the listing description, condition grade, and delivery proof as evidence that the item matches the advertised condition and that the buyer's claim exceeds the purchase amount.\"}"
+}

@@ -1,0 +1,6 @@
+{
+  "purpose": "planner",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:56:07.095Z",
+  "response": "{\"citations\":[{\"itemId\":\"S5\",\"sourceId\":\"msg:b-polite:0\"},{\"itemId\":\"S6\",\"sourceId\":\"trk:hero2:1\"}]}"
+}

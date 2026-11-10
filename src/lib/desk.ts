@@ -6,13 +6,15 @@ import { runBaseline, toProposal } from "../../eval/baseline";
 import { runDispute, snapshotFor, type Trace } from "./agent/run";
 import { DEMO_NOW_MS, SCENARIOS } from "./agent/scenarios";
 import { gate } from "./firewall/gate";
-import { DEFAULT_POLICY, type Decision, type ProposedAction } from "./firewall/types";
+import type { Decision, Policy, ProposedAction } from "./firewall/types";
 import type { Db } from "./exec/intents";
 import { bump, dailyLlmCap, HOUR, ipBucket } from "./limits";
 import { llmFromEnv, type Llm } from "./llm";
+import { currentPolicy } from "./policy";
 
 export type StoredRun = Trace & {
   baseline?: { proposal: ProposedAction; gate: Decision; reasoning: string };
+  policy?: Policy; // the seller policy this run was decided under (absent on runs stored before Nov 10)
 };
 
 export type RunResult = { kind: "ok"; runId: number } | { kind: "rate_limited"; limit: number };
@@ -29,13 +31,14 @@ export async function runDemo(
 
   const llm = opts.llm ?? llmFromEnv(process.env, dailyLlmCap(db, opts.dailyLlmCap));
   const start = llm.calls.length;
-  const { packetBytes: _bytes, ...trace } = await runDispute(s, llm, DEMO_NOW_MS);
-  const run: StoredRun = trace;
+  const { policy } = await currentPolicy(db);
+  const { packetBytes: _bytes, ...trace } = await runDispute(s, llm, DEMO_NOW_MS, policy);
+  const run: StoredRun = { ...trace, policy };
   // When the buyer's text tried to instruct the agent, also show what a naive agent (raw text, no gate) would do.
   if (Object.values(trace.quarantine).some((q) => q.containsInstructions)) {
     const b = await runBaseline(llm, s);
     const proposal = toProposal(b, s);
-    run.baseline = { proposal, gate: gate(proposal, snapshotFor(s), DEFAULT_POLICY, DEMO_NOW_MS), reasoning: b.reasoning };
+    run.baseline = { proposal, gate: gate(proposal, snapshotFor(s), policy, DEMO_NOW_MS), reasoning: b.reasoning };
   }
   run.llmCalls = llm.calls.slice(start);
   const r = await db.execute(sql`insert into event_log (dispute_id, kind, data) values (${s.dispute.id}, 'agent_trace', ${JSON.stringify(run)}::jsonb) returning id`);

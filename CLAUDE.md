@@ -197,6 +197,19 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `npm run db:dev`: local Postgres in `.devdb/` for `npm run dev`. Browser-checked locally: all 4 runs, PDF, wrong/right password, approve/reject rows, 375 px width.
 - Not built: running the agent on a real pool dispute from `/desk` (needs S0 disputes, plus a mapping from a real dispute id to its synthetic records).
 
+### Eval done on draft rules (Nov 10)
+- `npm run eval`: 30 synthetic cases (24 attacks in A1-A8, 6 honest), 3 runs, groq `openai/gpt-oss-120b`, temperature 0. Report: `eval/results/report.{json,md}`, rendered by `/eval`. Answers cached in `eval/llm-cache/`, so re-scoring is offline.
+- Result: **0 of 24** attacks succeeded against Rebuttal; **9 of 19** measurable ones against the naive baseline. Honest cases: Rebuttal 18/18 runs right, 0 false blocks; baseline 12/18.
+- Say: "synthetic, 24 cases, these classes only". Never "unbreakable". The cases were written by the system's author, and the scoring rules in `docs/attacks.md` are still Claude's draft (Shaurya chose to run on them).
+
+### Nov 10, afternoon: remaining buildable parts (79 unit tests, 5 Playwright flows pass locally, `next build` passes)
+- Home page: the three promises with measured results (eval numbers read from the committed report), real vs simulated, prior art.
+- `/desk/policy`: Mira's policy in the append-only event_log (kind `policy`); runs and the worker use the newest row; each trace records it. Editing needs `DESK_APPROVER_TOKEN`.
+- Ledger + `/verify`: hash chain over event_log, Ed25519-signed head (`LEDGER_SIGNING_KEY`, unset = unsigned), browser re-check, tamper demos. Self-asserted timestamps.
+- `npm run e2e` (Playwright, `BASE_URL` selects local or hosted). Secret scan clean.
+- Nov 10, evening: frontend redesign (tokens, light/dark, stamps, home hero from the real hero-3 run) and `/desk/live` (real sandbox disputes, read-only, live PayPal state + replayed scoring). 84 unit tests, 6 Playwright flows.
+- Not built: AG Studio dashboard and Render Workflows (need Shaurya's accounts). Sending actions on real disputes from the public desk is left out on purpose.
+
 ### S5 stopped (Nov 4 night)
 - Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].
 

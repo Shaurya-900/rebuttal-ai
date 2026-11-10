@@ -13,3 +13,5 @@ coverage/
 next-env.d.ts
 out/
 .devdb/
+test-results/
+playwright-report/

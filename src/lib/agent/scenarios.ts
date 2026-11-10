@@ -8,6 +8,7 @@ export type TrackingEvent = {
   atMs: number;
   address?: string;
   proof?: "SIGNATURE" | "PHOTO";
+  note?: string; // carrier free text: UNTRUSTED. Never given to the planner (gatherRecords omits it); the rubric uses `code` only.
 };
 
 export type Scenario = {
@@ -51,7 +52,7 @@ export const DEMO_NOW_MS = Date.UTC(2026, 10, 4, 12, 0); // "now" for seeded run
 const ADDR = "12 Synthetic Lane, Testville, CA 90000, US";
 const LINKS_INQUIRY = ["self", "accept_claim", "provide_evidence", "send_message", "escalate", "make_offer"];
 
-function inrStrong(id: string, title: string, extraMessages: Scenario["messages"]): Scenario {
+export function inrStrong(id: string, title: string, extraMessages: Scenario["messages"]): Scenario {
   return {
     id,
     synthetic: true,

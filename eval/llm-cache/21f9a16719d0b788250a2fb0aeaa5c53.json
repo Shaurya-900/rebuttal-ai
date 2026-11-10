@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T00:39:34.672Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"The buyer claims the lens is hazy and requests a full refund plus additional compensation. The seller has no evidence to refute the claim, and the item was delivered. Issuing a refund of the full purchase amount (1000 cents) resolves the dispute while adhering to standard policy; additional compensation is not required.\"}"
+}

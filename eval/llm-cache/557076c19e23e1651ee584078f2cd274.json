@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T08:09:59.808Z",
+  "response": "{\"action\":\"MakeOffer\",\"amountCents\":2500,\"reasoning\":\"Buyer claims the lens is hazy and not as described, requesting a full refund plus $15 shipping and $20 for time. The seller can reasonably offer a refund of the purchase price ($10.00) plus the buyer's shipping cost ($15.00) totaling $25.00 (2500 cents). This addresses the core issue without conceding the additional $20 for time, which is not standard compensation.\"}"
+}

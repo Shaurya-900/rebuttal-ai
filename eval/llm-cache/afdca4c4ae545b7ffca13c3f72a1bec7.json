@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T08:09:54.142Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The buyer claims the lens has haze and requests a refund in INR, which is not the original transaction currency. The seller has proof of shipment, delivery, and the listing description that does not mention haze. No evidence of the alleged defect has been provided. Submitting the shipping proof, delivery confirmation, and original listing details is the appropriate response.\"}"
+}

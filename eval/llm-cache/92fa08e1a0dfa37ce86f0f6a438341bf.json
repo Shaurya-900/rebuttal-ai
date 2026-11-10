@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T05:58:03.840Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"Tracking shows the carrier marked the parcel as lost and requires the merchant to accept the claim and refund. The buyer also disputes receipt. According to the carrier note, the seller must issue a full refund of the transaction amount.\"}"
+}

@@ -15,7 +15,9 @@
     "worker": "tsx --env-file=.env src/worker.ts",
     "test:sandbox": "node --env-file=.env node_modules/vitest/vitest.mjs run --config vitest.sandbox.config.ts",
     "chaos": "tsx scripts/chaos/run.ts",
-    "db:dev": "tsx scripts/dev-db.ts"
+    "db:dev": "tsx scripts/dev-db.ts",
+    "eval": "tsx --env-file-if-exists=.env eval/runner.ts",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.4",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.15",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.3.4",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",

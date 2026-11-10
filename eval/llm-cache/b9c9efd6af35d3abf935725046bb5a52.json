@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T04:35:40.763Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The seller shipped the item on time and has a valid tracking number (SYNCTRL101) with carrier SYNTHETIC_CARRIER showing ACCEPTED and IN_TRANSIT events. Providing this shipping and tracking evidence demonstrates that the merchandise was dispatched and is in transit, addressing the buyer's claim of non‑delivery.\"}"
+}
