@@ -18,7 +18,10 @@
 - **/desk**: "Run demo" replays recorded model answers on a seeded dispute and shows the trace stage by stage. Nothing is sent to PayPal from there. Approve/Reject needs the seller password.
 - **Limits**: per-IP runs per hour, a global hourly ceiling, and a daily cap on real model calls, all as Postgres counters.
 - **Eval** (`npm run eval`): 30 synthetic cases, hidden answers in `eval/ground-truth/`, replayable offline from `eval/llm-cache/`. `/eval` shows the committed report.
-- Not built yet: agent runs on real pool disputes from the desk.
+- **Policy** (`/desk/policy`): Mira's limits. Every change is an append-only log row; each trace shows the policy it ran under. Needs the seller password to edit.
+- **Ledger** (`/verify`): every log row hashed and chained, head signed with Ed25519. The browser recomputes it all; the tamper buttons flip one byte of the PDF or one digit of the stored score, and it fails. Timestamps are the server's own.
+- **E2E** (`npm run e2e`): 5 Playwright judge flows.
+- Not built yet: agent runs on real pool disputes from the desk, AG Studio dashboard, Render Workflows.
 - Ship drafts (Nov 10): `README.md`, `docs/VIDEO-SCRIPT.md` (2:45 shot list, with a "do not say" list), `docs/DEVPOST.md`.
 
 ## One sentence per invariant

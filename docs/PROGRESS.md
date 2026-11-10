@@ -12,14 +12,14 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M4 | Agent pipeline offline | DONE. Cached answers are real model output (groq `openai/gpt-oss-120b`, recorded Nov 10) |
 | M5 | PayPal adapter, webhook route, worker loops | PARTIAL. send_message verified through the adapter. Adapter now sends PROOF_OF_FULFILLMENT + tracking for INR evidence (the shape that got 200; adapter path itself not yet re-run on the sandbox, it needs a fresh dispute). Webhook delivery unverified |
 | M6 | Executor, reconcile, faults, approvals | DONE in tests. A real PROPOSED→CONFIRMED sandbox action waits on M1 |
-| M7 | /desk, Run demo, limits | PARTIAL. Judge flow works on the live URL (Nov 10: hero 3 Run demo -> trace with real recorded answers). Missing: `/desk/policy`, richer `/` page. Per-IP limit behind Render's proxy still unverified |
+| M7 | /desk, Run demo, limits | DONE except agent runs on real pool disputes. Nov 10: home page with the three promises; `/desk/policy` (edit with seller password, append-only history, used by runs and the worker). Per-IP limit behind Render's proxy unverified |
 | M8 | /store checkout | DONE locally. Capture after a human approval is unverified (NEEDS-SHAURYA [S2]) |
 | M9 | Eval | DONE (Nov 10) on the draft rules: 30 synthetic cases × 3 runs, report in `eval/results/`, shown on `/eval`. Rebuttal 0/24 attacks; naive baseline 9/19 measured. Shaurya still owns the 7 decisions in `docs/attacks.md`; changing a rule means `npm run eval` again (offline) |
 | M10 | Chaos | PARTIAL. Fake-PayPal run done Nov 4: N=200+200, 0 duplicates, 0 missing. Real-sandbox run TODO: needs one captured payment (many 0.01 refunds on one capture) |
-| M11 | Ledger + /verify | TODO |
-| M12 | /dashboard (AG Studio) | TODO |
-| M13 | Render Workflows spike | TODO |
-| M14 | README, video script, Devpost text, Playwright, secret scan | PARTIAL. README, docs/VIDEO-SCRIPT.md, docs/DEVPOST.md written with real eval numbers (Nov 10). TODO: Shaurya's edit, video recording, Playwright, secret scan, fresh-browser run |
+| M11 | Ledger + /verify | DONE (Nov 10): hash chain over event_log, Ed25519-signed head (`LEDGER_SIGNING_KEY`), browser re-check with two tamper demos. Checked locally in the browser. On Render it shows "unsigned" until the key is set (NEEDS-SHAURYA) |
+| M12 | /dashboard (AG Studio) | NOT BUILT: needs Shaurya's AG Studio trial account. Cut order item 2 |
+| M13 | Render Workflows spike | NOT BUILT: needs Shaurya's Render workspace. Cut order item 2 |
+| M14 | README, video script, Devpost text, Playwright, secret scan | PARTIAL. Done Nov 10: docs with real numbers; Playwright judge flows (`npm run e2e`, 5/5 pass locally); secret scan (no tracked secret files; none of the 4 `.env` secret values anywhere in git history). TODO: Shaurya's edit, video, e2e against the live URL after deploy |
 
 ## Verified facts (Nov 10 audit)
 - `npm run typecheck` passes; `npm test`: 11 files, 68 tests pass.

@@ -24,7 +24,7 @@ An AI that can move money is risky in three ways. A buyer can try to talk it int
 | --- | --- | --- |
 | **Unfoolable**: buyer text cannot make it do what the rules forbid | Quarantine (a model call with no tools) + a firewall in plain code with 10 invariants | Mutation check: each of 9 rules broken on purpose, every break caught by the tests (Nov 4). Attack evaluation (Nov 10): on 24 synthetic attack cases, **0** succeeded against Rebuttal; **9 of the 19** that could be put to a naive agent succeeded against it. See [Evaluation](#evaluation) |
 | **Crash-proof**: a crash never causes two effects or a lost one | Postgres intent + outbox, leases, `PayPal-Request-Id`, reconcile against PayPal before any retry | 400 intents, about 400 `kill -9`s, **0 duplicates, 0 missing**, against a *simulated* PayPal (Nov 4) |
-| **Auditable**: every decision cites its sources | Per-claim source ids, append-only event log, trace UI, evidence PDF with `[source: id]` on every line | Every rubric point is re-checked in code against the records; a citation that doesn't hold earns 0 |
+| **Auditable**: every decision cites its sources | Per-claim source ids, append-only event log, trace UI, evidence PDF with `[source: id]` on every line, hash-chained ledger with an Ed25519-signed head | Every rubric point is re-checked in code; a citation that doesn't hold earns 0. On `/verify` your browser re-checks the chain, the signature and a run's PDF, and one changed byte fails |
 
 > **The model proposes; code disposes.** The model never outputs a score, a probability or an amount, and it never calls PayPal. Only the firewall can turn a proposal into an action.
 
@@ -35,6 +35,8 @@ An AI that can move money is risky in three ways. A buyer can try to talk it int
 1. Open **https://rebuttal-web.onrender.com/desk**.
 2. Click **Run demo** on any scenario. Each run replays model answers recorded from a real model, so a click costs nothing and sends nothing to PayPal.
 3. Read the trace from top to bottom: quarantine → rubric → decision → firewall → evidence packet.
+4. Click **verify it in your browser** under the evidence packet. `/verify` re-checks the run against the signed ledger; the tamper buttons show one changed byte failing.
+5. Read the seller's limits on **`/desk/policy`**. Every change is logged, and each trace records the policy it was decided under.
 
 | Scenario | What you should see |
 | --- | --- |
@@ -121,6 +123,16 @@ The only step of the agent that sends raw buyer text to a model. It's a model ca
 
 ### Rubric and decision (`rubric.ts`, `decide.ts`)
 The planner (a model) only points: "R1 is proven by tracking event `trk:…:3`". Code checks that each pointer exists and says what is claimed, then awards that item's points. Score bands give a win probability; the decision is the option with the lowest expected loss among actions PayPal currently allows. Weights are in [`docs/rubric.md`](docs/rubric.md).
+
+### Seller policy (`src/lib/policy.ts`, `/desk/policy`)
+The numbers the decision and the firewall work within: the largest offer (I3), the auto-accept limit (I7), the daily and per-buyer budgets (I4), the repeat-disputer threshold (I10) and the allowed link hosts (I6). Each change is a row in the append-only event log, so the history is the audit trail and the newest row is in force. Demo runs and the worker read it on every run. Editing needs the seller password.
+
+### Evidence ledger (`src/lib/ledger.ts`, `/verify`)
+- **Content hash:** every event-log row (agent runs, policy changes) is hashed as canonical JSON.
+- **Chain:** each link is `sha256(previous link | content hash)`, so changing any stored byte changes every link after it.
+- **Signature:** the server signs the newest link with an Ed25519 key (`LEDGER_SIGNING_KEY`).
+- **Browser re-check:** `/verify` recomputes everything with the browser's own WebCrypto: the chosen run's record hash, its evidence PDF's SHA-256, every link, and the signature. Two tamper buttons edit only the browser's copy to show the failure.
+- **Limits:** timestamps are self-asserted, and the head is signed when the page asks. This proves the stored history wasn't rewritten after it was chained, not when each row was written.
 
 ### Crash-safe execution (`src/lib/exec/`)
 - Every action becomes an `action_intent` row and an `outbox` row in **one Postgres transaction**, before anything is sent.
@@ -209,7 +221,11 @@ Read these numbers with care:
 - **Model answers are one recorded run per scenario.** The live demo replays them; it does not call the model per click.
 - **Refund exactly-once** rests on PayPal honouring `PayPal-Request-Id` (unverified). The chaos test used a simulated PayPal.
 - **Sandbox only.** Dispute creation through the API was refused for this app, so demo disputes were made by hand.
-- **Not built:** retrieval of past cases (dropped), a hash-chained evidence ledger, and agent runs on real pool disputes from the desk.
+- **Not built:**
+  - retrieval of past cases (dropped);
+  - agent runs on real pool disputes from the desk;
+  - an AG Studio dashboard;
+  - a Render Workflows spike.
 
 ---
 
@@ -262,6 +278,7 @@ Open http://localhost:3000/desk.
 
 Other commands:
 - `npm run eval`: re-score the adversarial evaluation offline from recorded answers.
+- `npm run e2e`: Playwright judge flows in a real browser (home, Run demo, `/eval`, `/verify` tamper demo, policy). Set `BASE_URL=https://rebuttal-web.onrender.com` to run them against the hosted demo.
 - `npm run chaos`: crash test against real Postgres and a fake PayPal.
 - `npm run test:sandbox`: real sandbox checks. Read-only by default; dispute actions run only when you name a dispute and an action.
 
@@ -283,7 +300,7 @@ Other commands:
 - **PayPal REST APIs** (sandbox): Orders v2, Customer Disputes v1, Webhooks.
 - **Groq** running `openai/gpt-oss-120b`: the model behind quarantine, planner and baseline. A Gemini adapter exists but was not used for the recorded answers.
 - **Render**: hosting (web service, background worker, Postgres).
-- **Libraries:** Next.js, TypeScript, Tailwind, Drizzle ORM, Zod, pdf-lib, Vitest, fast-check, PGlite, embedded-postgres.
+- **Libraries:** Next.js, TypeScript, Tailwind, Drizzle ORM, Zod, pdf-lib, Vitest, fast-check, Playwright, PGlite, embedded-postgres.
 
 ## License
 
