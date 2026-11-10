@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 type Ledger = {
   entries: { id: number; kind: string; at: string; contentHash: string }[];
-  root: { headId: number; head: string; signedAt: string; message: string; signature: string | null; publicKeySpki: string | null } | null;
+  root: { headId: number; head: string; signedAt: string; message: string; signature: string | null; publicKeySpki: string | null; keyProblem?: string | null } | null;
   run: { id: number; canonical: string } | null;
 };
 type Check = { ok: boolean | null; label: string; detail?: string };
@@ -80,7 +80,7 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
       // 4. The signature on the head.
       const msgOk = L.root.message === `rebuttal-ledger-v1|${L.root.headId}|${L.root.head}|${L.root.signedAt}`;
       if (!L.root.signature || !L.root.publicKeySpki) {
-        out.push({ ok: null, label: "The head is not signed on this deploy (no signing key set)." });
+        out.push({ ok: null, label: L.root.keyProblem ? `The head is not signed: ${L.root.keyProblem}.` : "The head is not signed on this deploy (no signing key set)." });
       } else {
         const sig = await verifySig(L.root.publicKeySpki, L.root.message, L.root.signature);
         out.push(sig === null
