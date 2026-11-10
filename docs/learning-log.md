@@ -67,3 +67,15 @@ Recall questions:
 1. Why does the health route not check the worker as well as the database?
 2. What does `sync: false` mean in `render.yaml`, and why does it matter for a public repo?
 3. `PAYPAL_WEBHOOK_ID` is set to `pending` at first. What happens to a webhook that arrives before the real id is set, and why is that the safe direction?
+
+## Policy, ledger, home page, browser tests (Nov 10)
+1. The home page now states the three promises, and each one shows its measured result. The eval numbers are read from the committed report file, so the page can't drift from it.
+2. `/desk/policy` lets the seller change her limits. Each change is a new row in the append-only log, so the history is the audit trail, and the newest row is the one in force. Every run records the policy it was decided under.
+3. The ledger hashes every log row and chains each hash to the one before. The server signs the newest link with an Ed25519 key.
+4. `/verify` makes the browser redo that maths itself (WebCrypto). Changing one byte of a PDF, or one digit of a stored score, makes it fail.
+5. Playwright tests click through the judge flows in a real browser. The same tests can point at the live site with `BASE_URL`.
+
+Recall questions:
+1. Why does editing one old row break the signature check, even though only the newest link is signed?
+2. Why are policy changes stored as new log rows instead of updating a single "policy" row?
+3. What does `/verify` NOT prove about when a run happened, and why?
