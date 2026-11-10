@@ -37,7 +37,8 @@ An AI that can move money is risky in three ways. A buyer can try to talk it int
 3. Read the trace from top to bottom: quarantine → rubric → decision → firewall → evidence packet.
 4. Click **verify it in your browser** under the evidence packet. `/verify` re-checks the run against the signed ledger; the tamper buttons show one changed byte failing.
 5. Open **`/desk/live`**: the real PayPal sandbox disputes, read live, with what Rebuttal would do on each and the firewall's verdict on the live state. Nothing is sent from there.
-6. Read the seller's limits on **`/desk/policy`**. Every change is logged, and each trace records the policy it was decided under.
+6. Open **`/dashboard`**, built with **AG Studio**: firewall verdicts on every stored run (drawn by a custom stamp widget), the attack evaluation per agent, and the live sandbox disputes. **Build your own widget** switches it to edit mode.
+7. Read the seller's limits on **`/desk/policy`**. Every change is logged, and each trace records the policy it was decided under.
 
 | Scenario | What you should see |
 | --- | --- |
@@ -127,6 +128,14 @@ The planner (a model) only points: "R1 is proven by tracking event `trk:…:3`".
 
 ### Real sandbox disputes, read-only (`src/lib/live.ts`, `/desk/live`)
 Read live from PayPal with GET calls only: status, stage, amount, deadline and the actions PayPal allows now. The sandbox gives a seller no records, so each dispute is scored on the matching demo case's synthetic records, from recorded answers. The decision and the firewall then run on the live state. Example (Nov 10): on the escalated claim, PayPal offers no `make_offer`, so the offer option is dropped and the firewall allows sending evidence before the Nov 14 deadline. The buyer's real messages are not read there (that would need a live model call). Nothing is sent.
+
+### Dashboard (`src/app/dashboard/`, AG Studio)
+An AG Studio dashboard over the site's own data, with three pages:
+- **Firewall:** every agent run in the event log, its verdict, the rule that fired, and the money proposed.
+- **Attack evaluation:** one row per case, with separate columns for each agent, so totals never blend them.
+- **Live disputes:** the real sandbox disputes.
+
+It adds a **custom widget** (`verdict-stamps`) that draws any category-and-count mapping as Rebuttal's ink stamps through Studio's own query API. A Studio theme points every colour and font at the site's design tokens, so it follows light and dark mode. Edit mode lets anyone build widgets over the same data; edits stay in their browser. Without `AG_STUDIO_LICENSE_KEY`, AG Studio shows its trial watermark.
 
 ### Seller policy (`src/lib/policy.ts`, `/desk/policy`)
 The numbers the decision and the firewall work within: the largest offer (I3), the auto-accept limit (I7), the daily and per-buyer budgets (I4), the repeat-disputer threshold (I10) and the allowed link hosts (I6). Each change is a row in the append-only event log, so the history is the audit trail and the newest row is in force. Demo runs and the worker read it on every run. Editing needs the seller password.
@@ -228,7 +237,6 @@ Read these numbers with care:
 - **Not built:**
   - retrieval of past cases (dropped);
   - sending actions on real pool disputes from the desk (`/desk/live` is read-only on purpose: a public button would let any visitor use up the hand-made disputes during judging);
-  - an AG Studio dashboard;
   - a Render Workflows spike.
 
 ---
@@ -282,7 +290,7 @@ Open http://localhost:3000/desk.
 
 Other commands:
 - `npm run eval`: re-score the adversarial evaluation offline from recorded answers.
-- `npm run e2e`: Playwright judge flows in a real browser (home, Run demo, `/eval`, `/verify` tamper demo, policy, `/desk/live`). Set `BASE_URL=https://rebuttal-web.onrender.com` to run them against the hosted demo.
+- `npm run e2e`: Playwright judge flows in a real browser (home, Run demo, `/eval`, `/verify` tamper demo, policy, `/desk/live`, `/dashboard`). Set `BASE_URL=https://rebuttal-web.onrender.com` to run them against the hosted demo.
 - `npm run chaos`: crash test against real Postgres and a fake PayPal.
 - `npm run test:sandbox`: real sandbox checks. Read-only by default; dispute actions run only when you name a dispute and an action.
 
@@ -303,8 +311,9 @@ Other commands:
 - **Claude Code** (Anthropic): pair-programmed most of the code, tests and docs under a written project brief.
 - **PayPal REST APIs** (sandbox): Orders v2, Customer Disputes v1, Webhooks.
 - **Groq** running `openai/gpt-oss-120b`: the model behind quarantine, planner and baseline. A Gemini adapter exists but was not used for the recorded answers.
-- **Render**: hosting (web service, background worker, Postgres).
-- **Libraries:** Next.js, TypeScript, Tailwind, Drizzle ORM, Zod, pdf-lib, Vitest, fast-check, Playwright, PGlite, embedded-postgres.
+- **Render**: hosting (web service, background worker, Postgres) from `render.yaml`, all on paid plans.
+- **AG Studio** (AG Grid): the `/dashboard` page, with a custom widget and a theme built on Rebuttal's design tokens.
+- **Libraries:** Next.js, TypeScript, Tailwind, AG Studio / AG Grid, Drizzle ORM, Zod, pdf-lib, Vitest, fast-check, Playwright, PGlite, embedded-postgres.
 
 ## License
 
