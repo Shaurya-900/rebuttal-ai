@@ -2,6 +2,18 @@
 
 Things only you can do. Newest blockers at the top. Claude Code keeps working on whatever is not blocked.
 
+**Nov 11 (checked by Claude Code through the Render connector): the live site has PR #4 and all 6 browser flows pass on it. Three Render fixes left, all secrets, so they're yours:**
+
+## [Deploy] [5] Worker: add the PayPal variables (it is crash-looping)
+Why: `rebuttal-worker` restarts every 5 minutes with `Invalid environment: PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID`. They were only set on the web service.
+Exact steps: Render -> rebuttal-worker -> Environment -> add `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` (same values as your `.env`) and `PAYPAL_WEBHOOK_ID` (the word `pending` is fine) -> Save.
+Done when: its logs stop showing "Invalid environment".
+
+## [Deploy] [5] Web: re-paste the PayPal client id and secret
+Why: on the live site PayPal answers `PayPal token failed: 401`, so `/desk/live` and `/store` checkout cannot reach the sandbox. The same keys work locally. Most likely (unverified) the pasted values carry the quotes or spaces from `.env` (it writes `NAME = "value"`).
+Exact steps: Render -> rebuttal-web -> Environment -> edit `PAYPAL_CLIENT_ID` and `PAYPAL_CLIENT_SECRET`: paste only the characters between the quotes, no spaces -> Save.
+Done when: https://rebuttal-web.onrender.com/desk/live lists PP-R-HQO-10196189 and PP-R-FCU-10197630.
+
 **Nov 10: under two days left. Do these three first, in this order: [M3] Render, [S1] LLM key, [S0] fresh disputes. Everything a judge sees depends on them.**
 
 ## [M11] [5] Set the ledger signing key on Render
