@@ -33,6 +33,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
           <Link href="/store" className="hover:underline">Store</Link>
           <Link href="/desk/policy" className="hover:underline">Policy</Link>
           <Link href="/eval" className="hover:underline">Evaluation</Link>
+          <Link href="/verify" className="hover:underline">Verify</Link>
         </nav>
       </div>
 

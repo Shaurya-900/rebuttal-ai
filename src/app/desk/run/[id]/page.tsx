@@ -141,7 +141,7 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
             {run.packet.lines.map((l, i) => <li key={i}>{l}</li>)}
           </ul>
           <p className="mt-2 text-xs text-neutral-500">
-            <a href={`/desk/run/${got.id}/packet`} className="text-neutral-900 underline">Download PDF</a> · sha256 <span className="font-mono">{run.packet.sha256.slice(0, 16)}…</span>
+            <a href={`/desk/run/${got.id}/packet`} className="text-neutral-900 underline">Download PDF</a> · sha256 <span className="font-mono">{run.packet.sha256.slice(0, 16)}…</span> · <Link href={`/verify?run=${got.id}`} className="text-neutral-900 underline">verify it in your browser</Link>
           </p>
         </Stage>
       )}
