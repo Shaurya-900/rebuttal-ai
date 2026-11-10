@@ -2,8 +2,9 @@
 import { z } from "zod";
 
 const schema = z.object({
-  PAYPAL_CLIENT_ID: z.string().min(1),
-  PAYPAL_CLIENT_SECRET: z.string().min(1),
+  // Trimmed: a space or newline pasted into a dashboard otherwise turns into a 401 from PayPal (seen on Render, Nov 11).
+  PAYPAL_CLIENT_ID: z.string().trim().min(1),
+  PAYPAL_CLIENT_SECRET: z.string().trim().min(1),
   PAYPAL_BASE_URL: z.url().default("https://api-m.sandbox.paypal.com"),
   PAYPAL_WEBHOOK_ID: z.string().min(1),
   PAYPAL_BUYER_EMAIL: z.email().optional(),
