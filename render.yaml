@@ -30,6 +30,7 @@ services:
       - { key: DESK_APPROVER_TOKEN, sync: false }
       - { key: REBUTTAL_LLM_KEY, sync: false }
       - { key: LEDGER_SIGNING_KEY, sync: false }
+      - { key: AG_STUDIO_LICENSE_KEY, sync: false }
 
   - type: worker
     name: rebuttal-worker

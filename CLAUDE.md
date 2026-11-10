@@ -208,7 +208,8 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - Ledger + `/verify`: hash chain over event_log, Ed25519-signed head (`LEDGER_SIGNING_KEY`, unset = unsigned), browser re-check, tamper demos. Self-asserted timestamps.
 - `npm run e2e` (Playwright, `BASE_URL` selects local or hosted). Secret scan clean.
 - Nov 10, evening: frontend redesign (tokens, light/dark, stamps, home hero from the real hero-3 run) and `/desk/live` (real sandbox disputes, read-only, live PayPal state + replayed scoring). 84 unit tests, 6 Playwright flows.
-- Not built: AG Studio dashboard and Render Workflows (need Shaurya's accounts). Sending actions on real disputes from the public desk is left out on purpose.
+- Nov 11: `/dashboard` with AG Studio 3.0 (runs, eval per agent, live disputes; custom `verdict-stamps` widget; theme on design tokens; edit mode). Watermarked until `AG_STUDIO_LICENSE_KEY` is set. 7 Playwright flows.
+- Not built: Render Workflows. APIMatic Context Plugin needs Shaurya's OAuth sign-in. Sending actions on real disputes from the public desk is left out on purpose.
 
 ### S5 stopped (Nov 4 night)
 - Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].

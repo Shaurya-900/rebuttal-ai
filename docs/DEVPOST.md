@@ -34,6 +34,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
   - after any crash the executor *reconciles*: it asks PayPal whether the effect already happened before it retries.
 - **Model:** `openai/gpt-oss-120b` on Groq, behind an adapter with provider fallback and a record/replay cache. Demo clicks replay recorded answers and cost nothing.
 - **Tests:** property-based tests (fast-check) for the invariants, a mutation check, and a `kill -9` chaos test.
+- **Dashboard:** an **AG Studio** dashboard (`/dashboard`) over every stored run, the attack evaluation and the live sandbox disputes. It has a custom verdict-stamp widget and a Studio theme built from the site's design tokens, and visitors can build their own widgets in edit mode.
 - **Tooling:** pair-programmed with Claude Code under a written brief that set the safety rules before any code. The invariants, rubric and attack plan live in `docs/` and are what the code is tested against.
 
 ## Challenges we ran into
@@ -67,7 +68,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 - **Evidence ledger:** a hash-chained log with signed roots, so a seller can prove an exhibit wasn't altered.
 
 ## Built with
-`typescript` `next.js` `react` `tailwind` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-disputes-api` `groq` `render` `claude-code`
+`typescript` `next.js` `react` `tailwind` `ag-studio` `ag-grid` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-disputes-api` `groq` `render` `claude-code`
 
 ## Prior art (put this in the description too)
 AI dispute tools already exist commercially (Chargeflow, ChargePay, Justt, Chargebacks911), and the safety patterns are published: Dual-LLM (Simon Willison) and CaMeL (Google Research). Rebuttal is an open-source reference implementation that combines them against the real PayPal Disputes sandbox. It is not a new technique.

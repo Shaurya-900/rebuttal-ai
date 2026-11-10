@@ -91,3 +91,15 @@ Recall questions:
 1. On the escalated dispute, why does the offer option disappear, and which code removes it?
 2. What on `/desk/live` is live from PayPal, and what is replayed?
 3. Why is the buyer's real message on a sandbox dispute not read on that page?
+
+## AG Studio dashboard (Nov 11)
+1. `/dashboard` shows the site's real data in AG Studio, AG Grid's dashboard library: stored runs, the attack eval, and the live sandbox disputes.
+2. The data is read on the server and handed to Studio as three tables. Studio does the charts, grids, totals and filters.
+3. The verdict-stamp board is a custom widget: Studio sends it the rows for whatever fields are mapped, and it draws our ink stamps.
+4. The attack table has one row per case, with separate columns for each agent. The first version mixed both agents into one 21% figure, which was wrong.
+5. A Studio theme points every colour at the site's tokens. Chart colours avoid red and green, because those mean denied and allowed.
+
+Recall questions:
+1. Why did the first attack KPI ("21%") mislead, and how does one row per case fix it?
+2. What does the custom widget get from Studio, and what does it draw?
+3. Why must a chart on this site not paint "fight" in red?
