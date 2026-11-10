@@ -7,7 +7,8 @@ import { describe, expect, it } from "vitest";
 import type { ProposedAction } from "../src/lib/firewall/types";
 import { accessToken, fromCents, toCents } from "../src/lib/paypal/client";
 import { disputeSnapshot, getDispute, LinkAbsentError, listDisputesUpdatedSince, rels, sendDisputeAction } from "../src/lib/paypal/disputes";
-import { createOrder } from "../src/lib/paypal/orders";
+import { PayPalError } from "../src/lib/paypal/client";
+import { createOrder, getCapture, getOrder } from "../src/lib/paypal/orders";
 
 const KNOWN = process.env.SANDBOX_DISPUTE_ID ?? "PP-R-HQO-10196189"; // escalated spike dispute (CHARGEBACK stage)
 
@@ -54,6 +55,15 @@ describe("sandbox: orders", () => {
     console.log(`order ${a.order.id} status ${a.order.status}; replay -> ${b.order.id}`);
     expect(a.approveUrl).toMatch(/^https:\/\/www\.sandbox\.paypal\.com\//);
     expect(b.order.id).toBe(a.order.id);
+    const got = await getOrder(a.order.id); // SDK getOrder, read-only
+    expect(got.status).toBe("PAYER_ACTION_REQUIRED");
+  });
+
+  it("an SDK error becomes a PayPalError with the HTTP status (read-only: unknown capture id)", async () => {
+    const e = await getCapture("0NOSUCHCAPTURE00").catch((x) => x);
+    console.log(`get unknown capture -> ${e instanceof Error ? e.message : e}`);
+    expect(e).toBeInstanceOf(PayPalError);
+    expect((e as PayPalError).res.status).toBeGreaterThanOrEqual(400);
   });
 });
 

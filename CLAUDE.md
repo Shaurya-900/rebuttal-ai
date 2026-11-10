@@ -209,7 +209,8 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `npm run e2e` (Playwright, `BASE_URL` selects local or hosted). Secret scan clean.
 - Nov 10, evening: frontend redesign (tokens, light/dark, stamps, home hero from the real hero-3 run) and `/desk/live` (real sandbox disputes, read-only, live PayPal state + replayed scoring). 84 unit tests, 6 Playwright flows.
 - Nov 11: `/dashboard` with AG Studio 3.0 (runs, eval per agent, live disputes; custom `verdict-stamps` widget; theme on design tokens; edit mode). Watermarked until `AG_STUDIO_LICENSE_KEY` is set. 7 Playwright flows.
-- Not built: Render Workflows. APIMatic Context Plugin needs Shaurya's OAuth sign-in. Sending actions on real disputes from the public desk is left out on purpose.
+- Nov 11: `orders.ts` (create, get, capture, get capture, refund) moved to PayPal's Server SDK using the APIMatic Context Plugin; SDK retries off, SDK errors mapped to `PayPalError`. Sandbox: create, replay, get order and a 404 mapping verified; capture and refund through the SDK UNVERIFIED (need a buyer approval). Notes: `docs/paypal-notes.md`.
+- Not built: Render Workflows. Sending actions on real disputes from the public desk is left out on purpose.
 
 ### S5 stopped (Nov 4 night)
 - Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].
@@ -257,7 +258,7 @@ Takeoff (floor-plan photo -> PayPal deposit invoice with a QR code, for a tile/f
 - **No Redis, no queue library.** Postgres is the queue, outbox, lease store and dedupe table. A second datastore needs a written justification in this file.
 - **Web:** Next.js App Router, TypeScript, Tailwind.
 - **Tests:** Vitest (unit + integration, recorded fixtures), fast-check (invariants), Playwright (seeded hosted-demo flows only; never automate PayPal's sandbox login), `npm run chaos` (kill -9 and recovery), `npm run test:sandbox` (real sandbox; run by hand, not CI). README limitation: property tests show invariants hold over tested inputs; they are not a proof.
-- **PayPal adapter `lib/paypal/`:** hand-write the roughly 10 fields we use. Skip OpenAPI codegen unless time is left.
+- **PayPal adapter `lib/paypal/`:** orders, captures and refunds use `@paypal/paypal-server-sdk` (since Nov 11; responses still parsed by our tolerant Zod schemas). Disputes are hand-written REST (no SDK controller).
 - **LLM adapter `lib/llm.ts`:** list of providers with fallback on quota errors; a **record/replay cache** keyed by prompt hash so CI and eval re-runs cost nothing; the quarantined extractor is a separate call with no tools. Firewall and invariant tests never call an LLM.
 
 ### Architecture

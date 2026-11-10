@@ -103,3 +103,15 @@ Recall questions:
 1. Why did the first attack KPI ("21%") mislead, and how does one row per case fix it?
 2. What does the custom widget get from Studio, and what does it draw?
 3. Why must a chart on this site not paint "fight" in red?
+
+## PayPal Server SDK via the APIMatic Context Plugin (Nov 11)
+1. Orders, captures and refunds now go through PayPal's official TypeScript SDK (`OrdersController`, `PaymentsController`) instead of our own `fetch` calls. Disputes stay on our REST code because the SDK has no Disputes controller.
+2. The APIMatic Context Plugin answered "what are the SDK's real method names, request fields and enums?" so the code was written from its answers, not from memory.
+3. The idempotency key moved into the SDK's `paypalRequestId` parameter, so a retried refund still carries the same `PayPal-Request-Id`.
+4. SDK errors (`ApiError`) are turned into our `PayPalError`, so the executor can still tell "PayPal said no" (4xx: stop) from "we don't know" (timeout: reconcile first).
+5. SDK retries are off on purpose: only the executor decides when to retry, and only after reconciling.
+
+Recall questions:
+1. Why must the SDK not retry a refund by itself?
+2. What would break in the executor if SDK errors were not mapped to `PayPalError`?
+3. Which parts of the PayPal integration still use direct REST, and why?
