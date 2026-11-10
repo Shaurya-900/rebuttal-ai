@@ -99,34 +99,34 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
   const failed = checks.some((c) => c.ok === false);
   return (
-    <section className="mt-6 rounded-lg border border-neutral-200 p-5">
+    <section className="mt-6 rounded-lg border border-rule p-5">
       <div className="flex flex-wrap items-end gap-3">
         <label className="text-sm">
           <span className="font-medium">Run to check</span>
-          <select className="mt-1 block rounded border border-neutral-300 px-2 py-1.5 text-sm" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
+          <select className="field block w-auto" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
             <option value="">Chain only</option>
-            {runs.map((r) => <option key={r.id} value={r.id}>#{r.id} · {r.scenario} · {r.choice}</option>)}
+            {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {r.scenario}, {r.choice?.toLowerCase()}</option>)}
           </select>
         </label>
         <div className="flex flex-wrap gap-2 text-sm" role="group" aria-label="Tamper demo">
           {([["none", "Untouched"], ["pdf", "Change one byte of the PDF"], ["record", "Edit the stored score"]] as const).map(([t, label]) => (
             <button key={t} type="button" onClick={() => setTamper(t)} aria-pressed={tamper === t}
-              className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-neutral-900 bg-neutral-900 text-white" : "border-neutral-300 hover:bg-neutral-50"}`}>
+              className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-ink bg-ink text-paper" : "border-rule hover:bg-sunk"}`}>
               {label}
             </button>
           ))}
         </div>
       </div>
-      {tamper !== "none" && <p className="mt-3 text-xs text-amber-800">Tamper demo: the change is made to your browser&apos;s copy only, before hashing. Nothing on the server changes.</p>}
+      {tamper !== "none" && <p className="mt-3 text-xs text-hold">Tamper demo: the change is made to your browser&apos;s copy only, before hashing. Nothing on the server changes.</p>}
 
-      <p className={`mt-4 text-base font-semibold ${busy ? "text-neutral-500" : failed ? "text-red-700" : "text-green-800"}`} aria-live="polite">
+      <p className={`mt-4 text-base font-semibold ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`} aria-live="polite">
         {busy ? "Checking…" : failed ? "Verification FAILED: what you have is not what was signed." : "Verified: the record, its evidence and the chain match the signed head."}
       </p>
       <ul className="mt-3 space-y-2 text-sm">
         {checks.map((c, i) => (
           <li key={i} className="flex gap-2">
-            <span aria-hidden className={c.ok === true ? "text-green-700" : c.ok === false ? "text-red-700" : "text-neutral-400"}>{c.ok === true ? "✓" : c.ok === false ? "✗" : "–"}</span>
-            <span>{c.label}{c.detail && <span className="ml-2 font-mono text-xs text-neutral-500">{c.detail}</span>}</span>
+            <span aria-hidden className={c.ok === true ? "text-allow" : c.ok === false ? "text-deny" : "text-faint"}>{c.ok === true ? "✓" : c.ok === false ? "✗" : "–"}</span>
+            <span>{c.label}{c.detail && <span className="ml-2 font-mono text-xs text-faint">{c.detail}</span>}</span>
           </li>
         ))}
       </ul>
