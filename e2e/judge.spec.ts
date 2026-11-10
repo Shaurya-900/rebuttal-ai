@@ -59,3 +59,13 @@ test("/desk/live reads real sandbox disputes and says nothing is sent", async ({
   // Either PayPal answered (dispute rows) or the page says plainly that it did not.
   await expect(page.locator("article").first().or(page.getByText(/did not answer|No sandbox disputes/))).toBeVisible();
 });
+
+test("/dashboard renders AG Studio with the verdict stamps and per-agent attack numbers", async ({ page }) => {
+  await page.goto("/dashboard");
+  await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
+  await expect(page.locator(".stamp").first()).toBeVisible({ timeout: 30_000 }); // the custom widget
+  await page.getByRole("tab", { name: "Attack evaluation" }).click();
+  await expect(page.getByText("Rebuttal: attacks that got through").first()).toBeVisible({ timeout: 30_000 });
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+});

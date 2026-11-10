@@ -17,7 +17,7 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M9 | Eval | DONE (Nov 10) on the draft rules: 30 synthetic cases × 3 runs, report in `eval/results/`, shown on `/eval`. Rebuttal 0/24 attacks; naive baseline 9/19 measured. Shaurya still owns the 7 decisions in `docs/attacks.md`; changing a rule means `npm run eval` again (offline) |
 | M10 | Chaos | PARTIAL. Fake-PayPal run done Nov 4: N=200+200, 0 duplicates, 0 missing. Real-sandbox run TODO: needs one captured payment (many 0.01 refunds on one capture) |
 | M11 | Ledger + /verify | DONE (Nov 10): hash chain over event_log, Ed25519-signed head (`LEDGER_SIGNING_KEY`), browser re-check with two tamper demos. Checked locally in the browser. On Render it shows "unsigned" until the key is set (NEEDS-SHAURYA) |
-| M12 | /dashboard (AG Studio) | NOT BUILT: needs Shaurya's AG Studio trial account. Cut order item 2 |
+| M12 | /dashboard (AG Studio) | DONE (Nov 11): AG Studio 3.0, three pages over real data (runs, eval, live disputes), custom verdict-stamp widget, theme on the site's tokens, edit mode. Unlicensed (watermark) unless AG_STUDIO_LICENSE_KEY is set |
 | M13 | Render Workflows spike | NOT BUILT: needs Shaurya's Render workspace. Cut order item 2 |
 | M14 | README, video script, Devpost text, Playwright, secret scan | PARTIAL. Done Nov 10: docs with real numbers; Playwright judge flows (`npm run e2e`, 5/5 pass locally); secret scan (no tracked secret files; none of the 4 `.env` secret values anywhere in git history). TODO: Shaurya's edit, video, e2e against the live URL after deploy |
 

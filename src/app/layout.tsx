@@ -10,6 +10,7 @@ export const metadata = { title: "Rebuttal", description: "A PayPal dispute agen
 
 const NAV = [
   ["/desk", "Desk"],
+  ["/dashboard", "Dashboard"],
   ["/eval", "Evaluation"],
   ["/verify", "Verify"],
   ["/desk/policy", "Policy"],
