@@ -32,8 +32,8 @@ export default async function Return({ searchParams }: { searchParams: Promise<{
   return (
     <Shell title={status === "COMPLETED" ? "Thanks, payment received" : `Payment ${status}`}>
       <p>Order <code>{token}</code></p>
-      <p>Capture <code>{captureId}</code> · status {status}</p>
-      <p className="mt-4 text-neutral-600">
+      <p>Capture <code className="id">{captureId}</code>, status {status}</p>
+      <p className="mt-4 text-graphite">
         To test Rebuttal: log in to the sandbox Resolution Center as this buyer, report a problem on this payment, and do not escalate it.
       </p>
     </Shell>
@@ -43,8 +43,7 @@ export default async function Return({ searchParams }: { searchParams: Promise<{
 function Shell({ title, children }: { title: string; children: ReactNode }) {
   return (
     <main className="mx-auto max-w-xl px-4 py-12">
-      <p className="rounded bg-amber-100 px-3 py-2 text-sm text-amber-900">PayPal sandbox · synthetic store · no real money moves</p>
-      <h1 className="mt-6 text-2xl font-semibold">{title}</h1>
+      <h1 className="mt-6 text-3xl font-extrabold tracking-tight">{title}</h1>
       <div className="mt-4 space-y-1">{children}</div>
       <Link href="/store" className="mt-6 inline-block text-sm underline">Back to the store</Link>
     </main>

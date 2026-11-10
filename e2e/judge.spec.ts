@@ -2,8 +2,9 @@ import { expect, test } from "@playwright/test";
 
 test("home page states the three promises and labels the demo synthetic", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Rebuttal", level: 1 })).toBeVisible();
-  for (const p of ["Unfoolable", "Crash-proof", "Auditable"]) await expect(page.getByRole("heading", { name: p })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Three promises, each measured" })).toBeVisible();
+  await expect(page.getByRole("img", { name: /Firewall: denied, rule I1/ })).toBeVisible(); // the hero stamp, computed from the real run
   await expect(page.getByText(/synthetic/i).first()).toBeVisible();
 });
 
@@ -14,7 +15,7 @@ test("Run demo on the injection scenario shows every stage of the trace", async 
   await expect(page).toHaveURL(/\/desk\/run\/\d+/);
   await expect(page.getByText("containsInstructions").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: /Rubric/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Decision · FIGHT/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Decision: fight/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Firewall" })).toBeVisible();
   await expect(page.getByText("Nothing on this page was sent to PayPal")).toBeVisible();
 });
