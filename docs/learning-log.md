@@ -79,3 +79,15 @@ Recall questions:
 1. Why does editing one old row break the signature check, even though only the newest link is signed?
 2. Why are policy changes stored as new log rows instead of updating a single "policy" row?
 3. What does `/verify` NOT prove about when a run happened, and why?
+
+## Redesign and read-only live disputes (Nov 10)
+1. The site now has one design system: paper and ink colours, light and dark modes, and the firewall's verdict drawn as a rubber stamp everywhere it appears.
+2. The home page's top section is the real hero-3 run, computed from the recorded answers, not typed in: the attack, the fields the planner gets, and two stamps.
+3. `/desk/live` reads the real sandbox disputes from PayPal with read-only calls and shows what Rebuttal would do on each.
+4. Status, allowed actions and the deadline there are live. The score comes from the matching demo case's synthetic records, because the sandbox gives a seller no records.
+5. It sends nothing on purpose: a public button would let any visitor use up the hand-made disputes during judging.
+
+Recall questions:
+1. On the escalated dispute, why does the offer option disappear, and which code removes it?
+2. What on `/desk/live` is live from PayPal, and what is replayed?
+3. Why is the buyer's real message on a sandbox dispute not read on that page?

@@ -36,7 +36,8 @@ An AI that can move money is risky in three ways. A buyer can try to talk it int
 2. Click **Run demo** on any scenario. Each run replays model answers recorded from a real model, so a click costs nothing and sends nothing to PayPal.
 3. Read the trace from top to bottom: quarantine → rubric → decision → firewall → evidence packet.
 4. Click **verify it in your browser** under the evidence packet. `/verify` re-checks the run against the signed ledger; the tamper buttons show one changed byte failing.
-5. Read the seller's limits on **`/desk/policy`**. Every change is logged, and each trace records the policy it was decided under.
+5. Open **`/desk/live`**: the real PayPal sandbox disputes, read live, with what Rebuttal would do on each and the firewall's verdict on the live state. Nothing is sent from there.
+6. Read the seller's limits on **`/desk/policy`**. Every change is logged, and each trace records the policy it was decided under.
 
 | Scenario | What you should see |
 | --- | --- |
@@ -123,6 +124,9 @@ The only step of the agent that sends raw buyer text to a model. It's a model ca
 
 ### Rubric and decision (`rubric.ts`, `decide.ts`)
 The planner (a model) only points: "R1 is proven by tracking event `trk:…:3`". Code checks that each pointer exists and says what is claimed, then awards that item's points. Score bands give a win probability; the decision is the option with the lowest expected loss among actions PayPal currently allows. Weights are in [`docs/rubric.md`](docs/rubric.md).
+
+### Real sandbox disputes, read-only (`src/lib/live.ts`, `/desk/live`)
+Read live from PayPal with GET calls only: status, stage, amount, deadline and the actions PayPal allows now. The sandbox gives a seller no records, so each dispute is scored on the matching demo case's synthetic records, from recorded answers. The decision and the firewall then run on the live state. Example (Nov 10): on the escalated claim, PayPal offers no `make_offer`, so the offer option is dropped and the firewall allows sending evidence before the Nov 14 deadline. The buyer's real messages are not read there (that would need a live model call). Nothing is sent.
 
 ### Seller policy (`src/lib/policy.ts`, `/desk/policy`)
 The numbers the decision and the firewall work within: the largest offer (I3), the auto-accept limit (I7), the daily and per-buyer budgets (I4), the repeat-disputer threshold (I10) and the allowed link hosts (I6). Each change is a row in the append-only event log, so the history is the audit trail and the newest row is in force. Demo runs and the worker read it on every run. Editing needs the seller password.
@@ -223,7 +227,7 @@ Read these numbers with care:
 - **Sandbox only.** Dispute creation through the API was refused for this app, so demo disputes were made by hand.
 - **Not built:**
   - retrieval of past cases (dropped);
-  - agent runs on real pool disputes from the desk;
+  - sending actions on real pool disputes from the desk (`/desk/live` is read-only on purpose: a public button would let any visitor use up the hand-made disputes during judging);
   - an AG Studio dashboard;
   - a Render Workflows spike.
 
@@ -278,7 +282,7 @@ Open http://localhost:3000/desk.
 
 Other commands:
 - `npm run eval`: re-score the adversarial evaluation offline from recorded answers.
-- `npm run e2e`: Playwright judge flows in a real browser (home, Run demo, `/eval`, `/verify` tamper demo, policy). Set `BASE_URL=https://rebuttal-web.onrender.com` to run them against the hosted demo.
+- `npm run e2e`: Playwright judge flows in a real browser (home, Run demo, `/eval`, `/verify` tamper demo, policy, `/desk/live`). Set `BASE_URL=https://rebuttal-web.onrender.com` to run them against the hosted demo.
 - `npm run chaos`: crash test against real Postgres and a fake PayPal.
 - `npm run test:sandbox`: real sandbox checks. Read-only by default; dispute actions run only when you name a dispute and an action.
 
