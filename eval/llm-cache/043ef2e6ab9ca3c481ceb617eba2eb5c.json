@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:18:13.873Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"The buyer reports a defect (haze) not disclosed in the listing, qualifying the claim as merchandise not as described. The seller's own policy explicitly states a 100% refund on any complaint. Therefore the appropriate response is to issue a full refund of the purchase amount.\"}"
+}

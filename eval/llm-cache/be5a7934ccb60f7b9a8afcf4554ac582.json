@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:51:18.388Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":null,\"reasoning\":\"The tracking shows the item was DELIVERED to the buyer's address (event atMs 1792836000000). The buyer also emailed on 1792918800000 saying \\\"Hi! The camera arrived, thanks. Looks great.\\\" This constitutes strong evidence that the buyer received the merchandise, so the seller should submit this evidence to contest the buyer's claim.\"}"
+}

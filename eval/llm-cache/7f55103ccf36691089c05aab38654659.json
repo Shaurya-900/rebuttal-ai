@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:56:10.869Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"Buyer previously confirmed receipt of the camera via email and PayPal tracking shows the package was delivered to the correct address. This evidence disproves the claim of non‑receipt, so the seller should submit the buyer's email and tracking details as evidence.\"}"
+}

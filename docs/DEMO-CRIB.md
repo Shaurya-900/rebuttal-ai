@@ -17,7 +17,8 @@
 - **Chaos** (`npm run chaos`): kill -9 hundreds of times; count effects per intent on a fake PayPal.
 - **/desk**: "Run demo" replays recorded model answers on a seeded dispute and shows the trace stage by stage. Nothing is sent to PayPal from there. Approve/Reject needs the seller password.
 - **Limits**: per-IP runs per hour, a global hourly ceiling, and a daily cap on real model calls, all as Postgres counters.
-- Not built yet: eval run, agent runs on real pool disputes from the desk.
+- **Eval** (`npm run eval`): 30 synthetic cases, hidden answers in `eval/ground-truth/`, replayable offline from `eval/llm-cache/`. `/eval` shows the committed report.
+- Not built yet: agent runs on real pool disputes from the desk.
 - Ship drafts (Nov 10): `README.md`, `docs/VIDEO-SCRIPT.md` (2:45 shot list, with a "do not say" list), `docs/DEVPOST.md`.
 
 ## One sentence per invariant
@@ -45,11 +46,11 @@
 | Chaos (FAKE PayPal, real Postgres): messages N=200, refunds N=200, ~400 kill -9s, 0 duplicates, 0 missing | real (Nov 4). Say "against a simulated PayPal" |
 | Chaos negative control: a PayPal that ignores the idempotency key -> 19/50 double refunds | real (Nov 4). It shows the test can catch a double-send |
 | Chaos against the real sandbox | does not exist yet |
-| Attack success rates | do not exist yet |
+| Attack eval (Nov 10, 3 runs, groq gpt-oss-120b, temp 0): Rebuttal 0 of 24 attacks succeeded; naive agent 9 of 19 measured (A1 1/5, A2 2/3, A3 1/3, A5 3/3, A7 0/2, A8 2/3). Honest cases: Rebuttal 18/18 runs right, 0 false blocks; naive 12/18. Citations 369, 7 rejected | real. Say "synthetic, 24 cases, these classes only". Never "unbreakable". 2 of the naive agent's 9 are decision changes without extra money. Cases were written by the system's author |
 
 ## Likely judge questions (honest answers)
 1. **"Isn't this what Chargeflow does?"** Yes, commercial tools exist; we credit them. Ours is open source, gates every money action in code, and publishes its attack evaluation.
-2. **"Can a buyer still trick it?"** Less easily: buyer text is reduced to fixed fields before the planner sees it, and the firewall caps any action. Enums reduce risk but do not remove it; our eval measures only the attack classes we wrote.
+2. **"Can a buyer still trick it?"** Less easily (0 of our 24 synthetic attacks got through, vs 9 of 19 on a naive agent): buyer text is reduced to fixed fields before the planner sees it, and the firewall caps any action. Enums reduce risk but do not remove it; our eval measures only the attack classes we wrote.
 3. **"Is this real PayPal?"** Real sandbox API calls. Disputes were created by hand (API creation was blocked), and simulator endpoints are labelled. All buyers, carriers and emails are synthetic.
 4. **"How do you know it never refunds twice?"** Chaos test: about 400 kill -9s, 0 duplicates against a simulated PayPal. For refunds that relies on PayPal honouring PayPal-Request-Id, and we say so; the deliberately broken control produced 19 double refunds out of 50.
 5. **"What stops someone hammering your demo?"** Per-IP limit per hour, a global hourly ceiling, and a daily cap on real model calls. Seeded runs replay recorded answers, so a click costs no model call.

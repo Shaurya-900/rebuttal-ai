@@ -13,6 +13,7 @@ export type LlmRequest<T> = {
   user: string;
   schema: z.ZodType<T>;
   meta?: Record<string, string>; // trace/stub hints; not part of the cache key
+  variant?: string; // eval run index ("run2"...): part of the cache key so repeated runs are separate recordings
 };
 export type Provider = { name: string; model: string; call: (system: string, user: string) => Promise<string> };
 export type LlmCallRecord = { purpose: string; key: string; from: "cache" | "provider"; recordedFrom: string; meta?: Record<string, string> };
@@ -20,10 +21,13 @@ export type Llm = { json<T>(req: LlmRequest<T>): Promise<T>; calls: LlmCallRecor
 
 type Cassette = { purpose: string; recordedFrom: string; recordedAt: string; response: string };
 
-export class QuotaError extends Error {}
+export class QuotaError extends Error {
+  constructor(msg: string, public readonly retryAfterMs = 0) { super(msg); }
+}
 
-export function cacheKey(purpose: string, system: string, user: string): string {
-  return createHash("sha256").update(JSON.stringify([purpose, system, user])).digest("hex").slice(0, 32);
+export function cacheKey(purpose: string, system: string, user: string, variant?: string): string {
+  const parts = variant ? [purpose, system, user, variant] : [purpose, system, user]; // no variant -> same keys as before
+  return createHash("sha256").update(JSON.stringify(parts)).digest("hex").slice(0, 32);
 }
 
 export function createLlm(opts: {
@@ -38,7 +42,7 @@ export function createLlm(opts: {
   return {
     calls,
     async json<T>(req: LlmRequest<T>): Promise<T> {
-      const key = cacheKey(req.purpose, req.system, req.user);
+      const key = cacheKey(req.purpose, req.system, req.user, req.variant);
       const file = join(opts.cacheDir, `${key}.json`);
       const cached: Cassette | null = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : null;
       // A stand-in ("stub") answer never blocks re-recording from a real model.
@@ -82,9 +86,21 @@ function parseJson<T>(req: LlmRequest<T>, text: string): T {
 
 async function post(url: string, headers: Record<string, string>, body: unknown): Promise<unknown> {
   const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
-  if (res.status === 429) throw new QuotaError(`429 from ${new URL(url).host}`);
+  if (res.status === 429) throw new QuotaError(`429 from ${new URL(url).host}`, retryAfterMs(res.headers));
   if (!res.ok) throw new Error(`LLM HTTP ${res.status} from ${new URL(url).host}`); // body omitted: may echo the prompt
   return res.json();
+}
+
+// Groq sends "retry-after" (seconds) and x-ratelimit-reset-tokens ("1m26.4s", "577ms"). Longest wait wins.
+function retryAfterMs(h: Headers): number {
+  const dur = (v: string | null) => {
+    if (!v) return 0;
+    let ms = 0;
+    for (const [, n, u] of v.matchAll(/([\d.]+)(ms|h|m|s)/g)) ms += Number(n) * { ms: 1, s: 1000, m: 60_000, h: 3_600_000 }[u as "ms"];
+    return ms;
+  };
+  const ra = Number(h.get("retry-after"));
+  return Math.max(Number.isFinite(ra) ? ra * 1000 : 0, dur(h.get("x-ratelimit-reset-tokens")));
 }
 
 export function geminiProvider(key: string, model = "gemini-2.5-flash"): Provider {
@@ -125,7 +141,7 @@ export function groqProvider(key: string, model = "openai/gpt-oss-120b"): Provid
 export const LLM_CACHE_DIR = join(process.cwd(), "fixtures", "llm-cache");
 
 /** Reads only the LLM variables, so offline tests do not need PayPal env vars. */
-export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => Promise<void>): Llm {
+export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => Promise<void>, cacheDir = LLM_CACHE_DIR): Llm {
   const mode = (e.REBUTTAL_LLM_MODE ?? "replay") as "record" | "replay" | "live";
   const providers: Provider[] = [];
   // First provider uses REBUTTAL_LLM_KEY / REBUTTAL_LLM_MODEL; fallbacks use REBUTTAL_LLM_KEY_<NAME> / REBUTTAL_LLM_MODEL_<NAME>.
@@ -136,5 +152,5 @@ export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => P
     if (name === "gemini") providers.push(geminiProvider(key, model));
     if (name === "groq") providers.push(groqProvider(key, model));
   });
-  return createLlm({ mode, providers, cacheDir: LLM_CACHE_DIR, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200), reserve });
+  return createLlm({ mode, providers, cacheDir, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200), reserve });
 }

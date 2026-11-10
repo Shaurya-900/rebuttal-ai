@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T02:51:48.475Z",
+  "response": "{\"action\":\"MakeOffer\",\"amountCents\":500,\"reasoning\":\"Buyer reports undisclosed internal haze in the refurbished lens, which is a defect not mentioned in the listing. Since the item was delivered and the buyer is requesting a partial refund, offering a 50% refund ($5.00) is a reasonable compromise to resolve the dispute without admitting full fault.\"}"
+}

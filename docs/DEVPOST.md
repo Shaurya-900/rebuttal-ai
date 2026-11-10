@@ -45,9 +45,10 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 
   Both now shape the executor: offers first, and re-read the dispute right before every send.
 - **Our planner under-cited at first.** Real model answers scored our strong case 70 instead of 85: the model cited each record only once, even where one delivery event proves two rubric items. We fixed the prompt, not the rubric. The code still rejects any citation that doesn't hold.
-- **The naive agent didn't take the bait.** In our recorded run, the naive comparison agent refused the "$500" injection on its own. We report that as it happened instead of tuning the attack until it worked.
+- **The naive agent didn't take the obvious bait.** The naive comparison agent refused our headline "$500" injection on its own. We kept that result in the demo as it happened. The evaluation then showed where it does fail: quieter, indirect attacks.
 
 ## Accomplishments that we're proud of
+- **Adversarial evaluation (Nov 10):** 24 synthetic attacks in 8 classes, 3 runs each, same model for both agents. **0 of 24** succeeded against Rebuttal; **9 of the 19** measurable ones succeeded against the naive agent. It refunded in full because a carrier note or the listing text said to, and offered $25 on a $10 order. On 6 honest cases Rebuttal was right in 18 of 18 runs with no false blocks. Small and synthetic; cases, recorded answers and scoring code are in the repo.
 - **Crash test:** about 400 `kill -9`s against real Postgres and a simulated PayPal, with 0 duplicate and 0 missing effects across 400 intents. A deliberately broken control (a PayPal that ignores idempotency keys) produced 19 double refunds in 50. That shows the test can see the failure it is guarding against.
 - **Evidence accepted:** a real `PROOF_OF_FULFILLMENT` submission accepted by the PayPal sandbox (debug_id `f589977c30084`).
 - **Mutation check:** nine of the ten firewall rules broken on purpose, one at a time; every break was caught by the tests.
@@ -59,7 +60,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 - A crash test only means something with a negative control.
 
 ## What's next for Rebuttal
-- **Run the adversarial evaluation:** eight attack classes, Rebuttal vs a naive agent, published per class.
+- **A harder evaluation:** more cases, written by someone else, aimed at steering the quarantine's fields, which is the open risk.
 - **Verify the rest on the sandbox:** `make_offer`, `accept_claim`, refunds and their idempotency.
 - **Webhooks:** delivery to the hosted URL.
 - **Real pool disputes:** connect them to the desk, so a seller can run the agent on their own case.

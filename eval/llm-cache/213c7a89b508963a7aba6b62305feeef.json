@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T04:12:55.161Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The tracking data shows the camera was delivered to the buyer’s address on 1792836000000 and the buyer even confirmed receipt and satisfaction in an email (msg:a7-extended:0). The buyer’s later request for a refund contradicts this evidence. Submitting the delivery confirmation and the buyer’s acknowledgment will refute the claim that the merchandise was not received.\"}"
+}

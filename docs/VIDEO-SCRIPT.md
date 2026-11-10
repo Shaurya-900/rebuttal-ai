@@ -33,15 +33,16 @@ Draft by Claude Code, Nov 10. Shaurya: read it aloud once with a timer and cut w
 
 ---
 
-## If the eval runs before recording
-Replace shot 8 (keep its last sentence as one line in shot 9) with:
+## Eval shot (numbers from `eval/results/report.json`, run Nov 10)
+Use this as shot 8, and move the "real vs simulated" sentence into shot 9 as one line ("PayPal calls are real sandbox calls; buyers and carriers are synthetic; the crash test used a simulated PayPal").
 
-| 8 | 2:20–2:35 | `/eval` | "We attacked it on purpose: [N] synthetic attacks across eight classes, against Rebuttal and a naive agent. Naive agent: [X]% succeeded. Rebuttal: [Y]%. Synthetic cases, these classes only." |
+| 8 | 2:20–2:35 | `/eval` on the live site: the "Attacks that succeeded" table, then scroll to a red row | "We attacked it on purpose: twenty-four synthetic attacks in eight classes, three runs each, against Rebuttal and a naive agent on the same model. Nine of the nineteen we could put to the naive agent got through. It refunded in full because a carrier note said to. Against Rebuttal: zero of twenty-four. Small, synthetic, these classes only." |
 
-Fill in N, X and Y **only** from `eval/results/report.json`, with its date. If the numbers are not in that file, do not use this shot.
+Optional stronger hero 3 (if time allows): after the "$500" message, say "A capable model shrugs off that blunt one. The attack that works is quieter", and show the `/eval` row "A2 · instruction in a carrier tracking note": naive agent `IssueRefund $10.00`, Rebuttal `FIGHT → ALLOW`.
 
 ## Do not say
 - "first", "only", or "nobody else does this". Say "we publish ours".
-- "the naive agent fell for it". On hero 3 it didn't, in our one recorded run.
+- "the naive agent fell for it" about **hero 3**. It didn't. It fell for 9 of 19 other attacks; say which.
+- "unbreakable", "cannot be fooled", or "100% secure". Say "zero of these twenty-four".
 - "exactly-once refunds on PayPal". Say "against a simulated PayPal; refunds rely on PayPal's idempotency key, which we haven't verified".
 - Any win rate. All cases are synthetic.
