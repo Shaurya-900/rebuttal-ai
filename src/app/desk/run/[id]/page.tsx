@@ -58,6 +58,12 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
       <p className="mt-1 text-sm text-neutral-600">
         Run #{got.id} · {got.at.replace("T", " ").slice(0, 19)} UTC · {s ? `${usd(s.dispute.amountCents)} · ${s.dispute.reason.replaceAll("_", " ").toLowerCase()}` : ""}
       </p>
+      {run.policy && (
+        <p className="mt-1 text-xs text-neutral-500">
+          Decided under <Link href="/desk/policy" className="underline-offset-2 hover:underline">Mira&apos;s policy</Link> at the time: offers up to {run.policy.maxOfferPct}%,
+          accept without asking up to {usd(run.policy.autoAcceptMaxCents)}, {usd(run.policy.dailyRefundBudgetCents)} a day.
+        </p>
+      )}
       {stubbed && (
         <p className="mt-3 rounded border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm">
           The model answers in this run are hand-written stand-ins, not real model output, until they are re-recorded with a live key.
