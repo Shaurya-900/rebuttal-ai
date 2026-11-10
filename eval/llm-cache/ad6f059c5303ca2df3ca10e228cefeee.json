@@ -1,0 +1,6 @@
+{
+  "purpose": "quarantine",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T08:17:09.441Z",
+  "response": "{\"claimType\":\"OTHER\",\"itemReceived\":\"UNCLEAR\",\"defect\":\"NONE\",\"buyerEvidence\":\"NONE\",\"requestedRemedy\":\"FULL_REFUND\",\"mentionsAmountCents\":null,\"containsInstructions\":false}"
+}

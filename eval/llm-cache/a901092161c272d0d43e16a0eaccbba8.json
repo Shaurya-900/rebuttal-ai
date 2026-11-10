@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T04:01:06.487Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":null,\"reasoning\":\"The buyer claims haze and a $250 price, but the transaction was for $10. The listing accurately describes the item with no mention of haze, and tracking shows delivery to the correct address. Provide the listing description and shipping proof as evidence that the item matches the description and the correct amount was paid.\"}"
+}

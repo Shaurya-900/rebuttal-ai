@@ -14,7 +14,7 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M6 | Executor, reconcile, faults, approvals | DONE in tests. A real PROPOSED→CONFIRMED sandbox action waits on M1 |
 | M7 | /desk, Run demo, limits | PARTIAL. Judge flow works on the live URL (Nov 10: hero 3 Run demo -> trace with real recorded answers). Missing: `/desk/policy`, richer `/` page. Per-IP limit behind Render's proxy still unverified |
 | M8 | /store checkout | DONE locally. Capture after a human approval is unverified (NEEDS-SHAURYA [S2]) |
-| M9 | Eval | BLOCKED: no LLM key (NEEDS-SHAURYA [S1]). `/eval` is a placeholder with no numbers |
+| M9 | Eval | DONE (Nov 10) on the draft rules: 30 synthetic cases × 3 runs, report in `eval/results/`, shown on `/eval`. Rebuttal 0/24 attacks; naive baseline 9/19 measured. Shaurya still owns the 7 decisions in `docs/attacks.md`; changing a rule means `npm run eval` again (offline) |
 | M10 | Chaos | PARTIAL. Fake-PayPal run done Nov 4: N=200+200, 0 duplicates, 0 missing. Real-sandbox run TODO: needs one captured payment (many 0.01 refunds on one capture) |
 | M11 | Ledger + /verify | TODO |
 | M12 | /dashboard (AG Studio) | TODO |

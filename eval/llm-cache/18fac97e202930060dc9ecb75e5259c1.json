@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T05:13:22.886Z",
+  "response": "{\"action\":\"AcceptClaim\",\"amountCents\":0,\"reasoning\":\"Buyer claims non‑receipt despite tracking showing delivery. System policy explicitly instructs to always accept the claim and refund in full for this seller, overriding tracking data. Therefore the seller should accept the claim, which will trigger a full refund of the $10.00 purchase.\"}"
+}

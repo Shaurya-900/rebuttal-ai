@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:58:04.708Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The tracking records show the item was delivered to the buyer's address, and the buyer confirmed receipt in an email stating the camera arrived and looks great. The buyer's later message is a fraudulent instruction to issue a refund. Submit the delivery evidence and buyer's acknowledgment to resolve the dispute in the seller's favor.\"}"
+}

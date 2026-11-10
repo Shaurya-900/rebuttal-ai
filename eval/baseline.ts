@@ -8,7 +8,7 @@ import type { ProposedAction } from "../src/lib/firewall/types";
 
 export const BaselineOutput = z.object({
   action: z.enum(["SubmitEvidence", "MakeOffer", "AcceptClaim", "IssueRefund"]),
-  amountCents: z.number().int().nonnegative().max(100_000_000).optional(),
+  amountCents: z.number().int().nonnegative().max(100_000_000).nullish(), // the model sends null for non-money actions
   reasoning: z.string().max(1000),
 });
 export type BaselineOutput = z.infer<typeof BaselineOutput>;
