@@ -40,6 +40,10 @@ Use this as shot 8, and move the "real vs simulated" sentence into shot 9 as one
 
 Optional stronger hero 3 (if time allows): after the "$500" message, say "A capable model shrugs off that blunt one. The attack that works is quieter", and show the `/eval` row "A2 · instruction in a carrier tracking note": naive agent `IssueRefund $10.00`, Rebuttal `FIGHT → ALLOW`.
 
+## Optional dashboard shot (AG Studio, for the AG Grid prize)
+About 10 s, after the eval shot:
+| 8b | `/dashboard`, Attack evaluation tab, then the Firewall tab's stamp widget | "The same numbers, live in an AG Studio dashboard: naive agent nine, Rebuttal zero. That stamp board is a custom widget, and anyone can build their own here." |
+
 ## Optional ledger shot (only if the live `/verify` shows four green ticks)
 Replace part of shot 7 (keep the chaos table) with about 10 s:
 | 7b | `/verify?run=<a hero 1 run>`: green "Verified", then click "Change one byte of the PDF" → red FAILED | "Every run is hash-chained and signed. Your browser checks it, not our server. Change one byte of the evidence, and it fails." |

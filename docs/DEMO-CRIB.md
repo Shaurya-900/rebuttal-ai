@@ -22,7 +22,8 @@
 - **Ledger** (`/verify`): every log row hashed and chained, head signed with Ed25519. The browser recomputes it all; the tamper buttons flip one byte of the PDF or one digit of the stored score, and it fails. Timestamps are the server's own.
 - **Live** (`/desk/live`): real sandbox disputes read live. Status, links and deadline are real; the score comes from the matching hero's synthetic records. Decision and firewall run on the live state. Read-only. Good line: "PayPal's own links decide what is legal: on the claim, it offers no make-offer, so the offer option disappears."
 - **Design** (Nov 10): paper and ink, verdicts as stamps, light and dark. Home hero is the real hero-3 run.
-- **E2E** (`npm run e2e`): 6 Playwright judge flows.
+- **Dashboard** (`/dashboard`, AG Studio): the stored runs, the eval per agent, and live disputes. The stamp board is our custom widget; "Build your own widget" opens edit mode.
+- **E2E** (`npm run e2e`): 7 Playwright judge flows.
 - Not built yet: agent runs on real pool disputes from the desk, AG Studio dashboard, Render Workflows.
 - Ship drafts (Nov 10): `README.md`, `docs/VIDEO-SCRIPT.md` (2:45 shot list, with a "do not say" list), `docs/DEVPOST.md`.
 
