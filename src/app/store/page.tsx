@@ -33,21 +33,20 @@ export default async function Store({ searchParams }: { searchParams: Promise<{ 
   const { cancelled } = await searchParams;
   return (
     <main className="mx-auto max-w-xl px-4 py-12">
-      <p className="rounded bg-amber-100 px-3 py-2 text-sm text-amber-900">PayPal sandbox · synthetic store · no real money moves</p>
-      <h1 className="mt-6 text-2xl font-semibold">Mira&apos;s Cameras</h1>
-      <div className="mt-6 rounded-lg border border-neutral-200 p-5">
-        <h2 className="text-lg font-medium">{PRODUCT.name}</h2>
-        <p className="mt-1 text-neutral-600">Shutter tested at all speeds. Light wear on the base plate.</p>
-        <p className="mt-1 text-sm text-neutral-500">{PRODUCT.note}</p>
+      <h1 className="text-3xl font-extrabold tracking-tight">Mira&apos;s Cameras</h1>
+      <p className="mt-2 text-sm text-graphite">A synthetic shop with a real PayPal sandbox checkout, so a dispute can be opened on a real sandbox payment.</p>
+      <div className="mt-6 rounded border border-rule bg-paper p-5">
+        <h2 className="text-xl font-bold tracking-tight">{PRODUCT.name}</h2>
+        <p className="mt-1 text-graphite">Shutter tested at all speeds. Light wear on the base plate.</p>
+        <p className="mt-1 text-sm text-faint">{PRODUCT.note}</p>
         <p className="mt-4 text-xl font-semibold">${(PRODUCT.priceCents / 100).toFixed(2)}</p>
         <form action={buy} className="mt-4">
-          <button className="w-full rounded-md bg-[#ffc439] px-4 py-3 font-semibold text-neutral-900 hover:brightness-95">
-            Pay with PayPal (sandbox)
-          </button>
+          {/* Our own button style on purpose: no imitation of PayPal's branded checkout button. */}
+          <button className="btn-primary w-full py-3">Pay with the PayPal sandbox</button>
         </form>
-        {cancelled && <p className="mt-3 text-sm text-neutral-600">Checkout cancelled. Nothing was charged.</p>}
+        {cancelled && <p className="mt-3 text-sm text-graphite">Checkout cancelled. Nothing was charged.</p>}
       </div>
-      <p className="mt-6 text-sm text-neutral-500">
+      <p className="mt-6 text-sm text-faint">
         Log in on PayPal with a sandbox <em>personal</em> account. After paying, open a dispute on that payment in the sandbox
         Resolution Center to give Rebuttal something to work on.
       </p>

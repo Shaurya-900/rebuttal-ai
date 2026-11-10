@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T23:08:39.925Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The tracking shows the item was delivered to the buyer's address on 1792836000000 and the buyer previously emailed confirming receipt and satisfaction. This evidence disproves the buyer's claim of non‑receipt, so we should submit the delivery confirmation and the buyer's email as evidence rather than refunding or accepting the claim.\"}"
+}

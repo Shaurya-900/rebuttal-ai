@@ -4,6 +4,14 @@ Things only you can do. Newest blockers at the top. Claude Code keeps working on
 
 **Nov 10: under two days left. Do these three first, in this order: [M3] Render, [S1] LLM key, [S0] fresh disputes. Everything a judge sees depends on them.**
 
+## [M11] [5] Set the ledger signing key on Render
+Why: `/verify` shows the chain head as "unsigned" until the web service has an Ed25519 key.
+Exact steps: run this once in the repo folder and copy the single line it prints (it is a private key: don't paste it in chat or commit it):
+`node -e "const {generateKeyPairSync}=require('crypto');console.log(generateKeyPairSync('ed25519').privateKey.export({format:'der',type:'pkcs8'}).toString('base64'))"`
+Then Render -> rebuttal-web -> Environment -> add `LEDGER_SIGNING_KEY` = that line -> Save (it redeploys). Also set `DESK_APPROVER_TOKEN` there if you haven't, or the policy page is read-only.
+Done when: https://rebuttal-web.onrender.com/verify shows four green ticks.
+Blocks: the signature check on the live /verify (everything else on that page works without it).
+
 ## [M3] [40] Deploy to Render (the hosted demo is required to submit)
 Why: Devpost needs a working hosted build, and nothing has been deployed yet. `render.yaml` describes the three paid services (web, worker, Postgres), but only you can create the account and enter a card.
 Exact steps:

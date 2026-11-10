@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T03:34:13.171Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"The buyer claims non‑receipt, but the tracking data shows the item was delivered on 1792836000000 with a signature at the exact shipping address. This constitutes strong evidence that the merchandise was received, so the seller should submit the delivery proof as evidence to resolve the dispute.\"}"
+}

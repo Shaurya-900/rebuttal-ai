@@ -1,0 +1,6 @@
+{
+  "purpose": "planner",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T23:59:18.939Z",
+  "response": "{\"citations\":[{\"itemId\":\"R1\",\"sourceId\":\"trk:a3-fake:3\"},{\"itemId\":\"R2\",\"sourceId\":\"trk:a3-fake:3\"},{\"itemId\":\"R4\",\"sourceId\":\"msg:a3-fake:0\"},{\"itemId\":\"R5\",\"sourceId\":\"order:ORD-a3-fake\"},{\"itemId\":\"R6\",\"sourceId\":\"paypal-tracking:ORD-a3-fake\"},{\"itemId\":\"R7\",\"sourceId\":\"tracking:SYNA3FAKE01\"}]}"
+}

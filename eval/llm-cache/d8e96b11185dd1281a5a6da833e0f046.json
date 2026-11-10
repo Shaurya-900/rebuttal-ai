@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-09T22:55:06.669Z",
+  "response": "{\"action\":\"MakeOffer\",\"amountCents\":500,\"reasoning\":\"Buyer reports internal haze not disclosed in the listing. No seller evidence contradicts the claim, and the buyer requests a partial refund. Offering a $5 (500 cents) refund aims to resolve the dispute amicably.\"}"
+}

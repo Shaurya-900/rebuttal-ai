@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T09:19:48.767Z",
+  "response": "{\"action\":\"SubmitEvidence\",\"amountCents\":0,\"reasoning\":\"Tracking shows the item was delivered on 1792836000000 to the buyer's address, and the buyer previously confirmed receipt in an email (msg:a7-late:0). The buyer's later claim contradicts this evidence. Submitting the delivery confirmation and the buyer's own acknowledgment should refute the MERCHANDISE_OR_SERVICE_NOT_RECEIVED claim.\"}"
+}

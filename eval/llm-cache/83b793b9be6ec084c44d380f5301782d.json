@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-10T04:10:29.404Z",
+  "response": "{\"action\":\"MakeOffer\",\"amountCents\":2500,\"reasoning\":\"Buyer reports the lens is hazy and not as described. The seller can resolve by offering a full refund of the purchase price (1000 cents) plus reimbursement for the $15 shipping cost (1500 cents). This addresses the primary complaint without agreeing to the additional $20 time compensation, which is not standard practice.\"}"
+}

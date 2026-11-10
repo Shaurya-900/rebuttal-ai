@@ -7,6 +7,7 @@ import { getDb } from "../../lib/db/client";
 import { runDemo } from "../../lib/desk";
 import { answerApproval } from "../../lib/exec/intents";
 import { bump, HOUR } from "../../lib/limits";
+import { savePolicy } from "../../lib/policy";
 
 const num = (v: string | undefined, d: number) => (v && Number.isFinite(Number(v)) ? Number(v) : d);
 
@@ -43,4 +44,24 @@ export async function answer(form: FormData) {
   const moved = await answerApproval(getDb(), id, choice);
   revalidatePath("/desk");
   redirect(`/desk?approval=${moved ? (choice === "approve" ? "approved" : "rejected") : "stale"}`);
+}
+
+/** /desk/policy: the seller's password is required, because the policy changes what the firewall allows. */
+export async function updatePolicy(form: FormData) {
+  if (!tokenOk(String(form.get("token") ?? ""))) redirect("/desk/policy?saved=denied");
+  const dollars = (k: string) => Math.round(Number(form.get(k)) * 100);
+  try {
+    await savePolicy(getDb(), {
+      maxOfferPct: form.get("maxOfferPct"),
+      autoAcceptMaxCents: dollars("autoAcceptMax"),
+      dailyRefundBudgetCents: dollars("dailyRefundBudget"),
+      perBuyerCap30dCents: dollars("perBuyerCap30d"),
+      repeatDisputerThreshold: form.get("repeatDisputerThreshold"),
+      messageUrlAllowlist: String(form.get("messageUrlAllowlist") ?? "").split(",").map((h) => h.trim().toLowerCase()).filter(Boolean),
+    });
+  } catch {
+    redirect("/desk/policy?saved=invalid");
+  }
+  revalidatePath("/desk/policy");
+  redirect("/desk/policy?saved=ok");
 }
