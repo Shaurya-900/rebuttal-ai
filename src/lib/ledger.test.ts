@@ -33,3 +33,15 @@ describe("ledger", () => {
     expect(verifyRoot(publicKeySpki, rootMessage(head.id, "0".repeat(64), "2026-11-10T01:00:00.000Z"), signature)).toBe(false);
   });
 });
+
+describe("signing key config", () => {
+  it("unset -> unsigned, no problem; garbage -> reported, never thrown; a real key -> used", async () => {
+    const { signingKey } = await import("./ledger");
+    expect(signingKey("")).toEqual({ key: null, problem: null });
+    const bad = signingKey("node -e \"const {generateKeyPairSync}=require('crypto')\"");
+    expect(bad.key).toBeNull();
+    expect(bad.problem).toMatch(/not a valid key/);
+    const good = generateKeyPairSync("ed25519").privateKey.export({ format: "der", type: "pkcs8" }).toString("base64");
+    expect(signingKey(`  ${good}\n`).key?.asymmetricKeyType).toBe("ed25519");
+  });
+});
