@@ -26,7 +26,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 
 ## How we built it
 - **App:** Next.js and TypeScript on Render, with Postgres as the database, queue and outbox (no Redis). Zod validates every model output, proposed action, webhook and PayPal response.
-- **PayPal:** a hand-written adapter for Orders v2 and Customer Disputes v1. Before every action it re-reads the dispute and uses the HATEOAS link PayPal returns; no link means nothing is sent.
+- **PayPal:** orders, captures and refunds use PayPal's official TypeScript Server SDK; we moved them onto it with the APIMatic Context Plugin in Claude Code, which gave us the SDK's real methods, models and error types. Customer Disputes v1 stays a hand-written REST adapter, because the SDK has no Disputes controller. Before every action it re-reads the dispute and uses the HATEOAS link PayPal returns; no link means nothing is sent.
 - **Crash safety:**
   - each action is written as an intent and an outbox row in one transaction;
   - workers claim rows with `FOR UPDATE SKIP LOCKED` and a lease;
@@ -68,7 +68,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 - **Evidence ledger:** a hash-chained log with signed roots, so a seller can prove an exhibit wasn't altered.
 
 ## Built with
-`typescript` `next.js` `react` `tailwind` `ag-studio` `ag-grid` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-disputes-api` `groq` `render` `claude-code`
+`typescript` `next.js` `react` `tailwind` `ag-studio` `ag-grid` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-server-sdk` `apimatic` `paypal-disputes-api` `groq` `render` `claude-code`
 
 ## Prior art (put this in the description too)
 AI dispute tools already exist commercially (Chargeflow, ChargePay, Justt, Chargebacks911), and the safety patterns are published: Dual-LLM (Simon Willison) and CaMeL (Google Research). Rebuttal is an open-source reference implementation that combines them against the real PayPal Disputes sandbox. It is not a new technique.
