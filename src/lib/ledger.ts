@@ -37,11 +37,19 @@ export async function readRows(db: Db): Promise<Row[]> {
 
 export const rootMessage = (headId: number, head: string, signedAt: string) => `rebuttal-ledger-v1|${headId}|${head}|${signedAt}`;
 
-/** LEDGER_SIGNING_KEY: base64 PKCS#8 DER of an Ed25519 private key. Unset -> the head is shown unsigned. */
-export function signingKey(): KeyObject | null {
-  const b64 = process.env.LEDGER_SIGNING_KEY;
-  if (!b64) return null;
-  return createPrivateKey({ key: Buffer.from(b64, "base64"), format: "der", type: "pkcs8" });
+/**
+ * LEDGER_SIGNING_KEY: base64 PKCS#8 DER of an Ed25519 private key. Unset -> the head is shown unsigned.
+ * A value that is not such a key (e.g. the command that makes one, pasted instead of its output) is reported, never a 500.
+ */
+export function signingKey(b64 = process.env.LEDGER_SIGNING_KEY?.trim()): { key: KeyObject | null; problem: string | null } {
+  if (!b64) return { key: null, problem: null };
+  try {
+    const key = createPrivateKey({ key: Buffer.from(b64, "base64"), format: "der", type: "pkcs8" });
+    if (key.asymmetricKeyType !== "ed25519") return { key: null, problem: "LEDGER_SIGNING_KEY is a key, but not an Ed25519 key" };
+    return { key, problem: null };
+  } catch {
+    return { key: null, problem: "LEDGER_SIGNING_KEY is set but is not a valid key: paste the line the command prints, not the command" };
+  }
 }
 
 export function signRoot(key: KeyObject, message: string) {

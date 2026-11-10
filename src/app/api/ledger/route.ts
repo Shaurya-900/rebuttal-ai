@@ -11,8 +11,10 @@ export async function GET(req: Request) {
   const head = entries.at(-1);
   const signedAt = new Date().toISOString();
   const message = head ? rootMessage(head.id, head.link, signedAt) : null;
-  const key = signingKey();
-  const root = head && message ? { headId: head.id, head: head.link, signedAt, message, ...(key ? signRoot(key, message) : { signature: null, publicKeySpki: null }) } : null;
+  const { key, problem: keyProblem } = signingKey();
+  const root = head && message
+    ? { headId: head.id, head: head.link, signedAt, message, keyProblem, ...(key ? signRoot(key, message) : { signature: null, publicKeySpki: null }) }
+    : null;
 
   const runId = Number(new URL(req.url).searchParams.get("run"));
   const row = Number.isInteger(runId) ? rows.find((r) => r.id === runId && r.kind === "agent_trace") : undefined;
