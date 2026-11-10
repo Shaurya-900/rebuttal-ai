@@ -51,3 +51,11 @@ test("policy page is readable but refuses a wrong password", async ({ page }) =>
   await save.click();
   await expect(page.getByText("Wrong seller password")).toBeVisible();
 });
+
+test("/desk/live reads real sandbox disputes and says nothing is sent", async ({ page }) => {
+  await page.goto("/desk/live");
+  await expect(page.getByRole("heading", { name: "Real sandbox disputes", level: 1 })).toBeVisible();
+  await expect(page.getByText("Nothing is sent from this page")).toBeVisible();
+  // Either PayPal answered (dispute rows) or the page says plainly that it did not.
+  await expect(page.locator("article").first().or(page.getByText(/did not answer|No sandbox disputes/))).toBeVisible();
+});

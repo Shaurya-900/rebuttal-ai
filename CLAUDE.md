@@ -207,7 +207,8 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - `/desk/policy`: Mira's policy in the append-only event_log (kind `policy`); runs and the worker use the newest row; each trace records it. Editing needs `DESK_APPROVER_TOKEN`.
 - Ledger + `/verify`: hash chain over event_log, Ed25519-signed head (`LEDGER_SIGNING_KEY`, unset = unsigned), browser re-check, tamper demos. Self-asserted timestamps.
 - `npm run e2e` (Playwright, `BASE_URL` selects local or hosted). Secret scan clean.
-- Not built: AG Studio dashboard and Render Workflows (need Shaurya's accounts), agent runs on real pool disputes from `/desk`.
+- Nov 10, evening: frontend redesign (tokens, light/dark, stamps, home hero from the real hero-3 run) and `/desk/live` (real sandbox disputes, read-only, live PayPal state + replayed scoring). 84 unit tests, 6 Playwright flows.
+- Not built: AG Studio dashboard and Render Workflows (need Shaurya's accounts). Sending actions on real disputes from the public desk is left out on purpose.
 
 ### S5 stopped (Nov 4 night)
 - Not started. `docs/attacks.md` is still Claude's unreviewed draft (A8 describes the dropped precedent corpus) and there is no LLM key, so any numbers would come from hand-written stubs. Shaurya chose to review the doc first. The 7 decisions are in `docs/NEEDS-SHAURYA.md` under [S5].

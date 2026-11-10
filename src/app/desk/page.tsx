@@ -114,7 +114,10 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
 
       <section className="mt-10">
         <h2 className="text-xl font-bold tracking-tight">Sandbox disputes</h2>
-        <p className="mt-1 text-sm text-graphite">Real PayPal sandbox disputes the worker has synced, with the actions PayPal allows right now.</p>
+        <p className="mt-1 text-sm text-graphite">
+          <Link href="/desk/live" className="link font-semibold">See what Rebuttal would do on each real sandbox dispute</Link>, read live from PayPal with
+          nothing sent. Below: disputes the background worker has synced, with the actions PayPal allows right now.
+        </p>
         {live.disputes.length === 0 ? (
           <p className="mt-2 text-sm text-faint">None synced yet.</p>
         ) : (
