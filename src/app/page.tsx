@@ -43,8 +43,8 @@ export default function Home() {
       name: "Auditable",
       claim: "Every decision cites the records it rests on.",
       how: "The model only points at records; code checks each pointer and adds up a fixed rubric. The evidence PDF ends every line with its source.",
-      proof: "Open any run on the desk to read the whole trace, stage by stage.",
-      href: "/desk",
+      proof: "Every run is hash-chained and the chain head is signed. Your browser can re-check it, and see one changed byte fail.",
+      href: "/verify",
     },
   ];
 
