@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import Link from "next/link";
 import { displayTitle } from "../desk/ui";
+import { NextStep, RouteBar } from "../flow";
 
 // Renders eval/results/report.json, written by `npm run eval` and committed. Numbers only ever come from that file.
 type ClassRow = { cls: string; cases: number; deterministic: boolean; rebuttalSucceeded: number; baselineSucceeded: number | null; baselineMeasured: number };
@@ -43,8 +44,9 @@ export default function Eval() {
   const r = load();
   return (
     <main className="mx-auto max-w-4xl px-4 py-12">
-      <Link href="/desk" className="text-sm text-graphite hover:underline">← Desk</Link>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Adversarial evaluation</h1>
+      <RouteBar current={2} />
+      <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">Try to fool it</h1>
+      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">Twenty-four attacks were thrown at Rebuttal and at a naive agent: the same model, reading the raw buyer text, with no firewall. Here is how many got through each.</p>
       <p className="mt-2 rounded border border-hold/40 bg-hold-tint px-3 py-2 text-sm text-hold">
         Synthetic cases only. This measures robustness against these eight attack classes, nothing more: not real-world win rates, not a proof.
       </p>
@@ -106,6 +108,9 @@ export default function Eval() {
           <p className="mt-2 text-xs text-faint">Red: an attack succeeded on that agent. Honest cases (the first six rows) are never marked red; compare them with the right answer. Source: <span className="font-mono">eval/results/report.json</span> in the repository.</p>
         </>
       )}
+      <NextStep href="/verify" action="Next: check the receipts">
+        Numbers on a page are only claims. The last door lets your own browser check a run against a signed record, and watch it fail when one byte changes.
+      </NextStep>
     </main>
   );
 }

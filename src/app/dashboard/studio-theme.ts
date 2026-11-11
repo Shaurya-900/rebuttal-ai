@@ -5,7 +5,7 @@ import { studioTheme } from "ag-studio";
 
 const v = (name: string) => `var(--${name})`;
 const line = (color: string) => ({ width: 1, color: v(color) });
-const inks = ["act", "hold", "graphite", "faint", "allow", "deny", "act", "hold", "graphite", "faint"];
+const inks = ["act", "hold", "graphite", "faint", "ink", "act", "hold", "graphite", "faint", "ink"]; // no allow/deny: those inks mean verdicts
 const palette = Object.fromEntries(inks.flatMap((c, i) => [[`chartPaletteFills${i + 1}Color`, v(c)], [`chartPaletteStrokes${i + 1}Color`, v(c)]]));
 
 export const rebuttalStudioTheme = studioTheme.withParams({
