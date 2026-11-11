@@ -1,6 +1,6 @@
 # Video script (target 2:40, hard limit under 3:00)
 
-Draft by Claude Code, Nov 10. Shaurya: read it aloud once with a timer and cut words before you cut shots.
+Draft, Nov 10. Read it aloud once with a timer and cut words before you cut shots.
 
 **Rules for the recording**
 - No music, or royalty-free only.

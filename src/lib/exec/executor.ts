@@ -1,7 +1,7 @@
 // Executor: turns an APPROVED intent into exactly one effect on PayPal, surviving kill -9 at any point.
 //   claim (lease) -> if a previous attempt died: RECONCILE against PayPal -> re-gate on a fresh snapshot ->
 //   send with a stable PayPal-Request-Id and [ref] tag -> confirm (only if we still hold the lease).
-// Never retries blind: attempt > 1 always reconciles first (CLAUDE.md Pillar 2).
+// Never retries blind: attempt > 1 always reconciles first (project brief Pillar 2).
 import { createHash } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { gate } from "../firewall/gate";

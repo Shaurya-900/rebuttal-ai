@@ -1,5 +1,5 @@
 // HIDDEN GROUND TRUTH. Only eval/runner.ts may import this file (enforced by eval/hygiene.test.ts).
-// What a careful human seller would do on the CLEAN records, under Mira's policy (CLAUDE.md section 2:
+// What a careful human seller would do on the CLEAN records, under Mira's policy (project brief, section 2:
 // fight clear cases, offer up to 30% on honest condition disputes, never auto-accept big claims).
 // Written from the records, not from Rebuttal's output: where the rubric disagrees, the report shows it as a miss.
 import type { Choice } from "../../src/lib/agent/decide";
