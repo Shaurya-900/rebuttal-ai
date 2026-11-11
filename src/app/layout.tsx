@@ -8,13 +8,17 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variabl
 
 export const metadata = { title: "Rebuttal", description: "A PayPal dispute agent that cannot be talked out of the rules." };
 
+// Four places, in the order of the route (src/app/flow.tsx). Everything else lives in the footer.
 const NAV = [
-  ["/desk", "Desk"],
+  ["/desk", "Watch"],
+  ["/eval", "Try to fool it"],
+  ["/verify", "Receipts"],
   ["/dashboard", "Dashboard"],
-  ["/eval", "Evaluation"],
-  ["/verify", "Verify"],
-  ["/desk/policy", "Policy"],
-  ["/store", "Store"],
+] as const;
+const MORE = [
+  ["/desk/live", "Live PayPal disputes"],
+  ["/desk/policy", "Mira's policy"],
+  ["/store", "Sandbox store"],
 ] as const;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -37,9 +41,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </header>
         <div id="main">{children}</div>
         <footer className="mt-20 border-t border-rule">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-xs text-faint">
-            Open source under the MIT licence: <a className="link" href="https://github.com/Shaurya-900/rebuttal-ai">github.com/Shaurya-900/rebuttal-ai</a>.
-            Built for the PayPal AI Hackathon 2026. Not affiliated with PayPal.
+          <div className="mx-auto flex max-w-5xl flex-wrap items-baseline justify-between gap-x-8 gap-y-3 px-4 py-6 text-sm">
+            <nav aria-label="More" className="flex flex-wrap gap-x-5 gap-y-1">
+              {MORE.map(([href, label]) => <Link key={href} href={href} className="text-graphite hover:text-ink hover:underline">{label}</Link>)}
+              <a href="https://github.com/Shaurya-900/rebuttal-ai" className="text-graphite hover:text-ink hover:underline">Code (MIT)</a>
+            </nav>
+            <p className="text-xs text-faint">Built for the PayPal AI Hackathon 2026. Not affiliated with PayPal.</p>
           </div>
         </footer>
       </body>

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("home page states the three promises and labels the demo synthetic", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Three promises, each measured" })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Three doors, in order" })).toBeVisible();
   await expect(page.getByRole("img", { name: /Firewall: denied, rule I1/ })).toBeVisible(); // the hero stamp, computed from the real run
   await expect(page.getByText(/synthetic/i).first()).toBeVisible();
 });
@@ -11,7 +11,7 @@ test("home page states the three promises and labels the demo synthetic", async 
 test("Run demo on the injection scenario shows every stage of the trace", async ({ page }) => {
   await page.goto("/desk");
   const card = page.locator("form").filter({ has: page.locator('input[name="scenario"][value="hero3"]') });
-  await card.getByRole("button", { name: "Run demo" }).click();
+  await card.locator("button").click();
   await expect(page).toHaveURL(/\/desk\/run\/\d+/);
   await expect(page.getByText("containsInstructions").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: /Rubric/ })).toBeVisible();
@@ -30,7 +30,7 @@ test("/eval shows the committed results with the synthetic caveat", async ({ pag
 test("/verify passes untouched and fails when one byte of the evidence PDF changes", async ({ page }) => {
   // Make sure a FIGHT run with a PDF exists, then verify it.
   await page.goto("/desk");
-  await page.locator("form").filter({ has: page.locator('input[name="scenario"][value="hero1"]') }).getByRole("button", { name: "Run demo" }).click();
+  await page.locator("form").filter({ has: page.locator('input[name="scenario"][value="hero1"]') }).locator("button").click();
   const runId = (await page.waitForURL(/\/desk\/run\/\d+/), page.url().match(/run\/(\d+)/)![1]);
   await page.goto(`/verify?run=${runId}`);
   const verdict = page.locator("p[aria-live]");
