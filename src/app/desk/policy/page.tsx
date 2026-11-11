@@ -27,7 +27,7 @@ export default async function PolicyPage({ searchParams }: { searchParams: Promi
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/desk" className="text-sm text-graphite hover:underline">← Desk</Link>
+      <Link href="/desk" className="text-sm text-graphite hover:underline">← Back to the desk</Link>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Mira&apos;s policy</h1>
       <p className="mt-2 text-sm text-graphite">
         These numbers bound what Rebuttal may do. The decision code sizes offers from them, and the firewall checks every action against them
@@ -74,7 +74,7 @@ export default async function PolicyPage({ searchParams }: { searchParams: Promi
           </label>
           <button type="submit" disabled={!approvalsOn} className="btn-primary">Save policy</button>
         </div>
-        {!approvalsOn && <p className="text-xs text-faint">Editing is off on this deploy (no seller password is set). The policy below is still the one in force.</p>}
+        <p className="text-xs text-graphite">{approvalsOn ? "Visitors can read this; only Mira, with her password, can save changes." : "Editing is off on this deploy (no seller password is set). The values above are the ones in force."}</p>
       </form>
 
       <h2 className="mt-10 text-xl font-bold tracking-tight">History</h2>

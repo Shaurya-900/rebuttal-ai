@@ -127,3 +127,15 @@ Recall questions:
 1. Why does door 1 say "proposed" and not "sent", and where would a judge check?
 2. Why is the naive agent's score out of 19 rather than 24?
 3. What happens to the home page if the hero-3 recording file goes missing, and why does that matter during Dec 1-15?
+
+## Every page explains itself (Nov 11)
+1. The run page now opens with "The outcome": what Rebuttal chose, what it proposed in a plain sentence, the firewall's stamp, and the naive agent beside it. Raw JSON and camelCase field names are gone.
+2. `/eval` starts with "Your turn": a visitor clicks an action an attacker would want (refund $500, offer 90%, a bit.ly link) and the real firewall stamps it. It is a server action calling the same pure `gate()`; no model call, nothing sent.
+3. `/verify` shows its result as a big stamp (VERIFIED or FAILED) with two numbered steps: pick a run, try to tamper with it.
+4. Buttons that wait on the server say what they are doing ("Running the agent…") so nobody clicks twice, and the header marks the page you are on.
+5. The 30-case table is folded away behind "Show every case"; the headline numbers and the per-attack marks come first.
+
+Recall questions:
+1. Why can the "Your turn" playground run without any LLM call, and which invariant blocks the $500 refund?
+2. Why does the playground allow a full $10 refund, and whose job is it to decide that a refund is unwise?
+3. What does `useFormStatus` give the pending button, and why does it matter on a slow server?
