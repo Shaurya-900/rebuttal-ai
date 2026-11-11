@@ -232,3 +232,25 @@ Consequences:
    After: `WAITING_FOR_BUYER_RESPONSE / INQUIRY`, links `self, accept_claim, escalate, send_message` (provide_evidence gone once answered).
 - The earlier HTTP 500 (PP-R-HQO-10196189, escalated, debug_id f649595c408c8) was most likely the wrong evidence type on a CHARGEBACK-stage dispute too (unverified; we did not retry it).
 - **Code consequence (fixed Nov 10):** `SubmitEvidence` now carries optional `tracking` (from trusted records, regex-validated). With it, `buildRequest` sends `PROOF_OF_FULFILLMENT` + `tracking_info`, the exact shape that got 200; without it, `OTHER`. Carriers outside a short PayPal list go as `carrier_name: OTHER` + `carrier_name_other`, which is UNVERIFIED. Not done: reading the dispute's `REQUESTED_FROM_SELLER` type.
+
+## APIMatic Context Plugin (Nov 11)
+`src/lib/paypal/orders.ts` (create order, get order, capture, get capture, refund) now calls PayPal's official TypeScript Server SDK, `@paypal/paypal-server-sdk` 2.5.0, which APIMatic generates. The exported function signatures did not change, so `/store`, `/store/return`, `scripts/sandbox-order.ts` and the executor are untouched. Responses are still parsed by our tolerant Zod schemas (from the SDK's raw response body), so callers keep the same snake_case types.
+
+**Plugin tools called (Claude Code, `context-matic` MCP server):**
+- `fetch_api(typescript, "paypal")`: the PayPal Server SDK; controllers Orders, Payments, Vault, Transaction Search, Subscriptions.
+- `ask`: how to build the `Client` for the sandbox with client credentials; and "is there a Disputes controller?" (answer: no, not among the controllers).
+- `endpoint_search`: `createOrder`, `captureOrder`, `getOrder` (Orders), `refundCapturedPayment`, `getCapturedPayment`, `getRefund` (Payments), and `Dispute` (returned only subscription/refund/order methods, nothing for disputes).
+- `model_search`: `PaypalWalletExperienceContext`, `PaypalExperienceUserAction` (`PAY_NOW`), `PaypalWalletContextShippingPreference` (`GET_FROM_FILE`), `RefundRequest` (`amount`, `noteToPayer`), `Refund`.
+- `update_activity`: `sdk_setup` after `npm install`, `first_call_made` after the sandbox run.
+
+**What it told us that changed the code:**
+- Idempotency goes in the `paypalRequestId` parameter of `createOrder`, `captureOrder` and `refundCapturedPayment`, so the executor's stable `PayPal-Request-Id` still reaches PayPal on refunds. It also said order keys are kept 6 hours and refund keys 45 days (now in the `refundCapture` comment).
+- Every non-2xx is thrown as `ApiError`/`CustomError` with `statusCode`, `headers` and `body`. We map it to our `PayPalError` (status + `paypal-debug-id`), because the executor decides "definite 4xx refusal" vs "unknown outcome, reconcile first" from that status. Timeouts are not mapped, so they stay unknown outcomes.
+- `refundCapturedPayment` can return **409** ("a previous call for the given resource is in progress"). Our executor treats any 4xx except 429 as definite, so a 409 refund is marked FAILED for a human, never retried blind. Noted in the code.
+- The plugin's sample client turns on request/response logging with bodies. We left logging off (the SDK's default is a NullLogger) so no token or body reaches our logs.
+
+**What the plugin could not answer:** several `ask` calls returned a tool error (including create-order with `experience_context`, and retry/abort options). For retries and per-call timeouts we read the installed SDK source instead (`node_modules/@paypal/paypal-server-sdk/src/defaultConfiguration.ts`, `@apimatic/core-interfaces` `RequestOptions`): default `maxNumberOfRetries` is 0 and POST is never in `httpMethodsToRetry`, and each call accepts `{ abortSignal }`. We set `retryConfig.maxNumberOfRetries: 0` explicitly anyway and pass `AbortSignal.timeout(...)` on refunds.
+
+**Disputes:** the plugin showed no Disputes controller (`ask` and `endpoint_search`), so `disputes.ts` stays on hand-written REST (`ppRequest` in `client.ts`), as do the token check and webhook verification.
+
+**Verified on the sandbox (`npm run test:sandbox`, Nov 11):** SDK `createOrder` + same `paypalRequestId` returns the same order (1UP6005507883833U, `PAYER_ACTION_REQUIRED`); SDK `getOrder` reads it back; SDK `getCapturedPayment` on an unknown id becomes `PayPalError` HTTP 404 `RESOURCE_NOT_FOUND` with a debug id. **UNVERIFIED through the SDK:** `captureOrder` and `refundCapturedPayment` (both need a buyer to approve an order: `npm run sandbox:order`), and whether refunds honour `PayPal-Request-Id`.
