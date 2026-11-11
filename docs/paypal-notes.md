@@ -198,7 +198,7 @@ First time `make_offer` and `send_message` links have been observed. No action h
 - The free tier returned HTTP 429 after about 9 calls in one run; a second run a minute later went through.
 
 ## Nov 10 — first successful dispute action: send_message on PP-R-FCU-10197630 (INQUIRY)
-Run by Claude Code with Shaurya's go-ahead, through the app adapter (`sendDisputeAction`, the executor's code path):
+Run with Shaurya's go-ahead, through the app adapter (`sendDisputeAction`, the executor's code path):
 `SANDBOX_MUTATE_DISPUTE_ID=PP-R-FCU-10197630 SANDBOX_MUTATE_ACTION=send_message npm run test:sandbox` -> test passed, so HTTP 2xx (vitest hid the debug_id line).
 
 Before (22:34:48Z): `WAITING_FOR_SELLER_RESPONSE / INQUIRY`, due 2026-11-29, links `self, accept_claim, provide_evidence, send_message, escalate, make_offer`.
@@ -236,7 +236,7 @@ Consequences:
 ## APIMatic Context Plugin (Nov 11)
 `src/lib/paypal/orders.ts` (create order, get order, capture, get capture, refund) now calls PayPal's official TypeScript Server SDK, `@paypal/paypal-server-sdk` 2.5.0, which APIMatic generates. The exported function signatures did not change, so `/store`, `/store/return`, `scripts/sandbox-order.ts` and the executor are untouched. Responses are still parsed by our tolerant Zod schemas (from the SDK's raw response body), so callers keep the same snake_case types.
 
-**Plugin tools called (Claude Code, `context-matic` MCP server):**
+**Plugin tools called (`context-matic` MCP server):**
 - `fetch_api(typescript, "paypal")`: the PayPal Server SDK; controllers Orders, Payments, Vault, Transaction Search, Subscriptions.
 - `ask`: how to build the `Client` for the sandbox with client credentials; and "is there a Disputes controller?" (answer: no, not among the controllers).
 - `endpoint_search`: `createOrder`, `captureOrder`, `getOrder` (Orders), `refundCapturedPayment`, `getCapturedPayment`, `getRefund` (Payments), and `Dispute` (returned only subscription/refund/order methods, nothing for disputes).

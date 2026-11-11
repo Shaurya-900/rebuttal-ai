@@ -1,4 +1,4 @@
-// Postgres is the queue, outbox, lease store and dedupe table (CLAUDE.md: no Redis, no queue lib).
+// Postgres is the queue, outbox, lease store and dedupe table (project rule: no Redis, no queue lib).
 import { sql } from "drizzle-orm";
 import { bigint, bigserial, customType, integer, jsonb, pgEnum, pgTable, primaryKey, text, timestamp, uniqueIndex, index } from "drizzle-orm/pg-core";
 
@@ -82,7 +82,7 @@ export const exhibit = pgTable("exhibit", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
-// Fixed-window counters for the per-IP run limit and the daily LLM cap (no Redis: CLAUDE.md section 10).
+// Fixed-window counters for the per-IP run limit and the daily LLM cap (no Redis: project brief section 10).
 export const usageCounter = pgTable("usage_counter", {
   bucket: text("bucket").notNull(), // "run:<ip hash>" or "llm:global"
   windowStart: timestamp("window_start", { withTimezone: true }).notNull(),

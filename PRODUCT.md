@@ -45,7 +45,7 @@ Commercial tools (Chargeflow, ChargePay, Justt, Chargebacks911; Stripe's and Sho
 - Web: Next.js App Router, TypeScript, Tailwind, Postgres; hosted on Render (paid plans: web, worker, Postgres).
 - PayPal: Disputes via REST (evidence accepted on a real sandbox dispute), Orders/captures/refunds via PayPal's Server SDK. Sponsor tools in use: AG Studio (dashboard), APIMatic Context Plugin (SDK integration), Render (hosting).
 - Terminology used on the site: dispute, inquiry/claim stage, evidence packet, rubric, firewall verdict (allowed / denied / held for seller), quarantine, naive agent, ledger.
-- Project rules from the brief (`CLAUDE.md`, principles 7–8 and section 9), binding on any page:
+- Project rules from the brief (principles 7–8 and the status notes), binding on any page:
   - all synthetic data is labelled synthetic;
   - every number shown comes from a dated, committed run;
   - untested things are labelled unverified;

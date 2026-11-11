@@ -49,7 +49,7 @@ const auth = { Authorization: `Bearer ${tok.access_token}` };
 
 log(`\n## ${new Date().toISOString()} — ${step} on ${disputeId}\n`);
 
-// Pre-check: latest dispute state decides legality (CLAUDE.md principle 4).
+// Pre-check: latest dispute state decides legality (project brief principle 4).
 const g = await fetch(`${BASE}/v1/customer/disputes/${disputeId}`, { headers: auth });
 const d = await g.json().catch(() => ({}));
 const rels = (d.links ?? []).map((l) => l.rel);

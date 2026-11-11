@@ -1,4 +1,4 @@
-# Devpost text (draft by Claude Code, Nov 10; Shaurya edits into his own voice before pasting)
+# Devpost text (draft, Nov 10; edit into your own voice before pasting)
 
 **Project name:** Rebuttal
 **Tagline (under 60 chars):** A PayPal dispute agent that can't be talked out of the rules
@@ -26,7 +26,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 
 ## How we built it
 - **App:** Next.js and TypeScript on Render, with Postgres as the database, queue and outbox (no Redis). Zod validates every model output, proposed action, webhook and PayPal response.
-- **PayPal:** orders, captures and refunds use PayPal's official TypeScript Server SDK; we moved them onto it with the APIMatic Context Plugin in Claude Code, which gave us the SDK's real methods, models and error types. Customer Disputes v1 stays a hand-written REST adapter, because the SDK has no Disputes controller. Before every action it re-reads the dispute and uses the HATEOAS link PayPal returns; no link means nothing is sent.
+- **PayPal:** orders, captures and refunds use PayPal's official TypeScript Server SDK; we moved them onto it with the APIMatic Context Plugin in our AI coding assistant, which gave us the SDK's real methods, models and error types. Customer Disputes v1 stays a hand-written REST adapter, because the SDK has no Disputes controller. Before every action it re-reads the dispute and uses the HATEOAS link PayPal returns; no link means nothing is sent.
 - **Crash safety:**
   - each action is written as an intent and an outbox row in one transaction;
   - workers claim rows with `FOR UPDATE SKIP LOCKED` and a lease;
@@ -35,7 +35,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 - **Model:** `openai/gpt-oss-120b` on Groq, behind an adapter with provider fallback and a record/replay cache. Demo clicks replay recorded answers and cost nothing.
 - **Tests:** property-based tests (fast-check) for the invariants, a mutation check, and a `kill -9` chaos test.
 - **Dashboard:** an **AG Studio** dashboard (`/dashboard`) over every stored run, the attack evaluation and the live sandbox disputes. It has a custom verdict-stamp widget and a Studio theme built from the site's design tokens, and visitors can build their own widgets in edit mode.
-- **Tooling:** pair-programmed with Claude Code under a written brief that set the safety rules before any code. The invariants, rubric and attack plan live in `docs/` and are what the code is tested against.
+- **Tooling:** pair-programmed with an AI coding assistant under a written brief that set the safety rules before any code. The invariants, rubric and attack plan live in `docs/` and are what the code is tested against.
 
 ## Challenges we ran into
 - **Creating disputes through the API was refused** for our app (`No permissions to set target_client_id`). Every sandbox dispute was made by hand, one payment each.
@@ -68,7 +68,7 @@ The demo has four synthetic scenarios: a strong "not received" case (fight), a w
 - **Evidence ledger:** a hash-chained log with signed roots, so a seller can prove an exhibit wasn't altered.
 
 ## Built with
-`typescript` `next.js` `react` `tailwind` `ag-studio` `ag-grid` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-server-sdk` `apimatic` `paypal-disputes-api` `groq` `render` `claude-code`
+`typescript` `next.js` `react` `tailwind` `ag-studio` `ag-grid` `postgresql` `drizzle-orm` `zod` `pdf-lib` `vitest` `fast-check` `paypal-rest-api` `paypal-server-sdk` `apimatic` `paypal-disputes-api` `groq` `render`
 
 ## Prior art (put this in the description too)
 AI dispute tools already exist commercially (Chargeflow, ChargePay, Justt, Chargebacks911), and the safety patterns are published: Dual-LLM (Simon Willison) and CaMeL (Google Research). Rebuttal is an open-source reference implementation that combines them against the real PayPal Disputes sandbox. It is not a new technique.
