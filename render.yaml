@@ -23,6 +23,7 @@ services:
       - { key: PAYPAL_BASE_URL, value: https://api-m.sandbox.paypal.com }
       - { key: SANDBOX_SIMULATOR, value: "true" }
       - { key: REBUTTAL_LLM_MODE, value: replay }
+      - { key: REBUTTAL_LLM_PROVIDER, value: groq } # the /eval chat asks this model live for new messages
       - { key: PAYPAL_CLIENT_ID, sync: false }
       - { key: PAYPAL_CLIENT_SECRET, sync: false }
       - { key: PAYPAL_WEBHOOK_ID, sync: false }

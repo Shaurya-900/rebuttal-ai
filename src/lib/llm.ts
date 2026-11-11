@@ -143,6 +143,11 @@ export const LLM_CACHE_DIR = join(process.cwd(), "fixtures", "llm-cache");
 /** Reads only the LLM variables, so offline tests do not need PayPal env vars. */
 export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => Promise<void>, cacheDir = LLM_CACHE_DIR): Llm {
   const mode = (e.REBUTTAL_LLM_MODE ?? "replay") as "record" | "replay" | "live";
+  return createLlm({ mode, providers: providersFromEnv(e), cacheDir, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200), reserve });
+}
+
+/** The configured model providers, in fallback order. Empty when no key is set. */
+export function providersFromEnv(e: NodeJS.ProcessEnv = process.env): Provider[] {
   const providers: Provider[] = [];
   // First provider uses REBUTTAL_LLM_KEY / REBUTTAL_LLM_MODEL; fallbacks use REBUTTAL_LLM_KEY_<NAME> / REBUTTAL_LLM_MODEL_<NAME>.
   (e.REBUTTAL_LLM_PROVIDER ?? "gemini").split(",").map((n) => n.trim()).forEach((name, i) => {
@@ -152,5 +157,25 @@ export function llmFromEnv(e: NodeJS.ProcessEnv = process.env, reserve?: () => P
     if (name === "gemini") providers.push(geminiProvider(key, model));
     if (name === "groq") providers.push(groqProvider(key, model));
   });
-  return createLlm({ mode, providers, cacheDir, maxCalls: Number(e.DAILY_LLM_CALL_CAP ?? 200), reserve });
+  return providers;
+}
+
+/** Replays recorded answers first and asks a live model only on a miss: recorded attacks cost nothing. */
+export function layeredLlm(replay: Llm, live: Llm): Llm {
+  const calls: LlmCallRecord[] = [];
+  return {
+    calls,
+    async json<T>(req: LlmRequest<T>): Promise<T> {
+      try {
+        const v = await replay.json(req);
+        calls.push(replay.calls.at(-1)!);
+        return v;
+      } catch (e) {
+        if (!(e instanceof Error && e.message.startsWith("LLM replay miss"))) throw e;
+        const v = await live.json(req);
+        calls.push(live.calls.at(-1)!);
+        return v;
+      }
+    },
+  };
 }

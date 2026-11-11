@@ -17,7 +17,8 @@
     "chaos": "tsx scripts/chaos/run.ts",
     "db:dev": "tsx scripts/dev-db.ts",
     "eval": "tsx --env-file-if-exists=.env eval/runner.ts",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "record:chat": "tsx --env-file-if-exists=.env scripts/record-chat.ts"
   },
   "dependencies": {
     "@paypal/paypal-server-sdk": "^2.5.0",

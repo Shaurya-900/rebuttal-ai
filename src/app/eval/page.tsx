@@ -4,6 +4,7 @@ import Link from "next/link";
 import { displayTitle } from "../desk/ui";
 import { NextStep, RouteBar } from "../flow";
 import TryFirewall from "./try-firewall";
+import BuyerChat from "./buyer-chat";
 
 // Renders eval/results/report.json, written by `npm run eval` and committed. Numbers only ever come from that file.
 type ClassRow = { cls: string; cases: number; deterministic: boolean; rebuttalSucceeded: number; baselineSucceeded: number | null; baselineMeasured: number };
@@ -59,7 +60,8 @@ export default function Eval() {
     <main className="mx-auto max-w-4xl px-4 py-12">
       <RouteBar current={2} />
       <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">Try to fool it</h1>
-      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">Two ways in. First, try to get a bad action past the firewall yourself. Then see what happened when 24 written attacks were thrown at Rebuttal and at a naive agent on the same model.</p>
+      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">Chat with the agent as a dishonest buyer and try to talk your way to a refund. Then hand the firewall a bad action directly, and see how 24 written attacks did.</p>
+      <BuyerChat />
       <TryFirewall />
       {!r ? (
         <p className="mt-6 text-graphite">No report has been committed yet, so there are no numbers here, on purpose.</p>
