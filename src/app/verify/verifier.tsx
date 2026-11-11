@@ -1,6 +1,7 @@
 "use client";
 // Runs entirely in the browser: SHA-256 and Ed25519 come from WebCrypto, not from the server.
 import { useCallback, useEffect, useState } from "react";
+import { caseName } from "../desk/ui";
 
 type Ledger = {
   entries: { id: number; kind: string; at: string; contentHash: string }[];
@@ -33,7 +34,7 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
   const [runId, setRunId] = useState<number | null>(initialRun);
   const [tamper, setTamper] = useState<Tamper>("none");
   const [checks, setChecks] = useState<Check[]>([]);
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState(true);
 
   const verify = useCallback(async () => {
     setBusy(true);
@@ -99,30 +100,41 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
   const failed = checks.some((c) => c.ok === false);
   return (
-    <section className="mt-6 rounded-lg border border-rule p-5">
-      <div className="flex flex-wrap items-end gap-3">
+    <section className="mt-6 rounded-lg border-2 border-ink p-5 sm:p-6">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-live="polite">
+        <span className={`stamp ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`}>
+          <span className="text-lg">{busy ? "CHECKING" : failed ? "FAILED" : "VERIFIED"}</span>
+          <small>{busy ? "in your browser" : failed ? "not what was signed" : "by your browser"}</small>
+        </span>
+        <p className="min-w-0 flex-1 basis-60 text-base font-semibold">
+          {busy ? "Checking…" : failed ? "What you have is not what was signed. One changed byte is enough." : "The record, its evidence and the chain match the signed head."}
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-5 border-t border-rule pt-5">
         <label className="text-sm">
-          <span className="font-medium">Run to check</span>
-          <select className="field block w-auto" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
+          <span className="block font-semibold">1. Pick a run</span>
+          <select className="field block w-auto max-w-full" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
             <option value="">Chain only</option>
-            {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {r.scenario}, {r.choice?.toLowerCase()}</option>)}
+            {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {caseName(r.scenario)} ({r.choice?.toLowerCase()})</option>)}
           </select>
         </label>
-        <div className="flex flex-wrap gap-2 text-sm" role="group" aria-label="Tamper demo">
-          {([["none", "Untouched"], ["pdf", "Change one byte of the PDF"], ["record", "Edit the stored score"]] as const).map(([t, label]) => (
+        <div className="text-sm">
+          <span className="block font-semibold">2. Try to tamper with it</span>
+          <div className="mt-1 flex flex-wrap gap-2" role="group" aria-label="Tamper demo">
+          {([["none", "Leave it untouched"], ["pdf", "Change one byte of the PDF"], ["record", "Edit the stored score"]] as const).map(([t, label]) => (
             <button key={t} type="button" onClick={() => setTamper(t)} aria-pressed={tamper === t}
               className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-ink bg-ink text-paper" : "border-rule hover:bg-sunk"}`}>
               {label}
             </button>
           ))}
+          </div>
         </div>
       </div>
       {tamper !== "none" && <p className="mt-3 text-xs text-hold">Tamper demo: the change is made to your browser&apos;s copy only, before hashing. Nothing on the server changes.</p>}
 
-      <p className={`mt-4 text-base font-semibold ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`} aria-live="polite">
-        {busy ? "Checking…" : failed ? "Verification FAILED: what you have is not what was signed." : "Verified: the record, its evidence and the chain match the signed head."}
-      </p>
-      <ul className="mt-3 space-y-2 text-sm">
+      <p className="mt-6 text-sm font-semibold">What your browser just checked</p>
+      <ul className="mt-2 space-y-2 text-sm">
         {checks.map((c, i) => (
           <li key={i} className="flex gap-2">
             <span aria-hidden className={c.ok === true ? "text-allow" : c.ok === false ? "text-deny" : "text-faint"}>{c.ok === true ? "✓" : c.ok === false ? "✗" : "–"}</span>

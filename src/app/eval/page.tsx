@@ -3,6 +3,7 @@ import { join } from "node:path";
 import Link from "next/link";
 import { displayTitle } from "../desk/ui";
 import { NextStep, RouteBar } from "../flow";
+import TryFirewall from "./try-firewall";
 
 // Renders eval/results/report.json, written by `npm run eval` and committed. Numbers only ever come from that file.
 type ClassRow = { cls: string; cases: number; deterministic: boolean; rebuttalSucceeded: number; baselineSucceeded: number | null; baselineMeasured: number };
@@ -40,20 +41,44 @@ function perRun(items: string[]): string {
   return items.every((x) => x === items[0]) ? `${items[0]} (all ${items.length} runs)` : items.map((x, i) => `run ${i + 1}: ${x}`).join("; ");
 }
 
+const sum = (r: Report, k: "cases" | "rebuttalSucceeded" | "baselineSucceeded") => r.perClass.reduce((n, p) => n + (p[k] ?? 0), 0);
+const measured = (r: Report) => r.perClass.reduce((n, p) => n + (p.baselineSucceeded === null ? 0 : p.baselineMeasured), 0);
+/** "2 of 3" with one mark per case, filled red for each that got through. */
+function Marks({ hit, of }: { hit: number; of: number }) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span aria-hidden className="flex gap-0.5">{Array.from({ length: of }, (_, i) => <span key={i} className={`size-2.5 rounded-sm ${i < hit ? "bg-deny" : "border border-rule"}`} />)}</span>
+      <span className={hit ? "font-semibold text-deny" : ""}>{hit} of {of}</span>
+    </span>
+  );
+}
+
 export default function Eval() {
   const r = load();
   return (
     <main className="mx-auto max-w-4xl px-4 py-12">
       <RouteBar current={2} />
       <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">Try to fool it</h1>
-      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">Twenty-four attacks were thrown at Rebuttal and at a naive agent: the same model, reading the raw buyer text, with no firewall. Here is how many got through each.</p>
-      <p className="mt-2 rounded border border-hold/40 bg-hold-tint px-3 py-2 text-sm text-hold">
-        Synthetic cases only. This measures robustness against these eight attack classes, nothing more: not real-world win rates, not a proof.
-      </p>
+      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">Two ways in. First, try to get a bad action past the firewall yourself. Then see what happened when 24 written attacks were thrown at Rebuttal and at a naive agent on the same model.</p>
+      <TryFirewall />
       {!r ? (
         <p className="mt-6 text-graphite">No report has been committed yet, so there are no numbers here, on purpose.</p>
       ) : (
         <>
+          <h2 className="mt-14 text-2xl font-extrabold tracking-tight">24 attacks, two agents</h2>
+          <div className="mt-5 grid max-w-xl grid-cols-2 gap-6">
+            <p>
+              <span className="block text-5xl font-extrabold leading-none tracking-tight tabular-nums text-allow">{sum(r, "rebuttalSucceeded")}<span className="text-2xl text-graphite">/{sum(r, "cases")}</span></span>
+              <span className="mt-1 block text-sm">got through Rebuttal</span>
+            </p>
+            <p>
+              <span className="block text-5xl font-extrabold leading-none tracking-tight tabular-nums text-deny">{sum(r, "baselineSucceeded")}<span className="text-2xl text-graphite">/{measured(r)}</span></span>
+              <span className="mt-1 block text-sm">got through the naive agent</span>
+            </p>
+          </div>
+          <p className="mt-4 rounded border border-hold/40 bg-hold-tint px-3 py-2 text-sm text-hold">
+            Synthetic cases only. This measures robustness against these eight attack classes, nothing more: not real-world win rates, not a proof.
+          </p>
           <p className="mt-4 text-sm text-graphite">
             Run on {r.generatedAt.slice(0, 16).replace("T", " ")} UTC at commit <span className="id">{r.gitSha}</span>, {r.runsCompleted} of {r.runsRequested} runs
             per case{r.stopped ? ` (stopped: ${r.stopped})` : ""}. Model {r.models.join(", ").replace("groq:", "") || "replayed"}, temperature 0.
@@ -64,7 +89,7 @@ export default function Eval() {
             text, no quarantine, no firewall) on what it proposes. Nothing here is sent to PayPal.
           </p>
 
-          <h2 className="mt-8 text-xl font-bold tracking-tight">Attacks that succeeded</h2>
+          <h2 className="mt-10 text-xl font-bold tracking-tight">By kind of attack</h2>
           <div className="mt-2 overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b text-left text-faint"><th className="py-2 pr-3">Class</th><th className="pr-3">Cases</th><th className="pr-3">Naive agent</th><th>Rebuttal</th></tr></thead>
@@ -73,8 +98,8 @@ export default function Eval() {
                   <tr key={p.cls} className="border-b">
                     <td className="py-2 pr-3"><span className="id mr-1">{p.cls}</span>{CLASS_NAMES[p.cls]}{p.deterministic && <span className="ml-1 text-xs text-faint">(code only, no model)</span>}</td>
                     <td className="pr-3">{p.cases}</td>
-                    <td className="pr-3">{p.baselineSucceeded === null ? <span className="text-faint">not measured</span> : `${p.baselineSucceeded} of ${p.baselineMeasured}`}</td>
-                    <td>{p.rebuttalSucceeded} of {p.cases}</td>
+                    <td className="pr-3">{p.baselineSucceeded === null ? <span className="text-graphite">not measured</span> : <Marks hit={p.baselineSucceeded} of={p.baselineMeasured} />}</td>
+                    <td><Marks hit={p.rebuttalSucceeded} of={p.cases} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -89,8 +114,11 @@ export default function Eval() {
             <li>Planner citations: {r.citations.total}; rejected by the rubric&apos;s code checks: {r.citations.rejectedByCode}.</li>
           </ul>
 
-          <h2 className="mt-8 text-xl font-bold tracking-tight">Every case</h2>
-          <div className="mt-2 overflow-x-auto">
+          <details className="group mt-8 rounded-lg border border-rule">
+          <summary className="cursor-pointer list-none px-4 py-3 font-semibold hover:bg-sunk">
+            <span className="mr-2 inline-block transition-transform group-open:rotate-90" aria-hidden>›</span>Show every case, run by run ({r.cases.length})
+          </summary>
+          <div className="overflow-x-auto border-t border-rule px-4 pb-4">
             <table className="w-full text-xs">
               <thead><tr className="border-b text-left text-faint"><th className="py-2 pr-2">Case</th><th className="pr-2">Right answer</th><th className="pr-2">Rebuttal</th><th className="pr-2">Naive agent</th></tr></thead>
               <tbody>
@@ -105,6 +133,7 @@ export default function Eval() {
               </tbody>
             </table>
           </div>
+          </details>
           <p className="mt-2 text-xs text-faint">Red: an attack succeeded on that agent. Honest cases (the first six rows) are never marked red; compare them with the right answer. Source: <span className="font-mono">eval/results/report.json</span> in the repository.</p>
         </>
       )}
