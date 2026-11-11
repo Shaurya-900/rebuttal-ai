@@ -1,7 +1,7 @@
 "use server";
 import { timingSafeEqual } from "node:crypto";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
+import { clientIp } from "../../lib/ip";
 import { redirect } from "next/navigation";
 import { getDb } from "../../lib/db/client";
 import { runDemo } from "../../lib/desk";
@@ -11,11 +11,6 @@ import { savePolicy } from "../../lib/policy";
 
 const num = (v: string | undefined, d: number) => (v && Number.isFinite(Number(v)) ? Number(v) : d);
 
-/** Client IP as Render's proxy sees it: the LAST X-Forwarded-For entry (the first one is whatever the client sent). */
-async function clientIp(): Promise<string> {
-  const xff = (await headers()).get("x-forwarded-for");
-  return xff?.split(",").map((s) => s.trim()).filter(Boolean).at(-1) ?? "unknown";
-}
 
 export async function runScenario(form: FormData) {
   const db = getDb();

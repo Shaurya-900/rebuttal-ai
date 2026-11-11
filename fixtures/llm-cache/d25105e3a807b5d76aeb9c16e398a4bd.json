@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-11T15:59:20.740Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":500,\"reasoning\":\"Buyer received the camera but reports a jammed shutter, making it unusable. They request a $5 partial refund to cover repair costs. Issuing a $5 (500 cents) refund satisfies the buyer's request and resolves the dispute.\"}"
+}

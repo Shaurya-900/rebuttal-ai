@@ -100,7 +100,8 @@ export default async function Home() {
           <p className="mt-4 text-xs text-graphite">A recorded run, replayed. Nothing is sent to PayPal.</p>
         </Door>
 
-        <Door n={2} title="Try to fool it" href="/eval" action="See every attack">
+        <Door n={2} title="Try to fool it" href="/eval" action="Play the dishonest buyer">
+          <p className="mb-4 text-sm leading-relaxed">Chat with the agent as a buyer who wants a refund they don't deserve. Your own messages go to a live model.</p>
           {ev ? (
             <>
               <div className="grid grid-cols-2 gap-x-6">

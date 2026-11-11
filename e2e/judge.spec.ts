@@ -25,6 +25,11 @@ test("/eval shows the committed results with the synthetic caveat", async ({ pag
   await expect(page.getByText(/Synthetic cases only/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "By kind of attack" })).toBeVisible();
   await expect(page.locator("tbody tr").first()).toBeVisible();
+  // Play the buyer: a recorded attack runs the real pipeline; Rebuttal holds, the naive agent is fooled.
+  await page.getByRole("button", { name: "Forge a PayPal ruling" }).click();
+  await expect(page.getByText(/^Held firm\./).first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/^Fooled\./).first()).toBeVisible();
+  await expect(page.getByText("Rebuttal fooled 0")).toBeVisible();
   // Your turn: the real firewall stamps a visitor's proposal.
   await page.getByRole("button", { name: "Refund the $500 the buyer demanded" }).click();
   await expect(page.getByRole("img", { name: /Firewall: denied, rule I1/ })).toBeVisible();

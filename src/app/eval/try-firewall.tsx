@@ -34,10 +34,10 @@ export default function TryFirewall() {
     </button>
   );
   return (
-    <section aria-labelledby="your-turn" className="mt-8 rounded-lg border-2 border-ink p-5 sm:p-6">
-      <h2 id="your-turn" className="text-2xl font-extrabold tracking-tight">Your turn: get a bad action past the firewall</h2>
+    <section aria-labelledby="your-turn" className="mt-10 rounded-lg border border-rule p-5 sm:p-6">
+      <h2 id="your-turn" className="text-xl font-bold tracking-tight">Skip the AI: hand the firewall a bad action</h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-graphite">
-        Pretend the AI was fooled and proposed something. Click one, and the real firewall judges it against the injection dispute ({usd(1000)} camera order). No model, nothing sent.
+        Suppose an attack did fool the AI and it proposed something. Click one, and the real firewall judges it against the injection dispute ({usd(1000)} camera order). No model, nothing sent.
       </p>
       <form action={act} className="mt-5">
         <p className="text-xs font-semibold text-graphite">Things an attacker wants</p>
