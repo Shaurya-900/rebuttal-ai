@@ -5,6 +5,7 @@ import { liveRecommendations, type LiveRec } from "../../../lib/live";
 import { currentPolicy } from "../../../lib/policy";
 import { displayTitle, Stamp, usd } from "../ui";
 import { SCENARIOS } from "../../../lib/agent/scenarios";
+import { NextStep, RouteBar } from "../../flow";
 
 export const dynamic = "force-dynamic";
 
@@ -70,8 +71,8 @@ export default async function Live() {
   const res = await liveRecommendations(policy);
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/desk" className="text-sm text-graphite hover:underline">← Desk</Link>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Real sandbox disputes</h1>
+      <RouteBar current={0} />
+      <h1 className="mt-8 text-3xl font-extrabold tracking-tight">Real sandbox disputes</h1>
       <p className="mt-3 leading-relaxed text-graphite">
         These disputes were opened by hand on real PayPal sandbox payments. Their status, deadline and the actions PayPal allows are read live,
         and the decision and firewall run on that live state. Nothing is sent from this page.
@@ -91,6 +92,9 @@ export default async function Live() {
         <div className="mt-8">{res.items.map((r) => <Dispute key={r.id} r={r} />)}</div>
       )}
       <p className="mt-6 text-xs text-faint">Read from PayPal at {res.fetchedAt.slice(11, 16)} UTC, refreshed at most once a minute.</p>
+      <NextStep href="/dashboard" action="See everything in the dashboard">
+        Every run, every attack and these live disputes, in one dashboard you can rearrange or add to.
+      </NextStep>
     </main>
   );
 }

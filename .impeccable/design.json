@@ -1,0 +1,457 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T10:42:09+00:00",
+  "title": "Design System: Rebuttal",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#f7f8f6",
+        "dark": "#12161b",
+        "oklch": "oklch(97.8% 0.003 128.5)",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#242423",
+          "#3f403e",
+          "#5d5e5c",
+          "#80807f",
+          "#a4a5a3",
+          "#cacbc9",
+          "#eeefed"
+        ]
+      },
+      "sunk": {
+        "role": "neutral",
+        "displayName": "Sunk Paper",
+        "canonical": "#eef0ed",
+        "dark": "#1a2027",
+        "oklch": "oklch(95.3% 0.005 134.9)",
+        "tonalRamp": [
+          "#0a0c0a",
+          "#232422",
+          "#3f403e",
+          "#5c5e5c",
+          "#7f817e",
+          "#a3a5a2",
+          "#c9cbc8",
+          "#edefec"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b2430",
+        "dark": "#e6e9ec",
+        "oklch": "oklch(25.7% 0.026 255.8)",
+        "tonalRamp": [
+          "#050b16",
+          "#1c2531",
+          "#37414e",
+          "#545f6d",
+          "#768190",
+          "#9aa6b5",
+          "#c0ccdc",
+          "#e3f0ff"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#5b6573",
+        "dark": "#a3acb7",
+        "oklch": "oklch(50.3% 0.026 256.8)",
+        "tonalRamp": [
+          "#050b16",
+          "#1c2530",
+          "#37404d",
+          "#555e6c",
+          "#778190",
+          "#9ba6b5",
+          "#c0ccdb",
+          "#e4f0ff"
+        ]
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Faint",
+        "canonical": "#687280",
+        "dark": "#848d98",
+        "oklch": "oklch(54.9% 0.025 256.8)",
+        "tonalRamp": [
+          "#050b16",
+          "#1c2530",
+          "#37404d",
+          "#555e6c",
+          "#77818f",
+          "#9ba6b5",
+          "#c0ccdb",
+          "#e4f0ff"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#d9ddd8",
+        "dark": "#2c333c",
+        "oklch": "oklch(89.3% 0.008 139.4)",
+        "tonalRamp": [
+          "#090c09",
+          "#222521",
+          "#3e413d",
+          "#5b5f5a",
+          "#7e817d",
+          "#a2a6a1",
+          "#c8ccc7",
+          "#ecf0eb"
+        ]
+      },
+      "act": {
+        "role": "primary",
+        "displayName": "Action Blue",
+        "canonical": "#1f4fd1",
+        "dark": "#8aa6ff",
+        "oklch": "oklch(48.4% 0.200 264.3)",
+        "tonalRamp": [
+          "#00052d",
+          "#0a1e54",
+          "#1e3a7e",
+          "#3558ab",
+          "#557cd4",
+          "#7ea3f1",
+          "#a9caff",
+          "#d3efff"
+        ]
+      },
+      "act-ink": {
+        "role": "primary",
+        "displayName": "Act Ink",
+        "canonical": "#ffffff",
+        "dark": "#0d1530",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a4a4a4",
+          "#cacaca",
+          "#eeeeee"
+        ]
+      },
+      "allow": {
+        "role": "secondary",
+        "displayName": "Allow Green",
+        "canonical": "#1e6b45",
+        "dark": "#6cc896",
+        "oklch": "oklch(47.1% 0.097 157.4)",
+        "tonalRamp": [
+          "#001103",
+          "#002d17",
+          "#154b30",
+          "#306c4b",
+          "#52906c",
+          "#7db392",
+          "#a8d8ba",
+          "#d1fae0"
+        ]
+      },
+      "allow-tint": {
+        "role": "secondary",
+        "displayName": "Allow Tint",
+        "canonical": "#e3f0e8",
+        "dark": "#15291f",
+        "oklch": "oklch(94.3% 0.017 159.1)",
+        "tonalRamp": [
+          "#050d09",
+          "#1d2721",
+          "#38433c",
+          "#56615a",
+          "#78847c",
+          "#9ca8a1",
+          "#c2cec6",
+          "#e5f2ea"
+        ]
+      },
+      "deny": {
+        "role": "secondary",
+        "displayName": "Deny Red",
+        "canonical": "#b3261e",
+        "dark": "#f2837a",
+        "oklch": "oklch(50.1% 0.178 28.7)",
+        "tonalRamp": [
+          "#230000",
+          "#470806",
+          "#6e221b",
+          "#983b32",
+          "#c15e52",
+          "#e2897c",
+          "#ffb4a8",
+          "#ffdcd1"
+        ]
+      },
+      "deny-tint": {
+        "role": "secondary",
+        "displayName": "Deny Tint",
+        "canonical": "#f8e4e2",
+        "dark": "#33191a",
+        "oklch": "oklch(93.4% 0.022 24.4)",
+        "tonalRamp": [
+          "#130807",
+          "#2e201f",
+          "#4b3b3a",
+          "#6a5957",
+          "#8d7b7a",
+          "#b2a09e",
+          "#d9c5c3",
+          "#fde9e7"
+        ]
+      },
+      "hold": {
+        "role": "secondary",
+        "displayName": "Hold Amber",
+        "canonical": "#8a5a00",
+        "dark": "#e6b04a",
+        "oklch": "oklch(50.8% 0.108 73.3)",
+        "tonalRamp": [
+          "#190500",
+          "#371d00",
+          "#583800",
+          "#7b551b",
+          "#a1773f",
+          "#c39d6c",
+          "#e6c499",
+          "#ffe9c4"
+        ]
+      },
+      "hold-tint": {
+        "role": "secondary",
+        "displayName": "Hold Tint",
+        "canonical": "#f6ecd6",
+        "dark": "#2e2412",
+        "oklch": "oklch(94.5% 0.031 86.5)",
+        "tonalRamp": [
+          "#110a00",
+          "#2b2312",
+          "#473f2d",
+          "#655d4a",
+          "#887f6b",
+          "#ada48f",
+          "#d3cab4",
+          "#f8eed8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home page headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "The h1 of each inner page, under the route bar."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section and door headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose up to about 42rem; leads at 1.125rem in graphite."
+      },
+      "body-sm": {
+        "displayName": "Body small",
+        "purpose": "Door copy, tables, nav, buttons."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Provenance lines, receipts, badges, banner. Never uppercase."
+      },
+      "id": {
+        "displayName": "Identifier",
+        "purpose": "IBM Plex Mono, for ids, hashes, source citations, model names and file paths only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "stamp-double-ring",
+        "value": "inset 0 0 0 1.5px var(--paper), inset 0 0 0 3px currentColor",
+        "purpose": "The stamp's inner ring; the only box-shadow in the system, and not an elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "stamp-land",
+        "value": "360ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both; from rotate(-7deg) scale(1.12) to rotate(-2.5deg) scale(1)",
+        "purpose": "A stamp landing on first paint, only under prefers-reduced-motion: no-preference; starts fully visible."
+      },
+      {
+        "name": "state-colour",
+        "value": "transition-colors, 150ms",
+        "purpose": "Button and nav hover fills."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ],
+    "focus": {
+      "value": "outline: 2px solid var(--act); outline-offset: 2px; border-radius: 2px",
+      "purpose": "Global :focus-visible ring."
+    },
+    "colorScheme": "Light and dark via prefers-color-scheme; colorMeta.<token>.dark holds the dark value."
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one primary action in a section: action blue, 4px corners.",
+      "html": "<button class=\"ds-btn-primary\">Watch it decide</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--act,#1f4fd1);color:var(--act-ink,#fff);border:0;border-radius:4px;padding:8px 16px;font:600 0.875rem/1.25rem 'Public Sans',system-ui,sans-serif;transition:background-color .15s;cursor:pointer}.ds-btn-primary:hover{background:color-mix(in srgb,var(--act,#1f4fd1) 85%,transparent)}.ds-btn-primary:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}.ds-btn-primary:disabled{opacity:.4;cursor:not-allowed}"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Every other action: paper, rule border, sunk on hover.",
+      "html": "<button class=\"ds-btn-quiet\">See every attack</button>",
+      "css": ".ds-btn-quiet{display:inline-flex;align-items:center;gap:8px;background:var(--paper,#f7f8f6);color:var(--ink,#1b2430);border:1px solid var(--rule,#d9ddd8);border-radius:4px;padding:8px 16px;font:600 0.875rem/1.25rem 'Public Sans',system-ui,sans-serif;transition:background-color .15s;cursor:pointer}.ds-btn-quiet:hover{background:var(--sunk,#eef0ed)}.ds-btn-quiet:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Text input: paper, rule stroke, 4px corners.",
+      "html": "<label class=\"ds-label\">Approver password<input class=\"ds-field\" type=\"password\"></label>",
+      "css": ".ds-label{display:block;font:400 0.875rem 'Public Sans',system-ui,sans-serif;color:var(--graphite,#5b6573)}.ds-field{display:block;margin-top:4px;width:100%;background:var(--paper,#f7f8f6);color:var(--ink,#1b2430);border:1px solid var(--rule,#d9ddd8);border-radius:4px;padding:6px 10px;font:400 0.875rem 'Public Sans',system-ui,sans-serif}.ds-field:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}"
+    },
+    {
+      "name": "Stamp",
+      "kind": "custom",
+      "refersTo": "stamp-deny",
+      "description": "The firewall's verdict as an ink stamp; the one loud element on a page.",
+      "html": "<span class=\"ds-stamp ds-stamp-deny\" role=\"img\" aria-label=\"Firewall: denied, rule I1\"><span class=\"ds-stamp-word\">DENIED</span><small>I1: more than was paid</small></span> <span class=\"ds-stamp ds-stamp-allow\" role=\"img\" aria-label=\"Firewall: allowed\"><span class=\"ds-stamp-word\">ALLOWED</span><small>all ten rules pass</small></span> <span class=\"ds-stamp ds-stamp-hold\" role=\"img\" aria-label=\"Firewall: held for seller\"><span class=\"ds-stamp-word\">HELD FOR SELLER</span><small>I7: large accept needs the seller</small></span>",
+      "css": ".ds-stamp{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;margin:8px;padding:.35rem .7rem .4rem;border:2.5px solid currentColor;border-radius:6px;transform:rotate(-2.5deg);font-family:'Public Sans',system-ui,sans-serif;font-weight:800;letter-spacing:.06em;line-height:1.05;box-shadow:inset 0 0 0 1.5px var(--paper,#f7f8f6),inset 0 0 0 3px currentColor}.ds-stamp-word{font-size:1.125rem}.ds-stamp small{font-size:.75rem;font-weight:700;letter-spacing:.02em;opacity:.9}.ds-stamp-deny{color:var(--deny,#b3261e)}.ds-stamp-allow{color:var(--allow,#1e6b45)}.ds-stamp-hold{color:var(--hold,#8a5a00)}@media (prefers-reduced-motion:no-preference){.ds-stamp{animation:ds-stamp-land 360ms cubic-bezier(.2,.9,.3,1.2) both}@keyframes ds-stamp-land{from{transform:rotate(-7deg) scale(1.12)}to{transform:rotate(-2.5deg) scale(1)}}}"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge-allow",
+      "description": "Small inline status in lists and tables, in its verdict ink on its tint.",
+      "html": "<span class=\"ds-badge ds-badge-allow\">allowed</span> <span class=\"ds-badge ds-badge-deny\">denied</span> <span class=\"ds-badge ds-badge-hold\">held</span> <span class=\"ds-badge\">waiting</span>",
+      "css": ".ds-badge{display:inline-block;border-radius:4px;padding:2px 6px;font:600 .75rem/1rem 'Public Sans',system-ui,sans-serif;background:var(--sunk,#eef0ed);color:var(--graphite,#5b6573)}.ds-badge-allow{background:var(--allow-tint,#e3f0e8);color:var(--allow,#1e6b45)}.ds-badge-deny{background:var(--deny-tint,#f8e4e2);color:var(--deny,#b3261e)}.ds-badge-hold{background:var(--hold-tint,#f6ecd6);color:var(--hold,#8a5a00)}"
+    },
+    {
+      "name": "Header and Nav",
+      "kind": "nav",
+      "refersTo": "synthetic-banner",
+      "description": "Wordmark, four route items, and the always-present sandbox banner.",
+      "html": "<header class=\"ds-header\"><div class=\"ds-header-row\"><a class=\"ds-wordmark\" href=\"#\">Rebuttal</a><nav class=\"ds-nav\"><a href=\"#\">Watch</a><a href=\"#\">Try to fool it</a><a href=\"#\">Receipts</a><a href=\"#\">Dashboard</a></nav></div><p class=\"ds-banner\">PayPal sandbox only. Every buyer, order, carrier and message in the demo is synthetic.</p></header>",
+      "css": ".ds-header{border-bottom:1px solid var(--rule,#d9ddd8);font-family:'Public Sans',system-ui,sans-serif}.ds-header-row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;padding:16px}.ds-wordmark{font-size:1.125rem;font-weight:800;letter-spacing:-.025em;color:var(--ink,#1b2430);text-decoration:none}.ds-nav{display:flex;flex-wrap:wrap;gap:4px;font-size:.875rem}.ds-nav a{color:var(--graphite,#5b6573);text-decoration:none;padding:4px 8px;border-radius:4px}.ds-nav a:hover{background:var(--sunk,#eef0ed);color:var(--ink,#1b2430)}.ds-nav a:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}.ds-banner{margin:0;border-top:1px solid var(--rule,#d9ddd8);background:color-mix(in srgb,var(--hold-tint,#f6ecd6) 60%,transparent);color:var(--hold,#8a5a00);padding:6px 16px;text-align:center;font-size:.75rem}"
+    },
+    {
+      "name": "Route Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "The three doors in order; the current door in ink with a filled disc.",
+      "html": "<ol class=\"ds-route\"><li><a class=\"ds-done\" href=\"#\"><span>1</span>Watch a dispute get decided</a></li><li><a class=\"ds-here\" aria-current=\"step\" href=\"#\"><span>2</span>Try to fool it</a></li><li><a href=\"#\"><span>3</span>Check the receipts</a></li></ol>",
+      "css": ".ds-route{display:flex;flex-wrap:wrap;gap:8px 24px;list-style:none;margin:0;padding:0 0 16px;border-bottom:1px solid var(--rule,#d9ddd8);font:400 .875rem 'Public Sans',system-ui,sans-serif}.ds-route a{display:inline-flex;align-items:center;gap:8px;padding:4px 0;color:var(--faint,#687280);text-decoration:none}.ds-route a:hover{color:var(--ink,#1b2430)}.ds-route a:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}.ds-route span{display:grid;place-items:center;width:24px;height:24px;border-radius:9999px;border:1px solid var(--rule,#d9ddd8);font-size:.75rem;font-weight:700}.ds-route .ds-done{color:var(--graphite,#5b6573)}.ds-route .ds-here{color:var(--ink,#1b2430);font-weight:700}.ds-route .ds-here span{background:var(--ink,#1b2430);color:var(--paper,#f7f8f6);border-color:var(--ink,#1b2430)}"
+    },
+    {
+      "name": "Next Step",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "Closes every route page: heavy ink rule, one sentence, one primary button.",
+      "html": "<section class=\"ds-next\"><p>You have watched one dispute decided. Now try the attacks the firewall was measured against.</p><a class=\"ds-next-btn\" href=\"#\">Try to fool it</a></section>",
+      "css": ".ds-next{border-top:2px solid var(--ink,#1b2430);padding-top:24px;font-family:'Public Sans',system-ui,sans-serif;color:var(--ink,#1b2430)}.ds-next p{max-width:42rem;font-size:1rem;line-height:1.625;margin:0}.ds-next-btn{display:inline-flex;margin-top:16px;background:var(--act,#1f4fd1);color:var(--act-ink,#fff);border-radius:4px;padding:8px 16px;font-weight:600;font-size:.875rem;text-decoration:none}.ds-next-btn:hover{background:color-mix(in srgb,var(--act,#1f4fd1) 85%,transparent)}.ds-next-btn:focus-visible{outline:2px solid var(--act,#1f4fd1);outline-offset:2px}"
+    },
+    {
+      "name": "Ledger Receipt",
+      "kind": "card",
+      "refersTo": "receipt",
+      "description": "Sunk label-size record with identifiers in mono.",
+      "html": "<dl class=\"ds-receipt\"><dt>Ledger head</dt><dd class=\"ds-id\">#42 9f3c1a7b02de…</dd><dt>Entries</dt><dd>42</dd><dt>Signature</dt><dd class=\"ds-ok\">Ed25519, signed on request</dd></dl>",
+      "css": ".ds-receipt{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0;background:var(--sunk,#eef0ed);border:1px solid var(--rule,#d9ddd8);border-radius:4px;padding:10px 12px;font:400 .75rem 'Public Sans',system-ui,sans-serif;color:var(--ink,#1b2430);font-variant-numeric:tabular-nums}.ds-receipt dt{color:var(--graphite,#5b6573)}.ds-receipt dd{margin:0}.ds-id{font-family:'IBM Plex Mono',ui-monospace,monospace}.ds-ok{font-weight:600;color:var(--allow,#1e6b45)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Filing Desk",
+    "overview": "**Creative North Star: \"The Filing Desk\"**\n\nRebuttal looks like a clerk's desk where cases are decided on paper: cool off-white sheets, blue-black ink, thin rule lines between records, and a rubber stamp for the verdict. It is a filing desk, not a dashboard. Nothing glows, floats or gradients. Authority comes from the deterministic decision, so the one loud thing on any page is the firewall's stamp, and everything around it is quiet, typeset record.\n\nDensity is that of a well-kept file: generous reading measure (about 42rem for prose), a single centred column (64rem on the home page, 56rem on inner pages), records separated by hairline rules rather than boxed into cards. Pages are walked in order. A route bar across the top says which of the three doors you are at, and a heavy ink rule closes each page with one Next button.\n\nThe system has light and dark modes driven by `prefers-color-scheme`. Every colour is a CSS custom property on `:root` in `src/app/globals.css` and is remapped for dark; the frontmatter records the light values, and the sidecar carries the dark ones.",
+    "keyCharacteristics": [
+      "Cool paper, blue-black ink, hairline rules; flat, no shadows.",
+      "Three stamp inks (allow green, deny red, hold amber) are the only saturated colours, and each always means a verdict or a status.",
+      "One action blue for buttons, links and focus.",
+      "Public Sans for everything people read; IBM Plex Mono only for identifiers.",
+      "Tabular figures everywhere, so money and counts line up.",
+      "Every page ends with one Next step."
+    ],
+    "rules": [
+      {
+        "name": "The Stamp Ink Rule",
+        "body": "Allow green, deny red and hold amber are the only saturated colours, and they always carry their meaning (allowed, denied, held or caution). A chart, illustration or decoration never uses red or green for anything else.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Blue Rule",
+        "body": "Action blue means \"you can click this\" and nothing else.",
+        "section": "colors"
+      },
+      {
+        "name": "The Faint Floor Rule",
+        "body": "Faint holds WCAG AA on paper (4.58:1 light, 5.4:1 dark). It is for text on paper only; on sunk paper it drops to 4.25:1, so text on sunk uses graphite or ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is For Identifiers Rule",
+        "body": "Plex Mono is reserved for identifiers: ids, hashes, source citations, model names and file paths. Prose, labels, numbers and headings stay in Public Sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "The body sets `tnum` on, so every amount, score and count lines up in columns. Large proof figures also use tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Walk In Order Rule",
+        "body": "Every route page carries the route bar (three numbered doors; the current one in ink with a filled ink disc, earlier ones graphite, later ones faint) and ends with one Next step: a 2px ink rule, a sentence, and one primary button to the next door.",
+        "section": "layout"
+      },
+      {
+        "name": "The One Primary Rule",
+        "body": "One primary (action blue) button per section. Any other action in that section is a quiet button or a text link.",
+        "section": "layout"
+      },
+      {
+        "name": "The Paper Is Flat Rule",
+        "body": "Nothing floats. If a surface needs separating, give it a rule line or sunk paper, never a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep allow green, deny red and hold amber for their meanings (allowed, denied, held or caution), and use them nowhere else.",
+      "**Do** compute every figure on a page from committed data (the eval report, the recorded run, the ledger) and label anything synthetic, simulated or replayed in plain words next to it.",
+      "**Do** date proof figures and name their model and run count in a label line beneath them.",
+      "**Do** set identifiers in IBM Plex Mono and everything else in Public Sans.",
+      "**Do** give each section one primary button; extra actions are quiet buttons or links.",
+      "**Do** end every route page with the Next step, and open it with the route bar.",
+      "**Do** separate records with rule lines and sunk paper.",
+      "**Do** check new text colours for AA against the surface they sit on; faint is cleared on paper only."
+    ],
+    "donts": [
+      "**Don't** use red or green in a chart, illustration or decoration for anything other than denied or allowed.",
+      "**Don't** add drop shadows, glows or gradients.",
+      "**Don't** use PayPal's logos, brand colours or anything that imitates its checkout button. \"PayPal\" appears only as plain text.",
+      "**Don't** use mono for prose, labels or headings to make them look technical.",
+      "**Don't** animate the stamp after it lands, or animate it at all when reduced motion is requested.",
+      "**Don't** show a number that is not read from committed data, or a synthetic case without its label."
+    ]
+  }
+}

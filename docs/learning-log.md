@@ -115,3 +115,15 @@ Recall questions:
 1. Why must the SDK not retry a refund by itself?
 2. What would break in the executor if SDK errors were not mapped to `PayPalError`?
 3. Which parts of the PayPal integration still use direct REST, and why?
+
+## Three doors: the site gets a route (Nov 11)
+1. The home page is now three doors in order: watch a dispute get decided (`/desk`), try to fool it (`/eval`), check the receipts (`/verify`). Mira's story comes first, so a judge knows whose money is at stake.
+2. Every route page carries a numbered route bar at the top and ends with one "Next" button, so there is always exactly one obvious place to click. The header nav went from 6 items to 4; the rest moved to the footer.
+3. The critique's honesty fixes: door 1 says Rebuttal "proposed" evidence (nothing was sent), the 0/24 vs 9/19 figures carry their date and model and explain why the naive agent is out of 19, and door 3 lists the checks instead of claiming they passed.
+4. `--faint` text was darkened to pass WCAG AA contrast (4.5:1 for small text), and the replayed hero-3 run is wrapped in try/catch so a missing recording can't crash the home page during judging.
+5. `/desk` now leads with one recommended case (the injection attempt) and lists the others below, instead of a table of equal choices.
+
+Recall questions:
+1. Why does door 1 say "proposed" and not "sent", and where would a judge check?
+2. Why is the naive agent's score out of 19 rather than 24?
+3. What happens to the home page if the hero-3 recording file goes missing, and why does that matter during Dec 1-15?

@@ -5,6 +5,7 @@ import { dashboardData } from "../../lib/dashboard-data";
 import { getDb } from "../../lib/db/client";
 import { currentPolicy } from "../../lib/policy";
 import StudioLoader from "./studio-loader";
+import { NextStep } from "../flow";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Rebuttal dashboard" };
@@ -25,6 +26,9 @@ export default async function Dashboard() {
         <StudioLoader data={data} licenseKey={process.env.AG_STUDIO_LICENSE_KEY} />
       </div>
       <p className="mt-4 text-xs text-faint">Data as of {data.asOf.slice(0, 16).replace("T", " ")} UTC.</p>
+      <NextStep href="https://github.com/Shaurya-900/rebuttal-ai" action="Read the code on GitHub">
+        That is the whole route. Everything here is open source under the MIT licence, including the attack cases, the recorded answers and the crash test.
+      </NextStep>
     </main>
   );
 }
