@@ -7,6 +7,7 @@ import { SCENARIOS } from "../../../../lib/agent/scenarios";
 import { getDb } from "../../../../lib/db/client";
 import { getRun } from "../../../../lib/desk";
 import type { Decision } from "../../../../lib/firewall/types";
+import { NextStep, RouteBar } from "../../../flow";
 import { displayTitle, Stamp, ruleName, usd } from "../../ui";
 
 export const dynamic = "force-dynamic";
@@ -51,8 +52,8 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
       <p className="rounded bg-hold-tint px-3 py-2 text-sm text-hold">
         Synthetic dispute (<span className="font-mono">{s?.dispute.id}</span>). Nothing on this page was sent to PayPal.
       </p>
-      <Link href="/desk" className="mt-6 inline-block text-sm text-graphite hover:underline">← Desk</Link>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">{displayTitle(s?.title ?? run.scenarioId)}</h1>
+      <div className="mt-6"><RouteBar current={1} /></div>
+      <h1 className="mt-8 text-3xl font-extrabold tracking-tight">{displayTitle(s?.title ?? run.scenarioId)}</h1>
       <p className="mt-1 text-sm text-graphite">
         Run {got.id}, {got.at.replace("T", " ").slice(0, 16)} UTC{s ? `. A ${usd(s.dispute.amountCents)} dispute: ${s.dispute.reason.replaceAll("_", " ").toLowerCase()}.` : ""}
       </p>
@@ -161,6 +162,9 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
       <p className="mt-10 text-xs text-faint">
         Model answers: {[...new Set(run.llmCalls.map((c) => `${c.recordedFrom} (${c.from})`))].join(", ") || "none"}
       </p>
+      <NextStep href="/eval" action="Next: try to fool it">
+        That was one dispute. Now see 24 attacks thrown at Rebuttal and at a naive agent on the same model, and how many got through each.
+      </NextStep>
     </main>
   );
 }

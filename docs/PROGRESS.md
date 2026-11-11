@@ -21,6 +21,9 @@ Branch: work on `phase-1`, merged to `main` by PR; Render deploys `main`.
 | M13 | Render Workflows spike | NOT BUILT: needs Shaurya's Render workspace. Cut order item 2 |
 | M14 | README, video script, Devpost text, Playwright, secret scan | PARTIAL. Done Nov 10: docs with real numbers; Playwright judge flows (`npm run e2e`, 5/5 pass locally); secret scan (no tracked secret files; none of the 4 `.env` secret values anywhere in git history). TODO: Shaurya's edit, video, e2e against the live URL after deploy |
 
+## Nov 11: three-doors redesign
+- Home is three doors in order (/desk, /eval, /verify) with Mira's story first; every route page has a route bar and one "Next" button; nav cut to 4 items. Critique fixes: "proposed" not "sent", dated eval figures with the 19 explained, --faint passes AA, hero-3 replay guarded. 87 unit tests, 7 Playwright flows pass locally. Not yet deployed.
+
 ## Verified facts (Nov 10 audit)
 - `npm run typecheck` passes; `npm test`: 11 files, 68 tests pass.
 - Typecheck first failed on iCloud duplicate files (`routes.d 2.ts`) inside `.next/`. Fixed by deleting `.next/` (a build cache). If it returns, delete `.next/` again.

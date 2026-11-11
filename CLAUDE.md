@@ -210,6 +210,7 @@ Claude Code implements against them. **Never weaken, skip or delete a test to ma
 - Nov 10, evening: frontend redesign (tokens, light/dark, stamps, home hero from the real hero-3 run) and `/desk/live` (real sandbox disputes, read-only, live PayPal state + replayed scoring). 84 unit tests, 6 Playwright flows.
 - Nov 11: `/dashboard` with AG Studio 3.0 (runs, eval per agent, live disputes; custom `verdict-stamps` widget; theme on design tokens; edit mode). Watermarked until `AG_STUDIO_LICENSE_KEY` is set. 7 Playwright flows.
 - Nov 11: `orders.ts` (create, get, capture, get capture, refund) moved to PayPal's Server SDK using the APIMatic Context Plugin; SDK retries off, SDK errors mapped to `PayPalError`. Sandbox: create, replay, get order and a 404 mapping verified; capture and refund through the SDK UNVERIFIED (need a buyer approval). Notes: `docs/paypal-notes.md`.
+- Nov 11, evening: "three doors" redesign. Home walks judges through /desk -> /eval -> /verify in order; each page has a route bar and one Next button; nav cut to 4 items. Critique fixes applied (honest "proposed" wording, dated eval figures, AA contrast, guarded hero-3 replay). 87 unit tests, 7 Playwright flows locally.
 - Not built: Render Workflows. Sending actions on real disputes from the public desk is left out on purpose.
 
 ### S5 stopped (Nov 4 night)
