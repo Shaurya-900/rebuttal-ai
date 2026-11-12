@@ -8,7 +8,7 @@ import { getRun } from "../../../../lib/desk";
 import type { Decision } from "../../../../lib/firewall/types";
 import { NextStep } from "../../../flow";
 import { Walkthrough, type Step } from "../../../walkthrough";
-import { caseName, describeAction, FIELD_LABEL, fieldValue, Stamp, ruleName, usd } from "../../ui";
+import { caseName, describeAction, FIELD_LABEL, fieldValue, Verdict, ruleName, usd } from "../../ui";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +17,8 @@ const CHOICE: Record<string, string> = { FIGHT: "fight it with evidence", OFFER:
 function GateView({ g }: { g: Decision | null }) {
   if (!g) return <p className="text-sm text-faint">No action proposed.</p>;
   return (
-    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1 text-sm">
-      <Stamp decision={g} />
+    <div className="space-y-2 pt-1">
+      <Verdict decision={g} />
       {g.fired.length > 1 && (
         <p className="text-xs text-graphite">Every rule that fired: {g.fired.map((f) => `${f.rule} (${ruleName(f.rule)})`).join("; ")}.</p>
       )}
@@ -152,9 +152,9 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
   ];
 
   const verdict = (
-    <section aria-labelledby="outcome" className="mt-10 rounded-xl border border-allow/30 bg-allow-tint/40 p-5 sm:p-7">
+    <section aria-labelledby="outcome" className="card mt-6 p-5 sm:p-7">
       <h2 id="outcome" className="text-sm font-semibold text-graphite">The outcome</h2>
-      <p className="mt-2 text-2xl font-semibold leading-snug tracking-tight">Rebuttal chose to {CHOICE[d.choice] ?? d.choice.toLowerCase()}.</p>
+      <p className="mt-2 text-xl font-semibold leading-snug tracking-tight sm:text-2xl">Rebuttal chose to {CHOICE[d.choice] ?? d.choice.toLowerCase()}.</p>
       <p className="mt-1 text-graphite">Proposed: {describeAction(run.proposal)}.</p>
       <div className="mt-5"><GateView g={run.gate} /></div>
       {injected && (
@@ -175,9 +175,9 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
   );
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <p className="pill w-fit"><span className="rounded-full bg-gradient-to-r from-brand-from to-brand-to px-2 py-0.5 text-xs font-medium text-white">Chapter 1</span>of 3</p>
-      <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">{caseName(run.scenarioId, s?.title)}</h1>
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <p className="eyebrow">Chapter 1 of 3</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">{caseName(run.scenarioId, s?.title)}</h1>
       <p className="mt-2 text-sm text-graphite">
         Run {got.id}{s ? ` · a ${usd(s.dispute.amountCents)} dispute, ${s.dispute.reason.replaceAll("_", " ").toLowerCase()}` : ""} ·{" "}
         <span className="text-hold">synthetic, nothing sent to PayPal</span>

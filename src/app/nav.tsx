@@ -23,8 +23,8 @@ export function StoryNav() {
           <li key={c.n} className="flex items-center gap-1 sm:gap-2">
             {i > 0 && <span aria-hidden className={`h-px w-3 sm:w-6 ${done || on ? "bg-ink" : "bg-rule"}`} />}
             <Link href={c.href} aria-current={on ? "step" : undefined}
-              className={`inline-flex items-center gap-2 rounded-full py-1 pl-1 pr-1 sm:pr-3 ${on ? "bg-sunk font-semibold text-ink" : done ? "text-ink hover:bg-sunk" : "text-graphite hover:bg-sunk hover:text-ink"}`}>
-              <span aria-hidden className={`grid size-6 place-items-center rounded-full text-xs font-bold tabular-nums ${on ? "bg-act text-act-ink" : done ? "bg-ink text-paper" : "border border-rule bg-paper"}`}>
+              className={`inline-flex min-h-9 items-center gap-2 rounded-lg py-1 pl-1 pr-1 sm:pr-3 ${on ? "bg-sunk font-semibold text-ink" : done ? "text-ink hover:bg-sunk" : "text-graphite hover:bg-sunk hover:text-ink"}`}>
+              <span aria-hidden className={`grid size-6 place-items-center rounded-md text-xs font-bold tabular-nums ${on ? "bg-act text-act-ink" : done ? "bg-ink text-paper" : "border border-rule bg-paper"}`}>
                 {done ? "✓" : c.n}
               </span>
               <span className={on ? "" : "sr-only sm:not-sr-only"}>{c.title}</span>

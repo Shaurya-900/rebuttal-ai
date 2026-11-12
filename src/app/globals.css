@@ -60,6 +60,7 @@
       radial-gradient(60rem 28rem at 50% -8rem, color-mix(in oklch, var(--brand-to) 16%, transparent), transparent 70%),
       var(--paper);
     background-repeat: no-repeat;
+    overflow-x: clip; /* decorative motion must never make a phone page scroll sideways */
     color: var(--ink);
     font-feature-settings: "tnum" 1; /* money and counts line up */
   }
@@ -75,39 +76,18 @@
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 bg-ink text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)] hover:bg-ink/85 active:scale-[0.98]; }
-  .btn-quiet { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 border border-rule bg-white text-ink hover:bg-sunk active:scale-[0.98]; }
+  /* The one action to take on a screen: blue, big, full width on phones. Everything else is quiet. */
+  .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 bg-act text-act-ink shadow-[0_8px_20px_-8px_var(--act)] hover:bg-act/90 active:scale-[0.98]; }
+  .btn-go { @apply w-full px-6 py-3.5 text-base sm:w-auto; }
+  .btn-quiet { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 border border-rule bg-white text-ink hover:bg-sunk active:scale-[0.98]; }
+  /* A choice in a list: a full-width row with an arrow, easy to tap. */
+  .choice { @apply flex min-h-12 w-full items-center justify-between gap-3 rounded-xl border border-rule bg-white px-4 py-3 text-left text-[0.95rem] font-medium transition hover:border-act hover:bg-act/5 disabled:cursor-not-allowed disabled:opacity-50; }
   .card { @apply relative rounded-2xl border border-rule bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_color-mix(in_oklch,var(--brand-from)_28%,transparent)]; }
-  .pill { @apply inline-flex items-center gap-2 rounded-full border border-rule bg-white/80 py-1 pl-1 pr-3 text-sm text-ink shadow-sm backdrop-blur; }
+  .eyebrow { @apply text-sm font-semibold text-act; }
   .text-brand { @apply bg-gradient-to-r from-brand-from via-brand-via to-brand-to bg-clip-text text-transparent; }
-  .field { @apply mt-1 w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink; }
+  .field { @apply mt-1 w-full rounded-lg border border-rule bg-white px-3 py-2 text-base text-ink sm:text-sm; }
   .link { @apply text-act underline decoration-act/40 hover:decoration-act; }
   .id { @apply font-mono text-[0.8em] text-graphite; }
-}
-
-/* The firewall's verdict, as an ink stamp. Slightly rotated, never animated past the first paint. */
-.stamp {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  padding: 0.35rem 0.7rem 0.4rem;
-  border: 2.5px solid currentColor;
-  border-radius: 6px;
-  transform: rotate(-2.5deg);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  line-height: 1.05;
-  box-shadow: inset 0 0 0 1.5px var(--paper), inset 0 0 0 3px currentColor; /* double ring, like a real stamp */
-}
-.stamp small { font-size: max(0.68em, 0.75rem); font-weight: 700; letter-spacing: 0.02em; text-transform: none; opacity: 0.9; }
-@media (prefers-reduced-motion: no-preference) {
-  .stamp-land { animation: stamp-land 360ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
-  @keyframes stamp-land {
-    /* Starts fully visible: if the animation never runs (background tab, screenshot, print) the stamp still reads correctly. */
-    from { transform: rotate(-7deg) scale(1.12); }
-    to { transform: rotate(-2.5deg) scale(1); opacity: 1; }
-  }
 }
 
 @keyframes fade {

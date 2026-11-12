@@ -22,11 +22,11 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
   const injected = lead.messages.find((m) => /ignore|SYSTEM/i.test(m.text)) ?? lead.messages.at(-1);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <p className="pill w-fit"><span className="rounded-full bg-gradient-to-r from-brand-from to-brand-to px-2 py-0.5 text-xs font-medium text-white">Chapter 1</span>of 3</p>
-      <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">Watch it decide</h1>
-      <p className="mt-3 max-w-2xl text-lg leading-relaxed text-graphite">
-        A buyer has opened a dispute against Mira. Run it, then step through what the agent did, one stage at a time.
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <p className="eyebrow">Chapter 1 of 3</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Watch it decide</h1>
+      <p className="mt-3 max-w-2xl text-base leading-relaxed sm:text-lg text-graphite">
+        A buyer has opened a dispute against Mira. Press the blue button to run it, then step through what the agent did.
       </p>
 
       {limited && (
@@ -35,7 +35,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
         </p>
       )}
 
-      <form action={runScenario} className="mt-8 card p-5 sm:p-7">
+      <form action={runScenario} className="mt-6 card p-5 sm:mt-8 sm:p-7">
         <input type="hidden" name="scenario" value={lead.id} />
         <p className="text-xs font-semibold uppercase tracking-wide text-faint">The case · {usd(lead.dispute.amountCents)} · synthetic</p>
         <h2 className="mt-2 text-xl font-bold tracking-tight">{NAME[lead.id]}</h2>
@@ -45,14 +45,14 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
             {injected.text}
           </blockquote>
         )}
-        <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <PendingButton className="btn-primary px-7 py-3.5 text-base" pending="Running the agent…">Run this dispute →</PendingButton>
-          <span className="text-sm text-graphite">A few seconds. Recorded model answers; nothing sent to PayPal.</span>
+        <div className="mt-6">
+          <PendingButton className="btn-primary btn-go" pending="Running the agent…">Run this dispute →</PendingButton>
+          <p className="mt-2 text-sm text-graphite">Takes a few seconds. Recorded model answers; nothing sent to PayPal.</p>
         </div>
       </form>
 
       <details className="group mt-6">
-        <summary className="cursor-pointer list-none text-sm text-graphite hover:text-ink">
+        <summary className="cursor-pointer list-none py-2 text-sm text-graphite hover:text-ink">
           <span aria-hidden className="mr-1.5 inline-block transition-transform group-open:rotate-90">›</span>Or pick a different case
         </summary>
         <ul className="mt-3 divide-y divide-rule border-y border-rule">
@@ -64,7 +64,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
                   <h3 className="font-semibold">{caseName(x.id, x.title)}</h3>
                   <p className="mt-0.5 text-sm text-graphite">{BLURB[x.id]}</p>
                 </div>
-                <PendingButton className="btn-quiet" pending="Running…">Run</PendingButton>
+                <PendingButton className="btn-quiet w-full sm:w-auto" pending="Running…">Run this one</PendingButton>
               </form>
             </li>
           ))}

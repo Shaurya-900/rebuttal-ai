@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getDb } from "../../../lib/db/client";
 import { liveRecommendations, type LiveRec } from "../../../lib/live";
 import { currentPolicy } from "../../../lib/policy";
-import { Badge, displayTitle, Stamp, usd } from "../ui";
+import { Badge, displayTitle, Verdict, usd } from "../ui";
 import { liveQueue } from "../../../lib/desk";
 import { answer } from "../actions";
 import { SCENARIOS } from "../../../lib/agent/scenarios";
@@ -58,7 +58,7 @@ function Dispute({ r }: { r: LiveRec }) {
                 <p className="mt-1 text-graphite">Not considered, because PayPal does not allow it now: {r.decision.removed.map((c) => c.toLowerCase()).join(", ")}.</p>
               )}
             </div>
-            <Stamp decision={r.gate} />
+            <Verdict decision={r.gate} />
           </div>
         ) : (
           <p className="text-sm text-graphite">No recommendation.</p>

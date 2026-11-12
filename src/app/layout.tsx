@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Link href="/" className="flex items-center gap-2">
               <span aria-hidden className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-brand-from to-brand-to text-sm font-bold text-white shadow-sm">R</span>
               <span className="text-lg font-semibold tracking-tight text-ink">Rebuttal</span>
-              <span className="hidden rounded-full bg-hold-tint px-2 py-0.5 text-xs text-hold sm:inline">PayPal sandbox · synthetic data</span>
+              <span className="hidden text-xs text-hold sm:inline">PayPal sandbox · synthetic data</span>
             </Link>
             <nav aria-label="Main"><StoryNav /></nav>
           </div>

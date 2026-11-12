@@ -1,5 +1,5 @@
 "use client";
-// Custom AG Studio widget: each category (a firewall verdict) drawn as one of Rebuttal's ink stamps, with its count.
+// Custom AG Studio widget: each category (a firewall verdict) drawn as a labelled count, with its count.
 // Data comes through Studio's own query API, so filters and cross-filtering on the page apply to it.
 import { useEffect, useState } from "react";
 import type { AgWidgetField, AgWidgetParams } from "ag-studio";
@@ -41,8 +41,8 @@ export function VerdictStamps({ widgetApi, dataMapping }: AgWidgetParams) {
     <div className="flex h-full flex-wrap content-center items-center justify-center gap-x-8 gap-y-5 p-3">
       {rows.map((r) => (
         <div key={r.label} className="flex flex-col items-center gap-2">
-          <span className={`stamp ${INK[r.label.toLowerCase()] ?? "text-ink"}`}>
-            <span className="text-base sm:text-lg">{r.label.toUpperCase()}</span>
+          <span className={`rounded-lg border border-current/30 px-3 py-1 text-sm font-semibold ${INK[r.label.toLowerCase()] ?? "text-ink"}`}>
+            {r.label}
           </span>
           <span className="text-2xl font-semibold tabular-nums">{r.count}</span>
         </div>

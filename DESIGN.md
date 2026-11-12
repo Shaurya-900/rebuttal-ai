@@ -136,7 +136,13 @@ components:
 > rounded-2xl `.card` sheets with a faint blue shadow, `.text-brand` gradient words, and a frosted sticky header. Three Velora components are
 > vendored in `src/components/velora/` with their licence: `GridPattern` (home hero), `BorderBeam` (opening scene, current walkthrough step)
 > and `NumberTicker` (attack counts). Token values live in `src/app/globals.css`. Where this file's older notes on Public Sans, IBM Plex Mono,
-> paper tones or flat sheets disagree with that, the overhaul wins; the stamp inks, the stamp itself and the story rules are unchanged.
+> paper tones or flat sheets disagree with that, the overhaul wins; the stamp inks and the story rules are unchanged.
+>
+> **No stamps, no pills.** The rotated ink stamp is gone. A firewall verdict is a plain box (`Verdict` in `src/app/desk/ui.tsx`):
+> an icon, "Blocked by the firewall" / "Allowed by the firewall" / "Held for Mira to approve", and the rule in words.
+> Nothing is pill-shaped: buttons and choices use 12px corners. On every screen exactly one blue `.btn-primary` is the next
+> click (full width on phones via `.btn-go`); options the visitor picks from are full-width `.choice` rows with an arrow.
+> On phones the run walkthrough's Back / Next bar is fixed to the bottom of the screen.
 
 ## Overview
 

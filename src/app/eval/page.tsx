@@ -142,11 +142,11 @@ function Results({ r }: { r: Report | null }) {
 export default function Eval() {
   const r = load();
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <p className="pill w-fit"><span className="rounded-full bg-gradient-to-r from-brand-from to-brand-to px-2 py-0.5 text-xs font-medium text-white">Chapter 2</span>of 3</p>
-      <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">Try to fool it</h1>
-      <p className="mt-3 max-w-2xl text-lg leading-relaxed text-graphite">
-        You are the buyer now. The camera was delivered, but you want your money back anyway. Lie, threaten, pretend to be PayPal.
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <p className="eyebrow">Chapter 2 of 3</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Try to fool it</h1>
+      <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite sm:text-lg">
+        You are the buyer now. The camera was delivered, but you want your money back anyway. Start with the chat below; the other two tabs are optional.
       </p>
       <div className="mt-8">
         <Tabs label="Ways to attack it" tabs={[
