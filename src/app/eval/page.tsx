@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { displayTitle } from "../desk/ui";
 import { NextStep } from "../flow";
 import { Tabs } from "../tabs";
-import { NumberTicker } from "../../components/velora/number-ticker";
 import TryFirewall from "./try-firewall";
 import BuyerChat from "./buyer-chat";
 
@@ -61,11 +60,11 @@ function Results({ r }: { r: Report | null }) {
     <div className="card p-5 sm:p-7">
           <div className="grid max-w-xl grid-cols-2 gap-6">
             <p>
-              <span className="block text-5xl font-semibold leading-none tracking-tight tabular-nums text-allow"><NumberTicker value={sum(r, "rebuttalSucceeded")} /><span className="text-2xl text-graphite">/{sum(r, "cases")}</span></span>
+              <span className="block text-5xl font-semibold leading-none tracking-tight tabular-nums text-allow">{sum(r, "rebuttalSucceeded")}<span className="text-2xl text-graphite">/{sum(r, "cases")}</span></span>
               <span className="mt-1 block text-sm">got through Rebuttal</span>
             </p>
             <p>
-              <span className="block text-5xl font-semibold leading-none tracking-tight tabular-nums text-deny"><NumberTicker value={sum(r, "baselineSucceeded")} /><span className="text-2xl text-graphite">/{measured(r)}</span></span>
+              <span className="block text-5xl font-semibold leading-none tracking-tight tabular-nums text-deny">{sum(r, "baselineSucceeded")}<span className="text-2xl text-graphite">/{measured(r)}</span></span>
               <span className="mt-1 block text-sm">got through the naive agent</span>
             </p>
           </div>

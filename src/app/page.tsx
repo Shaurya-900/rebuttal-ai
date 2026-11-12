@@ -7,9 +7,6 @@ import { gate } from "../lib/firewall/gate";
 import { DEFAULT_POLICY, type Decision } from "../lib/firewall/types";
 import { createLlm, LLM_CACHE_DIR } from "../lib/llm";
 import { Verdict, usd } from "./desk/ui";
-import { GridPattern } from "../components/velora/grid-pattern";
-import { BorderBeam } from "../components/velora/border-beam";
-import { NumberTicker } from "../components/velora/number-ticker";
 import Intro from "./intro";
 // The opening of the story: one buyer trying to give the agent orders, the firewall's answer, and one button to begin.
 // Every figure is computed or read from committed files (eval/results/report.json, the recorded hero-3 run).
@@ -56,13 +53,12 @@ export default async function Home() {
   return (
     <main>
       <Intro />
-      <section className="relative overflow-hidden">
-        <GridPattern width={44} height={44} className="[mask-image:radial-gradient(42rem_26rem_at_50%_0%,#000,transparent)]" />
+      <section>
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-12 sm:pt-20 sm:pb-16 lg:grid-cols-[1.05fr_1fr]">
           <div>
             <p className="eyebrow">PayPal AI Hackathon 2026 · open source</p>
             <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-              A dispute agent that <span className="text-brand">can&apos;t be talked out</span> of the rules.
+              A dispute agent that can&apos;t be talked out of the rules.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
               Mira sells film cameras on her own. Rebuttal answers her PayPal disputes, and it can only act through a firewall written in plain code.
@@ -74,7 +70,6 @@ export default async function Home() {
           </div>
 
           <section aria-label="The opening scene" className="card overflow-hidden p-5 sm:p-7">
-            <BorderBeam size={90} duration={8} />
             <div className="flex items-center gap-2 text-sm text-graphite">
               <span className="size-2 rounded-sm bg-deny" aria-hidden />
               New dispute · {usd(HERO3.order.amountCents)} · synthetic buyer
@@ -98,14 +93,14 @@ export default async function Home() {
         <ol aria-label="Three chapters, in order" className="grid gap-4 md:grid-cols-3">
           {chapters.map((c) => (
             <li key={c.n}>
-              <Link href={c.href} className="card group flex h-full flex-col p-6 transition hover:-translate-y-0.5 hover:border-graphite/30">
+              <Link href={c.href} className="card group flex h-full flex-col p-6 transition hover:border-act">
                 <span className="text-sm font-medium text-act">Chapter {c.n}</span>
                 <span className="mt-2 text-xl font-semibold tracking-tight">{c.title}</span>
                 <span className="mt-2 flex-1 text-sm leading-relaxed text-graphite">{c.line}</span>
                 {c.n === 2 && ev ? (
                   <span className="mt-5 flex items-baseline gap-6 border-t border-rule pt-4">
-                    <span><NumberTicker value={ev.rebuttal} className="text-3xl font-semibold text-allow" /><span className="text-graphite">/{ev.attacks}</span><span className="block text-xs text-graphite">got through Rebuttal</span></span>
-                    <span><NumberTicker value={ev.naive} className="text-3xl font-semibold text-deny" /><span className="text-graphite">/{ev.naiveMeasured}</span><span className="block text-xs text-graphite">got through a naive agent</span></span>
+                    <span><span className="text-3xl font-semibold text-allow">{ev.rebuttal}</span><span className="text-graphite">/{ev.attacks}</span><span className="block text-xs text-graphite">got through Rebuttal</span></span>
+                    <span><span className="text-3xl font-semibold text-deny">{ev.naive}</span><span className="text-graphite">/{ev.naiveMeasured}</span><span className="block text-xs text-graphite">got through a naive agent</span></span>
                   </span>
                 ) : null}
                 <span className="mt-5 text-sm font-medium text-ink group-hover:underline">Open <span aria-hidden>→</span></span>

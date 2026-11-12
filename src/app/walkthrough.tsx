@@ -3,7 +3,6 @@
 // phones, so it is always under the thumb), Back goes back, and "Show all steps" opens everything at once.
 // Stage content is rendered on the server and passed in, so nothing here knows about disputes.
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { BorderBeam } from "../components/velora/border-beam";
 
 export type Step = { label: string; title: string; lead: string; body: ReactNode };
 
@@ -47,7 +46,7 @@ export function Walkthrough({ steps, finish }: { steps: Step[]; finish?: ReactNo
       </div>
 
       <div key={i} className="mt-5 animate-[fade_200ms_ease-out]">
-        <Panel n={i} total={steps.length} s={steps[i]!} beam />
+        <Panel n={i} total={steps.length} s={steps[i]!} current />
       </div>
 
       {!last && (
@@ -74,10 +73,9 @@ export function Walkthrough({ steps, finish }: { steps: Step[]; finish?: ReactNo
   );
 }
 
-function Panel({ n, total, s, beam = false }: { n: number; total: number; s: Step; beam?: boolean }) {
+function Panel({ n, total, s, current = false }: { n: number; total: number; s: Step; current?: boolean }) {
   return (
-    <section aria-labelledby={`step-${n}`} className="card overflow-hidden p-4 sm:p-7">
-      {beam && <BorderBeam size={80} duration={7} />}
+    <section aria-labelledby={`step-${n}`} className={`card p-4 sm:p-7 ${current ? "border-act" : ""}`}>
       <p className="text-xs font-medium uppercase tracking-wider text-act">Step {n + 1} of {total}</p>
       <h2 id={`step-${n}`} className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">{s.title}</h2>
       <p className="mt-2 max-w-2xl leading-relaxed text-graphite">{s.lead}</p>
