@@ -9,7 +9,7 @@ const inks = ["act", "hold", "graphite", "faint", "ink", "act", "hold", "graphit
 const palette = Object.fromEntries(inks.flatMap((c, i) => [[`chartPaletteFills${i + 1}Color`, v(c)], [`chartPaletteStrokes${i + 1}Color`, v(c)]]));
 
 export const rebuttalStudioTheme = studioTheme.withParams({
-  fontFamily: "var(--font-public-sans), ui-sans-serif, system-ui, sans-serif",
+  fontFamily: "var(--font-geist), ui-sans-serif, system-ui, sans-serif",
   fontSize: 14,
   textColor: v("ink"),
   foregroundColor: v("ink"),

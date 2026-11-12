@@ -1,14 +1,14 @@
 ---
 name: Rebuttal
-description: A PayPal dispute agent that cannot be talked out of the rules. Paper and ink, a filing desk, not a dashboard.
+description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, in the look of Velora UI; the firewall verdict box is the one loud element.
 colors:
-  paper: "#f7f8f6"
-  sunk: "#eef0ed"
-  ink: "#1b2430"
-  graphite: "#5b6573"
-  faint: "#687280"
-  rule: "#d9ddd8"
-  act: "#1f4fd1"
+  paper: "#ffffff"
+  sunk: "oklch(0.97 0.004 260)"
+  ink: "oklch(0.145 0 0)"
+  graphite: "oklch(0.47 0.01 260)"
+  faint: "oklch(0.52 0.01 260)"
+  rule: "oklch(0.922 0.004 260)"
+  act: "oklch(0.546 0.245 263)"
   act-ink: "#ffffff"
   allow: "#1e6b45"
   allow-tint: "#e3f0e8"
@@ -18,42 +18,42 @@ colors:
   hold-tint: "#f6ecd6"
 typography:
   display:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(2.25rem, 5vw, 3rem)"
-    fontWeight: 800
+    fontWeight: 600
     lineHeight: 1.05
     letterSpacing: "-0.025em"
   headline:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(1.875rem, 4vw, 2.25rem)"
-    fontWeight: 800
+    fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "-0.025em"
   title:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "-0.025em"
   body:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.625
     fontFeature: "\"tnum\" 1"
   body-sm:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.625
     fontFeature: "\"tnum\" 1"
   label:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.33
   id:
-    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontFamily: "Geist Mono, ui-monospace, monospace"
     fontSize: "0.8em"
     fontWeight: 400
 rounded:
@@ -131,15 +131,31 @@ components:
 
 # Design System: Rebuttal
 
+> **Nov 2026 overhaul.** The visual layer now follows [Velora UI](https://github.com/ColorlibHQ/velora-ui) (MIT): Geist and Geist Mono,
+> a white page with a soft blue glow and grid pattern at the top, near-black pill buttons (`.btn-primary`), outline pills (`.btn-quiet`),
+> rounded-2xl `.card` sheets with a faint blue shadow, `.text-brand` gradient words, and a frosted sticky header. Three Velora components are
+> vendored in `src/components/velora/` with their licence: `GridPattern` (home hero), `BorderBeam` (opening scene, current walkthrough step)
+> and `NumberTicker` (attack counts). Token values live in `src/app/globals.css`. Where this file's older notes on Public Sans, IBM Plex Mono,
+> paper tones or flat sheets disagree with that, the overhaul wins; the stamp inks and the story rules are unchanged.
+>
+> **No stamps, no pills.** The rotated ink stamp is gone. A firewall verdict is a plain box (`Verdict` in `src/app/desk/ui.tsx`):
+> an icon, "Blocked by the firewall" / "Allowed by the firewall" / "Held for Mira to approve", and the rule in words.
+> Nothing is pill-shaped: buttons and choices use 12px corners. On every screen exactly one blue `.btn-primary` is the next
+> click (full width on phones via `.btn-go`); options the visitor picks from are full-width `.choice` rows with an arrow.
+> On phones the run walkthrough's Back / Next bar is fixed to the bottom of the screen.
+>
+> **Every page opens the same way.** `PageHead` (`src/app/flow.tsx`): a blue `.eyebrow` (the chapter, or where the page sits, such as
+> "Sandbox store"), a 3xl/5xl semibold title, one lead paragraph. Content then sits in `.card` sheets; notices are rounded-xl tinted boxes.
+
 ## Overview
 
 **Creative North Star: "The Filing Desk"**
 
 Rebuttal looks like a clerk's desk where cases are decided on paper: cool off-white sheets, blue-black ink, thin rule lines between records, and a rubber stamp for the verdict. It is a filing desk, not a dashboard. Nothing glows, floats or gradients. Authority comes from the deterministic decision, so the one loud thing on any page is the firewall's stamp, and everything around it is quiet, typeset record.
 
-Density is that of a well-kept file: generous reading measure (about 42rem for prose), a single centred column (64rem on the home page, 56rem on inner pages), records separated by hairline rules rather than boxed into cards. Pages are walked in order. A route bar across the top says which of the three doors you are at, and a heavy ink rule closes each page with one Next button.
+Density is that of a well-kept file: generous reading measure (about 42rem for prose), a single centred column (64rem on the home page, 56rem on inner pages), records separated by hairline rules rather than boxed into cards. Pages are walked in order, as a story in three chapters. The header shows the three chapters (current one in action blue, earlier ones ticked), each page says "Chapter n of 3" above its headline, and closes with one Next button. Each page has one primary action at a time; detail waits behind a step, a tab or a disclosure.
 
-The system has light and dark modes driven by `prefers-color-scheme`. Every colour is a CSS custom property on `:root` in `src/app/globals.css` and is remapped for dark; the frontmatter records the light values, and the sidecar carries the dark ones.
+The system has one light theme on purpose, whatever the visitor's OS is set to. Every colour is a CSS custom property on `:root` in `src/app/globals.css`; the frontmatter records the values. Working sheets (the opening scene, the case, each walkthrough step, the chat) sit on white with a hairline border and 12px corners.
 
 **Key Characteristics:**
 - Cool paper, blue-black ink, hairline rules; flat, no shadows.
@@ -204,7 +220,7 @@ A single centred column with a 16px gutter: 64rem on the home page, 56rem on inn
 
 The home page sets its three doors as a three-column grid at `md` (768px) and up, 32px apart, and stacks them in order below that, 48px apart. Records are lists divided by hairlines (a rule above and below, a rule between rows), not grids of cards. Tables scroll sideways inside their own bordered box on narrow screens. The layout was checked down to 375px.
 
-**The Walk In Order Rule.** Every route page carries the route bar (three numbered doors; the current one in ink with a filled ink disc, earlier ones graphite, later ones faint) and ends with one Next step: a 2px ink rule, a sentence, and one primary button to the next door.
+**The Walk In Order Rule.** The header carries the three chapters on every page. Each chapter page ends with one Next step: a hairline rule, a sentence, and one primary button to the next chapter. On the run page the Next step appears only once the walkthrough reaches the verdict, so there is never more than one primary button on screen.
 
 **The One Primary Rule.** One primary (action blue) button per section. Any other action in that section is a quiet button or a text link.
 
@@ -250,8 +266,8 @@ Paper fill, a 1px rule border, 4px corners, 6px by 10px padding, small ink text,
 - **Links in prose:** action blue, with a 40%-blue underline offset 3px that turns solid on hover.
 - **Skip link:** the first focusable element, an action-blue pill when focused.
 
-### Route bar and Next step (signature component)
-See the Walk In Order Rule. The route bar is an ordered list of the three doors with `aria-current="step"` on the current one. The Next step is a labelled section: one sentence of body text up to about 42rem wide, then the primary button.
+### Story nav, walkthrough and Next step (signature components)
+See the Walk In Order Rule. The story nav (`src/app/nav.tsx`) is an ordered list of the three chapters with `aria-current="step"` on the current one. The walkthrough (`src/app/walkthrough.tsx`) shows a run one stage at a time with Back / Next and a "Show all steps" toggle; tabs (`src/app/tabs.tsx`) split chapter 2 into chat, firewall and results. The Next step is a labelled section: one sentence of body text up to about 42rem wide, then the primary button.
 
 ### Dashboard (AG Studio)
 The dashboard is themed entirely through the tokens, so it follows light and dark mode. Widgets are paper sheets with a single rule border, 4px corners, no shadow, ink titles and graphite subtitles. Grids have sunk headers in graphite, rule row lines and a sunk hover. Charts cycle act, hold, graphite, faint and ink, and never use allow or deny. The custom verdict-stamps widget reuses the stamp inks for verdicts.
@@ -264,7 +280,7 @@ The dashboard is themed entirely through the tokens, so it follows light and dar
 - **Do** date proof figures and name their model and run count in a label line beneath them.
 - **Do** set identifiers in IBM Plex Mono and everything else in Public Sans.
 - **Do** give each section one primary button; extra actions are quiet buttons or links.
-- **Do** end every route page with the Next step, and open it with the route bar.
+- **Do** end every chapter page with the Next step, and keep one primary action on screen at a time.
 - **Do** separate records with rule lines and sunk paper.
 - **Do** check new text colours for AA against the surface they sit on; faint is cleared on paper only.
 

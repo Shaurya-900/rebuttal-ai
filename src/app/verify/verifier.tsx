@@ -100,37 +100,35 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
   const failed = checks.some((c) => c.ok === false);
   return (
-    <section className="mt-6 rounded-lg border-2 border-ink p-5 sm:p-6">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-live="polite">
-        <span className={`stamp ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`}>
-          <span className="text-lg">{busy ? "CHECKING" : failed ? "FAILED" : "VERIFIED"}</span>
-          <small>{busy ? "in your browser" : failed ? "not what was signed" : "by your browser"}</small>
+    <section className="mt-6 card p-4 sm:mt-8 sm:p-7">
+      <div aria-live="polite" className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${busy ? "border-rule bg-sunk" : failed ? "border-deny/30 bg-deny-tint/60" : "border-allow/30 bg-allow-tint/60"}`}>
+        <span aria-hidden className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-md bg-white font-bold ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`}>{busy ? "…" : failed ? "✕" : "✓"}</span>
+        <span className="min-w-0">
+          <span className={`block text-lg font-semibold ${busy ? "text-graphite" : failed ? "text-deny" : "text-allow"}`}>{busy ? "Checking in your browser…" : failed ? "Failed: this is not what was signed" : "Verified by your browser"}</span>
+          <span className="block text-sm text-graphite">{busy ? "Hashing the record, the PDF and the chain." : failed ? "One changed byte is enough to break the chain." : "The record, its evidence and the chain match the signed head."}</span>
         </span>
-        <p className="min-w-0 flex-1 basis-60 text-base font-semibold">
-          {busy ? "Checking…" : failed ? "What you have is not what was signed. One changed byte is enough." : "The record, its evidence and the chain match the signed head."}
-        </p>
       </div>
 
-      <div className="mt-6 grid gap-5 border-t border-rule pt-5">
-        <label className="text-sm">
-          <span className="block font-semibold">1. Pick a run</span>
-          <select className="field block w-auto max-w-full" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
-            <option value="">Chain only</option>
-            {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {caseName(r.scenario)} ({r.choice?.toLowerCase()})</option>)}
-          </select>
-        </label>
-        <div className="text-sm">
-          <span className="block font-semibold">2. Try to tamper with it</span>
-          <div className="mt-1 flex flex-wrap gap-2" role="group" aria-label="Tamper demo">
+      <div className="mt-6">
+        <p className="font-semibold">Now tamper with it</p>
+        <p className="text-sm text-graphite">Tap one. Your browser re-checks straight away.</p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3" role="group" aria-label="Tamper demo">
           {([["none", "Leave it untouched"], ["pdf", "Change one byte of the PDF"], ["record", "Edit the stored score"]] as const).map(([t, label]) => (
             <button key={t} type="button" onClick={() => setTamper(t)} aria-pressed={tamper === t}
-              className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-ink bg-ink text-paper" : "border-rule hover:bg-sunk"}`}>
-              {label}
+              className={`choice ${tamper === t ? "border-act bg-act/5 ring-1 ring-act" : ""}`}>
+              {label}{tamper === t ? <span aria-hidden className="text-act">✓</span> : null}
             </button>
           ))}
-          </div>
         </div>
       </div>
+
+      <label className="mt-5 block text-sm">
+        <span className="block font-medium text-graphite">Which run to check</span>
+        <select className="field block w-full sm:w-auto sm:max-w-full" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
+          <option value="">Chain only</option>
+          {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {caseName(r.scenario)} ({r.choice?.toLowerCase()})</option>)}
+        </select>
+      </label>
       {tamper !== "none" && <p className="mt-3 text-xs text-hold">Tamper demo: the change is made to your browser&apos;s copy only, before hashing. Nothing on the server changes.</p>}
 
       <p className="mt-6 text-sm font-semibold">What your browser just checked</p>
@@ -138,7 +136,7 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
         {checks.map((c, i) => (
           <li key={i} className="flex gap-2">
             <span aria-hidden className={c.ok === true ? "text-allow" : c.ok === false ? "text-deny" : "text-faint"}>{c.ok === true ? "✓" : c.ok === false ? "✗" : "–"}</span>
-            <span>{c.label}{c.detail && <span className="ml-2 font-mono text-xs text-faint">{c.detail}</span>}</span>
+            <span>{c.label}{c.detail && <span className="ml-2 break-all font-mono text-xs text-faint">{c.detail}</span>}</span>
           </li>
         ))}
       </ul>

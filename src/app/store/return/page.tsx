@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { captureOrder, getOrder } from "../../../lib/paypal/orders";
+import { PageHead } from "../../flow";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,7 @@ export default async function Return({ searchParams }: { searchParams: Promise<{
 
   return (
     <Shell title={status === "COMPLETED" ? "Thanks, payment received" : `Payment ${status}`}>
-      <p>Order <code>{token}</code></p>
+      <p>Order <code className="id">{token}</code></p>
       <p>Capture <code className="id">{captureId}</code>, status {status}</p>
       <p className="mt-4 text-graphite">
         To test Rebuttal: log in to the sandbox Resolution Center as this buyer, report a problem on this payment, and do not escalate it.
@@ -42,10 +43,10 @@ export default async function Return({ searchParams }: { searchParams: Promise<{
 
 function Shell({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <main className="mx-auto max-w-xl px-4 py-12">
-      <h1 className="mt-6 text-3xl font-extrabold tracking-tight">{title}</h1>
-      <div className="mt-4 space-y-1">{children}</div>
-      <Link href="/store" className="mt-6 inline-block text-sm underline">Back to the store</Link>
+    <main className="mx-auto max-w-xl px-4 py-8 sm:py-12">
+      <PageHead eyebrow="Sandbox store" title={title} />
+      <div className="card mt-8 space-y-1 p-5 text-sm sm:p-6">{children}</div>
+      <Link href="/store" className="btn-quiet mt-6">← Back to the store</Link>
     </main>
   );
 }

@@ -30,15 +30,24 @@ const RULE_NAMES: Record<string, string> = {
 };
 export const ruleName = (code: string) => RULE_NAMES[code] ?? code.replaceAll("_", " ").toLowerCase();
 
-/** The firewall's verdict as an ink stamp: the one loud element on any page. */
-export function Stamp({ decision, land = false, className = "" }: { decision: Decision; land?: boolean; className?: string }) {
-  const [word, tone, code] =
-    decision.kind === "ALLOW" ? ["ALLOWED", "text-allow", null] : decision.kind === "DENY" ? ["DENIED", "text-deny", decision.reason] : ["HELD FOR SELLER", "text-hold", decision.rule];
+const VERDICT = {
+  ALLOW: { word: "Allowed by the firewall", icon: "✓", box: "border-allow/30 bg-allow-tint/60", ink: "text-allow" },
+  DENY: { word: "Blocked by the firewall", icon: "✕", box: "border-deny/30 bg-deny-tint/60", ink: "text-deny" },
+  REQUIRE_APPROVAL: { word: "Held for Mira to approve", icon: "!", box: "border-hold/30 bg-hold-tint/60", ink: "text-hold" },
+} as const;
+
+/** The firewall's verdict in plain words: what happened, and which rule decided it. */
+export function Verdict({ decision, className = "" }: { decision: Decision; className?: string }) {
+  const v = VERDICT[decision.kind];
+  const code = decision.kind === "DENY" ? decision.reason : decision.kind === "REQUIRE_APPROVAL" ? decision.rule : null;
   return (
-    <span role="img" aria-label={`Firewall: ${word.toLowerCase()}${code ? `, rule ${code}, ${ruleName(code)}` : ""}`} className={`stamp ${land ? "stamp-land" : ""} ${tone} ${className}`}>
-      <span className="text-base sm:text-lg">{word}</span>
-      <small>{code ? `${code.split("_")[0]}: ${ruleName(code)}` : "all ten rules pass"}</small>
-    </span>
+    <div className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${v.box} ${className}`}>
+      <span aria-hidden className={`mt-0.5 grid size-6 shrink-0 place-items-center rounded-md bg-white text-sm font-bold ${v.ink}`}>{v.icon}</span>
+      <span className="min-w-0">
+        <span className={`block font-semibold ${v.ink}`}>{v.word}</span>
+        <span className="block text-sm text-graphite">{code ? `Rule ${code.split("_")[0]}: ${ruleName(code)}` : "All ten rules pass"}</span>
+      </span>
+    </div>
   );
 }
 
