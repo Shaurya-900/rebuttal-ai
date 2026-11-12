@@ -264,7 +264,7 @@ npm install
 cp .env.example .env
 ```
 
-Fill in the PayPal sandbox client id and secret. The app's model key is `REBUTTAL_LLM_KEY`; never name it `ANTHROPIC_API_KEY`.
+Fill in the PayPal sandbox client id and secret. The app's model key is `REBUTTAL_LLM_KEY`.
 
 ```bash
 npm test
