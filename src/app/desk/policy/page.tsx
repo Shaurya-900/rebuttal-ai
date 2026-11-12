@@ -1,9 +1,9 @@
 // Mira's policy: what the decision and the firewall are allowed to do. Anyone can read it; changing it needs the seller password.
-import Link from "next/link";
 import { getDb } from "../../../lib/db/client";
 import type { Policy } from "../../../lib/firewall/types";
 import { currentPolicy, policyHistory } from "../../../lib/policy";
 import { updatePolicy } from "../actions";
+import { PageHead } from "../../flow";
 
 export const dynamic = "force-dynamic";
 
@@ -26,45 +26,44 @@ export default async function PolicyPage({ searchParams }: { searchParams: Promi
   const approvalsOn = (process.env.DESK_APPROVER_TOKEN ?? "").length >= 12;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/desk" className="text-sm text-graphite hover:underline">← Back to the desk</Link>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight">Mira&apos;s policy</h1>
-      <p className="mt-2 text-sm text-graphite">
-        These numbers bound what Rebuttal may do. The decision code sizes offers from them, and the firewall checks every action against them
-        (the rule each one feeds is shown). The model never sees them and cannot change them. {since ? `Last changed ${since.slice(0, 16).replace("T", " ")} UTC.` : "Using the built-in defaults."}
-      </p>
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <PageHead eyebrow="The rules she set" title="Mira's policy">
+        These numbers bound what Rebuttal may do. The decision code sizes offers from them and the firewall checks every action against them.
+        The model never sees them and cannot change them.
+      </PageHead>
+      <p className="mt-2 text-sm text-faint">{since ? `Last changed ${since.slice(0, 16).replace("T", " ")} UTC.` : "Using the built-in defaults."} The tag after each label is the firewall rule it feeds.</p>
 
       {saved && (
-        <p className={`mt-4 rounded border px-3 py-2 text-sm ${saved === "ok" ? "border-allow/30 bg-allow-tint text-allow" : "border-deny/30 bg-deny-tint text-deny"}`}>
+        <p className={`mt-6 rounded-xl border px-4 py-3 text-sm ${saved === "ok" ? "border-allow/30 bg-allow-tint text-allow" : "border-deny/30 bg-deny-tint text-deny"}`}>
           {{ ok: "Saved. The next demo run and the next action the worker checks use it.", denied: "Wrong seller password, or editing is off on this deploy.", invalid: "Not saved: a value is out of range." }[saved] ?? ""}
         </p>
       )}
 
-      <form action={updatePolicy} className="mt-6 space-y-4 rounded-lg border border-rule p-5">
+      <form action={updatePolicy} className="card mt-8 space-y-5 p-5 sm:p-6">
         <label className="block text-sm">
-          <span className="font-medium">Largest offer, % of the disputed amount</span> <span className="text-xs text-faint">(I3)</span>
+          <span className="font-medium">Largest offer, % of the disputed amount</span> <span className="ml-1 font-mono text-xs text-faint">(I3)</span>
           <input name="maxOfferPct" type="number" min={0} max={100} step={1} defaultValue={policy.maxOfferPct} className={input} />
         </label>
         <label className="block text-sm">
-          <span className="font-medium">Accept a claim without asking me, up to ($)</span> <span className="text-xs text-faint">(I7)</span>
+          <span className="font-medium">Accept a claim without asking me, up to ($)</span> <span className="ml-1 font-mono text-xs text-faint">(I7)</span>
           <input name="autoAcceptMax" type="number" min={0} step={0.01} defaultValue={dollars(policy.autoAcceptMaxCents)} className={input} />
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm">
-            <span className="font-medium">Refunds and offers per day ($)</span> <span className="text-xs text-faint">(I4)</span>
+            <span className="font-medium">Refunds and offers per day ($)</span> <span className="ml-1 font-mono text-xs text-faint">(I4)</span>
             <input name="dailyRefundBudget" type="number" min={0} step={0.01} defaultValue={dollars(policy.dailyRefundBudgetCents)} className={input} />
           </label>
           <label className="block text-sm">
-            <span className="font-medium">To one buyer in 30 days ($)</span> <span className="text-xs text-faint">(I4)</span>
+            <span className="font-medium">To one buyer in 30 days ($)</span> <span className="ml-1 font-mono text-xs text-faint">(I4)</span>
             <input name="perBuyerCap30d" type="number" min={0} step={0.01} defaultValue={dollars(policy.perBuyerCap30dCents)} className={input} />
           </label>
         </div>
         <label className="block text-sm">
-          <span className="font-medium">Ask me when a buyer&apos;s disputes in 60 days reach</span> <span className="text-xs text-faint">(I10)</span>
+          <span className="font-medium">Ask me when a buyer&apos;s disputes in 60 days reach</span> <span className="ml-1 font-mono text-xs text-faint">(I10)</span>
           <input name="repeatDisputerThreshold" type="number" min={1} max={20} step={1} defaultValue={policy.repeatDisputerThreshold} className={input} />
         </label>
         <label className="block text-sm">
-          <span className="font-medium">Websites messages may link to, comma separated</span> <span className="text-xs text-faint">(I6)</span>
+          <span className="font-medium">Websites messages may link to, comma separated</span> <span className="ml-1 font-mono text-xs text-faint">(I6)</span>
           <input name="messageUrlAllowlist" type="text" defaultValue={policy.messageUrlAllowlist.join(", ")} className={input} />
         </label>
         <div className="flex flex-wrap items-end gap-3 border-t border-rule pt-4">
@@ -77,17 +76,17 @@ export default async function PolicyPage({ searchParams }: { searchParams: Promi
         <p className="text-xs text-graphite">{approvalsOn ? "Visitors can read this; only Mira, with her password, can save changes." : "Editing is off on this deploy (no seller password is set). The values above are the ones in force."}</p>
       </form>
 
-      <h2 className="mt-10 text-xl font-bold tracking-tight">History</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">History</h2>
       <p className="mt-1 text-sm text-graphite">Every change is a row in the append-only event log; the database refuses to edit or delete it.</p>
       {history.length === 0 ? (
         <p className="mt-3 text-sm text-faint">No changes yet: the built-in defaults are in force.</p>
       ) : (
-        <div className="mt-3 overflow-x-auto">
+        <div className="card mt-4 overflow-x-auto p-4">
           <table className="w-full text-xs">
-            <thead><tr className="border-b text-left text-faint"><th className="py-2 pr-3">When (UTC)</th>{FIELDS.map((f) => <th key={f.key} className="pr-3">{f.rule}</th>)}</tr></thead>
+            <thead><tr className="border-b border-rule text-left text-faint"><th className="py-2 pr-3">When (UTC)</th>{FIELDS.map((f) => <th key={f.key} className="pr-3">{f.rule}</th>)}</tr></thead>
             <tbody>
               {history.map((h) => (
-                <tr key={h.id} className="border-b">
+                <tr key={h.id} className="border-b border-rule last:border-0">
                   <td className="py-1.5 pr-3 whitespace-nowrap">{h.at.slice(0, 16).replace("T", " ")}</td>
                   {FIELDS.map((f) => <td key={f.key} className="pr-3">{f.show(h.policy)}</td>)}
                 </tr>

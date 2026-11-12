@@ -1,14 +1,14 @@
 ---
 name: Rebuttal
-description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, in the look of Velora UI; the firewall stamp is the one loud element.
+description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, in the look of Velora UI; the firewall verdict box is the one loud element.
 colors:
-  paper: "#f7f8f6"
-  sunk: "#eef0ed"
-  ink: "#1b2430"
-  graphite: "#5b6573"
-  faint: "#687280"
-  rule: "#d9ddd8"
-  act: "#1f4fd1"
+  paper: "#ffffff"
+  sunk: "oklch(0.97 0.004 260)"
+  ink: "oklch(0.145 0 0)"
+  graphite: "oklch(0.47 0.01 260)"
+  faint: "oklch(0.52 0.01 260)"
+  rule: "oklch(0.922 0.004 260)"
+  act: "oklch(0.546 0.245 263)"
   act-ink: "#ffffff"
   allow: "#1e6b45"
   allow-tint: "#e3f0e8"
@@ -18,42 +18,42 @@ colors:
   hold-tint: "#f6ecd6"
 typography:
   display:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(2.25rem, 5vw, 3rem)"
-    fontWeight: 800
+    fontWeight: 600
     lineHeight: 1.05
     letterSpacing: "-0.025em"
   headline:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(1.875rem, 4vw, 2.25rem)"
-    fontWeight: 800
+    fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "-0.025em"
   title:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "-0.025em"
   body:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.625
     fontFeature: "\"tnum\" 1"
   body-sm:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.625
     fontFeature: "\"tnum\" 1"
   label:
-    fontFamily: "Public Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.33
   id:
-    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontFamily: "Geist Mono, ui-monospace, monospace"
     fontSize: "0.8em"
     fontWeight: 400
 rounded:
@@ -143,6 +143,9 @@ components:
 > Nothing is pill-shaped: buttons and choices use 12px corners. On every screen exactly one blue `.btn-primary` is the next
 > click (full width on phones via `.btn-go`); options the visitor picks from are full-width `.choice` rows with an arrow.
 > On phones the run walkthrough's Back / Next bar is fixed to the bottom of the screen.
+>
+> **Every page opens the same way.** `PageHead` (`src/app/flow.tsx`): a blue `.eyebrow` (the chapter, or where the page sits, such as
+> "Sandbox store"), a 3xl/5xl semibold title, one lead paragraph. Content then sits in `.card` sheets; notices are rounded-xl tinted boxes.
 
 ## Overview
 

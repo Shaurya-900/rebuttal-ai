@@ -42,7 +42,7 @@ export default function TryFirewall() {
   );
   return (
     <section aria-labelledby="your-turn" className="card p-4 sm:p-7">
-      <h2 id="your-turn" className="font-bold">Suppose an attack did fool the AI</h2>
+      <h2 id="your-turn" className="font-semibold">Suppose an attack did fool the AI</h2>
       <p className="mt-1 max-w-2xl text-sm leading-relaxed text-graphite">
         Tap what it proposes. The real firewall judges it against the {usd(1000)} camera order. No model, nothing sent.
       </p>

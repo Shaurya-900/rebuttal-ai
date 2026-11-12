@@ -79,7 +79,7 @@ function Panel({ n, total, s, beam = false }: { n: number; total: number; s: Ste
     <section aria-labelledby={`step-${n}`} className="card overflow-hidden p-4 sm:p-7">
       {beam && <BorderBeam size={80} duration={7} />}
       <p className="text-xs font-medium uppercase tracking-wider text-act">Step {n + 1} of {total}</p>
-      <h2 id={`step-${n}`} className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">{s.title}</h2>
+      <h2 id={`step-${n}`} className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">{s.title}</h2>
       <p className="mt-2 max-w-2xl leading-relaxed text-graphite">{s.lead}</p>
       <div className="mt-5">{s.body}</div>
     </section>

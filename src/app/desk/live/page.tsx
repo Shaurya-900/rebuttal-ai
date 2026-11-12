@@ -7,7 +7,7 @@ import { Badge, displayTitle, Verdict, usd } from "../ui";
 import { liveQueue } from "../../../lib/desk";
 import { answer } from "../actions";
 import { SCENARIOS } from "../../../lib/agent/scenarios";
-import { NextStep } from "../../flow";
+import { NextStep, PageHead } from "../../flow";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +22,9 @@ const status = (s: string) => s.replaceAll("_", " ").toLowerCase();
 function Dispute({ r }: { r: LiveRec }) {
   const allowed = r.links.filter((l) => l !== "self");
   return (
-    <article className="border-t border-rule py-6">
+    <article className="card p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <h2 className="text-lg font-bold">{REASON[r.reason] ?? status(r.reason)}, {usd(r.amountCents)}</h2>
+        <h2 className="text-lg font-semibold tracking-tight">{REASON[r.reason] ?? status(r.reason)}, {usd(r.amountCents)}</h2>
         <span className="id">{r.id}</span>
       </div>
       <dl className="mt-3 grid gap-x-8 gap-y-1.5 text-sm sm:grid-cols-[auto_1fr]">
@@ -75,38 +75,37 @@ export default async function Live({ searchParams }: { searchParams: Promise<{ a
   const res = await liveRecommendations(policy);
   const approvalsOn = (process.env.DESK_APPROVER_TOKEN ?? "").length >= 12;
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-semibold tracking-tight">Real sandbox disputes</h1>
-      <p className="mt-3 leading-relaxed text-graphite">
-        These disputes were opened by hand on real PayPal sandbox payments. Their status, deadline and the actions PayPal allows are read live,
-        and the decision and firewall run on that live state. Nothing is sent from this page.
-      </p>
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <PageHead eyebrow="Live from PayPal" title="Real sandbox disputes">
+        Opened by hand on real sandbox payments. Status, deadline and the actions PayPal allows are read live, and the decision and firewall
+        run on that state. Nothing is sent from this page.
+      </PageHead>
       <p className="mt-3 text-sm leading-relaxed text-graphite">
         The sandbox gives a seller no records of its own, so each dispute is scored on the synthetic records of the matching demo case, from recorded
         model answers. The buyer&apos;s real messages are not read here, because that would need a live model call.
       </p>
 
       {!res.ok ? (
-        <p className="mt-8 rounded border border-deny/30 bg-deny-tint px-4 py-3 text-sm text-deny">
+        <p className="mt-8 rounded-xl border border-deny/30 bg-deny-tint px-4 py-3 text-sm text-deny">
           PayPal&apos;s sandbox did not answer ({res.error}). Try again in a minute; nothing else on the site depends on it.
         </p>
       ) : res.items.length === 0 ? (
         <p className="mt-8 text-sm text-graphite">No sandbox disputes were updated in the last 30 days. Open one from the store to see it here.</p>
       ) : (
-        <div className="mt-8">{res.items.map((r) => <Dispute key={r.id} r={r} />)}</div>
+        <div className="mt-8 space-y-4">{res.items.map((r) => <Dispute key={r.id} r={r} />)}</div>
       )}
       {approval && (
-        <p role="status" className="mt-6 rounded border border-rule bg-sunk px-3 py-2 text-sm">
+        <p role="status" className="mt-6 rounded-xl border border-rule bg-sunk px-4 py-3 text-sm">
           {{ approved: "Approved. The worker re-checks the firewall against PayPal's current state before sending.", rejected: "Rejected. Nothing will be sent.", stale: "That action was already answered.", denied: "Wrong approver password, or approvals are off on this deploy." }[approval] ?? ""}
         </p>
       )}
       {live.pending.length > 0 && (
         <section aria-labelledby="waiting" className="mt-10">
-          <h2 id="waiting" className="text-lg font-bold tracking-tight">Waiting for the seller</h2>
+          <h2 id="waiting" className="text-xl font-semibold tracking-tight">Waiting for the seller</h2>
           <p className="mt-1 text-sm text-graphite">Actions on these disputes that the firewall held for Mira&apos;s approval. Approval never overrides a denial.</p>
           <ul className="mt-3 space-y-2">
             {live.pending.map((p) => (
-              <li key={p.id} className="rounded border border-rule p-4 text-sm">
+              <li key={p.id} className="card p-4 text-sm sm:p-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <strong>{p.action_type}</strong>
                   {"amountCents" in p.params && <span>{usd(p.params.amountCents)}</span>}

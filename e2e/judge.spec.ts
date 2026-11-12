@@ -85,7 +85,7 @@ test("/desk/live reads real sandbox disputes and says nothing is sent", async ({
 test("/dashboard renders AG Studio with the verdict counts and per-agent attack numbers", async ({ page }) => {
   await page.goto("/dashboard");
   await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
-  await expect(page.getByText("allowed", { exact: true }).first()).toBeVisible({ timeout: 30_000 }); // the custom widget
+  await expect(page.getByText("Allowed", { exact: true }).first()).toBeVisible({ timeout: 30_000 }); // the custom widget
   await page.getByRole("tab", { name: "Attack evaluation" }).click();
   await expect(page.getByText("Rebuttal: attacks that got through").first()).toBeVisible({ timeout: 30_000 });
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

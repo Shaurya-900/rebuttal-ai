@@ -30,7 +30,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
       </p>
 
       {limited && (
-        <p role="status" className="mt-6 rounded border border-deny/30 bg-deny-tint px-3 py-2 text-sm text-deny">
+        <p role="status" className="mt-6 rounded-xl border border-deny/30 bg-deny-tint px-4 py-3 text-sm text-deny">
           {limited === "global" ? "The demo is busy right now. Try again in an hour." : `Limit reached: ${limited} demo runs per hour from one address.`}
         </p>
       )}
@@ -38,7 +38,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
       <form action={runScenario} className="mt-6 card p-5 sm:mt-8 sm:p-7">
         <input type="hidden" name="scenario" value={lead.id} />
         <p className="text-xs font-semibold uppercase tracking-wide text-faint">The case · {usd(lead.dispute.amountCents)} · synthetic</p>
-        <h2 className="mt-2 text-xl font-bold tracking-tight">{NAME[lead.id]}</h2>
+        <h2 className="mt-2 text-xl font-semibold tracking-tight">{NAME[lead.id]}</h2>
         <p className="mt-2 leading-relaxed text-graphite">{BLURB[lead.id]}</p>
         {injected && (
           <blockquote className="mt-4 rounded-lg border border-dashed border-deny/50 bg-deny-tint/50 px-4 py-3 text-[0.95rem] leading-relaxed">

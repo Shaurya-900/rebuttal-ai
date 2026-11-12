@@ -69,14 +69,14 @@ function Results({ r }: { r: Report | null }) {
               <span className="mt-1 block text-sm">got through the naive agent</span>
             </p>
           </div>
-          <p className="mt-4 rounded border border-hold/40 bg-hold-tint px-3 py-2 text-sm text-hold">
+          <p className="mt-4 rounded-xl border border-hold/40 bg-hold-tint px-4 py-3 text-sm text-hold">
             Synthetic cases only. This measures robustness against these eight attack classes, nothing more: not real-world win rates, not a proof.
           </p>
           <p className="mt-4 text-sm text-graphite">
             Run on {r.generatedAt.slice(0, 16).replace("T", " ")} UTC at commit <span className="id">{r.gitSha}</span>, {r.runsCompleted} of {r.runsRequested} runs
             per case{r.stopped ? ` (stopped: ${r.stopped})` : ""}. Model {r.models.join(", ").replace("groq:", "") || "replayed"}, temperature 0.
           </p>
-          <h2 className="mt-8 text-lg font-bold tracking-tight">By kind of attack</h2>
+          <h2 className="mt-8 text-lg font-semibold tracking-tight">By kind of attack</h2>
           <div className="mt-2 overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b text-left text-faint"><th className="py-2 pr-3">Class</th><th className="pr-3">Cases</th><th className="pr-3">Naive agent</th><th>Rebuttal</th></tr></thead>
@@ -94,7 +94,7 @@ function Results({ r }: { r: Report | null }) {
           </div>
           <p className="mt-2 text-xs text-faint">&quot;Not measured&quot;: the naive agent has no evidence store and no event dedupe, so A4 and A6 cannot be put to it fairly. One A7 case (deadline already passed) is also left out for it, because its prompt does not include the current time.</p>
 
-          <details className="group mt-8 rounded-lg border border-rule">
+          <details className="group mt-8 rounded-xl border border-rule bg-white">
             <summary className="cursor-pointer list-none px-4 py-3 font-semibold hover:bg-sunk">
               <span className="mr-2 inline-block transition-transform group-open:rotate-90" aria-hidden>›</span>How this was measured
             </summary>
@@ -105,7 +105,7 @@ function Results({ r }: { r: Report | null }) {
             text, no quarantine, no firewall) on what it proposes. Nothing here is sent to PayPal.
           </p>
 
-          <h2 className="mt-6 text-base font-bold tracking-tight">Honest cases ({r.benign.cases} cases × {r.runsCompleted} runs)</h2>
+          <h2 className="mt-6 text-base font-semibold tracking-tight">Honest cases ({r.benign.cases} cases × {r.runsCompleted} runs)</h2>
           <ul className="mt-2 list-disc pl-5 text-sm text-graphite">
             <li>Rebuttal&apos;s decision matched the ground truth in {r.benign.rebuttal.decisionCorrect} of {r.benign.runs} runs; false blocks (right decision, not allowed): {r.benign.rebuttal.falseBlocks}.</li>
             <li>The naive agent took the right action and amount in {r.benign.baseline.decisionCorrect} of {r.benign.baseline.runs} runs.</li>
@@ -114,7 +114,7 @@ function Results({ r }: { r: Report | null }) {
 
             </div>
           </details>
-          <details className="group mt-3 rounded-lg border border-rule">
+          <details className="group mt-3 rounded-xl border border-rule bg-white">
           <summary className="cursor-pointer list-none px-4 py-3 font-semibold hover:bg-sunk">
             <span className="mr-2 inline-block transition-transform group-open:rotate-90" aria-hidden>›</span>Show every case, run by run ({r.cases.length})
           </summary>

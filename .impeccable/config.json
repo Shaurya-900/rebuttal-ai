@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-11-12T08:41:21.788Z",
+        "reason": "Velora look on branch clever-dijkstra, which the user chose as the design language to follow (Nov 12)"
+      }
+    ]
+  }
+}

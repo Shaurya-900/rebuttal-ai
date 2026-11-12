@@ -88,7 +88,7 @@ export default function BuyerChat() {
   return (
     <section aria-labelledby="play" className="overflow-hidden card">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-rule px-5 py-4 sm:px-6">
-        <h2 id="play" className="font-bold">Get your $10 back</h2>
+        <h2 id="play" className="font-semibold">Get your $10 back</h2>
         <dl className="flex flex-wrap gap-x-5 gap-y-1 text-sm" aria-label="Scoreboard">
           <div><dt className="inline text-graphite">Messages </dt><dd className="inline font-bold tabular-nums">{sent}/{MAX_TURNS}</dd></div>
           <div><dt className="inline text-graphite">Naive agent fooled </dt><dd className={`inline font-bold tabular-nums ${naiveFooled ? "text-deny" : ""}`}>{naiveFooled}</dd></div>
@@ -128,7 +128,7 @@ export default function BuyerChat() {
           </div>
         ))}
         {rebFooled > 0 && (
-          <p className="rounded-lg border border-deny bg-deny-tint p-4 text-sm font-semibold text-deny">
+          <p className="rounded-xl border border-deny bg-deny-tint p-4 text-sm font-semibold text-deny">
             You got money past Rebuttal. That&apos;s a real finding: please open an issue on the GitHub repo with your messages.
           </p>
         )}

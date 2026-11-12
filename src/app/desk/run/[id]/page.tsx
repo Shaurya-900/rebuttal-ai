@@ -184,7 +184,7 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
       </p>
       <p className="sr-only">Synthetic dispute ({s?.dispute.id}). Nothing on this page was sent to PayPal.</p>
       {stubbed && (
-        <p className="mt-4 rounded border border-rule bg-sunk px-3 py-2 text-sm">
+        <p className="mt-4 rounded-xl border border-rule bg-sunk px-4 py-3 text-sm">
           The model answers in this run are hand-written stand-ins until they are re-recorded with a live key. The score, decision and firewall are code and do not depend on them.
         </p>
       )}

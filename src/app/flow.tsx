@@ -8,6 +8,17 @@ export const CHAPTERS = [
   { n: 3, href: "/verify", title: "Check the receipts" },
 ] as const;
 
+/** How every page opens: a blue eyebrow, a big title, one lead paragraph (same as the chapter pages). */
+export function PageHead({ eyebrow, title, children }: { eyebrow: string; title: string; children?: React.ReactNode }) {
+  return (
+    <>
+      <p className="eyebrow">{eyebrow}</p>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
+      {children && <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite sm:text-lg">{children}</p>}
+    </>
+  );
+}
+
 /** The one action that closes a page. */
 export function NextStep({ href, action, children }: { href: string; action: string; children: React.ReactNode }) {
   const external = href.startsWith("http");
