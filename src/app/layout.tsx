@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-20 border-b border-rule/70 bg-white/70 backdrop-blur-md">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3">
             <Link href="/" className="flex items-center gap-2">
-              <span aria-hidden className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-brand-from to-brand-to text-sm font-bold text-white shadow-sm">R</span>
+              <span aria-hidden className="grid size-7 place-items-center rounded-lg bg-act text-sm font-bold text-act-ink">R</span>
               <span className="text-lg font-semibold tracking-tight text-ink">Rebuttal</span>
               <span className="hidden text-xs text-hold sm:inline">PayPal sandbox · synthetic data</span>
             </Link>

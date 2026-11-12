@@ -24,7 +24,7 @@ export function NextStep({ href, action, children }: { href: string; action: str
   const external = href.startsWith("http");
   const cls = "btn-primary btn-go";
   return (
-    <section aria-label="Next step" className="card mt-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 overflow-hidden bg-gradient-to-br from-white to-sunk p-5 sm:mt-16 sm:p-8">
+    <section aria-label="Next step" className="card mt-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 p-5 sm:mt-16 sm:p-8">
       <p className="max-w-md text-base leading-relaxed text-graphite"><span className="block font-semibold text-ink">What to do next</span>{children}</p>
       {external ? <a href={href} className={cls}>{action}</a> : <Link href={href} className={cls}>{action} →</Link>}
     </section>

@@ -1,6 +1,6 @@
 ---
 name: Rebuttal
-description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, in the look of Velora UI; the firewall verdict box is the one loud element.
+description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, plain on purpose; the firewall verdict box is the one loud element.
 colors:
   paper: "#ffffff"
   sunk: "oklch(0.97 0.004 260)"
@@ -131,12 +131,14 @@ components:
 
 # Design System: Rebuttal
 
-> **Nov 2026 overhaul.** The visual layer now follows [Velora UI](https://github.com/ColorlibHQ/velora-ui) (MIT): Geist and Geist Mono,
-> a white page with a soft blue glow and grid pattern at the top, near-black pill buttons (`.btn-primary`), outline pills (`.btn-quiet`),
-> rounded-2xl `.card` sheets with a faint blue shadow, `.text-brand` gradient words, and a frosted sticky header. Three Velora components are
-> vendored in `src/components/velora/` with their licence: `GridPattern` (home hero), `BorderBeam` (opening scene, current walkthrough step)
-> and `NumberTicker` (attack counts). Token values live in `src/app/globals.css`. Where this file's older notes on Public Sans, IBM Plex Mono,
-> paper tones or flat sheets disagree with that, the overhaul wins; the stamp inks and the story rules are unchanged.
+> **Nov 2026 overhaul.** Geist and Geist Mono on a plain white page, one blue for the next click (`.btn-primary`), quiet
+> outlined buttons (`.btn-quiet`), rounded-2xl `.card` sheets with a hairline shadow, and a frosted sticky header. Token values live
+> in `src/app/globals.css`. Where this file's older notes on Public Sans, IBM Plex Mono, paper tones or flat sheets disagree with that,
+> the overhaul wins; the stamp inks and the story rules are unchanged.
+>
+> **No decoration that moves on its own.** No glows, grid patterns, moving borders, gradient text or counting numbers: the
+> interactive parts (the intro card, the chat, the firewall playground, the tamper test) carry the page. Motion is only a reply to
+> something the visitor did. The current walkthrough step is marked with a solid blue border.
 >
 > **No stamps, no pills.** The rotated ink stamp is gone. A firewall verdict is a plain box (`Verdict` in `src/app/desk/ui.tsx`):
 > an icon, "Blocked by the firewall" / "Allowed by the firewall" / "Held for Mira to approve", and the rule in words.

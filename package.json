@@ -27,7 +27,6 @@
     "ag-studio": "3.0.0",
     "ag-studio-react": "3.0.0",
     "drizzle-orm": "^0.45.4",
-    "motion": "^13.5.1",
     "next": "^16.4.4",
     "pdf-lib": "^1.17.1",
     "pg": "^8.23.1",
