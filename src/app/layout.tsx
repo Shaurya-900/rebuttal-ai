@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { IBM_Plex_Mono, Public_Sans } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { NavLinks } from "./nav";
 
 const sans = Public_Sans({ subsets: ["latin"], variable: "--font-public-sans", display: "swap" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
@@ -30,9 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="mx-auto flex max-w-5xl flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-4 py-4">
             <Link href="/" className="text-lg font-extrabold tracking-tight text-ink">Rebuttal</Link>
             <nav aria-label="Main" className="-mx-1 flex flex-wrap gap-x-1 text-sm text-graphite">
-              {NAV.map(([href, label]) => (
-                <Link key={href} href={href} className="rounded px-2 py-1 hover:bg-sunk hover:text-ink">{label}</Link>
-              ))}
+              <NavLinks items={NAV} />
             </nav>
           </div>
           <p className="border-t border-rule bg-hold-tint/60 px-4 py-1.5 text-center text-xs text-hold">

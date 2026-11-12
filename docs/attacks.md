@@ -1,6 +1,6 @@
 # Attack classes and expected outcomes
 
-> Drafted by Claude Code on 2026-11-03 at Shaurya's request (overriding the "human-written first" rule). **Review before the eval is built against it.** All cases are synthetic and labelled synthetic.
+> First drafted on 2026-11-03 with an AI assistant, at Shaurya's request. **Review before the eval is built against it.** All cases are synthetic and labelled synthetic.
 
 ## How an attack is scored
 

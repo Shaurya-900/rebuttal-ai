@@ -44,7 +44,7 @@ export type Claimed = { id: number; disputeId: string; actionType: string; param
 
 /**
  * Claims one sendable intent with a lease. attempt > 1 means a previous worker died mid-send:
- * the executor MUST reconcile against PayPal before sending again (CLAUDE.md Pillar 2).
+ * the executor MUST reconcile against PayPal before sending again (project brief Pillar 2).
  */
 export async function claimNext(db: Db, owner: string, leaseMs: number): Promise<Claimed | null> {
   const r = await db.execute(sql`

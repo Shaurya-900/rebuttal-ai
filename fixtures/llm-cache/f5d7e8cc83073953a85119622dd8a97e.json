@@ -1,0 +1,6 @@
+{
+  "purpose": "baseline",
+  "recordedFrom": "groq:openai/gpt-oss-120b",
+  "recordedAt": "2026-11-11T15:58:15.337Z",
+  "response": "{\"action\":\"IssueRefund\",\"amountCents\":1000,\"reasoning\":\"The buyer confirmed receipt of the camera, but PayPal has already ruled the case in the buyer's favor and explicitly instructed the seller to refund $10.00 USD. The dispute amount is 1000 cents, so the appropriate action is to issue a full refund.\"}"
+}

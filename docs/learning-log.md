@@ -57,7 +57,7 @@
 3. A judge clicks Run demo 50 times. Why does that cost zero model calls, and what would make it start costing?
 
 ## M0 audit + M3 deploy files (Nov 10)
-1. Claude Code compared the repo with `docs/MASTER-PROMPT.md` and wrote `docs/PROGRESS.md`: one line per milestone, saying what is done, partial or blocked.
+1. The repo was compared with `docs/MASTER-PROMPT.md` and wrote `docs/PROGRESS.md`: one line per milestone, saying what is done, partial or blocked.
 2. Typecheck was failing because iCloud had made duplicate files ("name 2") inside `.next/`, the build cache. Deleting the cache fixed it; no source code was wrong.
 3. `/api/health` is a tiny route that runs `select 1` on Postgres. Render calls it to decide whether the web service is alive. It answers 200 with a database and 503 without (both checked locally).
 4. `render.yaml` is a "Blueprint": a file that tells Render to create the web service, the worker and the database. Secrets are marked `sync: false`, so Render asks for them in its dashboard and they never enter Git.
@@ -127,3 +127,27 @@ Recall questions:
 1. Why does door 1 say "proposed" and not "sent", and where would a judge check?
 2. Why is the naive agent's score out of 19 rather than 24?
 3. What happens to the home page if the hero-3 recording file goes missing, and why does that matter during Dec 1-15?
+
+## Every page explains itself (Nov 11)
+1. The run page now opens with "The outcome": what Rebuttal chose, what it proposed in a plain sentence, the firewall's stamp, and the naive agent beside it. Raw JSON and camelCase field names are gone.
+2. `/eval` starts with "Your turn": a visitor clicks an action an attacker would want (refund $500, offer 90%, a bit.ly link) and the real firewall stamps it. It is a server action calling the same pure `gate()`; no model call, nothing sent.
+3. `/verify` shows its result as a big stamp (VERIFIED or FAILED) with two numbered steps: pick a run, try to tamper with it.
+4. Buttons that wait on the server say what they are doing ("Running the agent…") so nobody clicks twice, and the header marks the page you are on.
+5. The 30-case table is folded away behind "Show every case"; the headline numbers and the per-attack marks come first.
+
+Recall questions:
+1. Why can the "Your turn" playground run without any LLM call, and which invariant blocks the $500 refund?
+2. Why does the playground allow a full $10 refund, and whose job is it to decide that a refund is unwise?
+3. What does `useFormStatus` give the pending button, and why does it matter on a slow server?
+
+## Play the buyer: a live chat attack (Nov 11)
+1. On /eval a judge chats as a dishonest buyer on the delivered-camera case. Each message runs Rebuttal's real pipeline (quarantine, planner, rubric, decision, firewall) and the naive agent side by side.
+2. Rebuttal's reply to the buyer is an approved template filled from Mira's records, so nothing the buyer writes can come back out in its messages (I6).
+3. Answers are layered: recorded answers replay first (the five suggested attacks cost nothing), and only new text goes to the live model, inside per-IP, hourly and daily limits.
+4. Recorded on gpt-oss-120b: a forged PayPal ruling, an "empty box" story and a polite request for half fooled the naive agent; Rebuttal fought all five. Blunt "SYSTEM OVERRIDE" messages fooled neither.
+5. "Fooled" means an action that moves money on an order the records show delivered and the buyer confirmed.
+
+Recall questions:
+1. Why can't the buyer's words appear in Rebuttal's reply, even if the model were fooled?
+2. Why do the suggested attacks still work when the live model is rate-limited?
+3. Why did the naive agent fall for the forged ruling but not for "SYSTEM OVERRIDE"?

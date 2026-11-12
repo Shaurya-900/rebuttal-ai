@@ -8,15 +8,18 @@ import { getDb } from "../../../../lib/db/client";
 import { getRun } from "../../../../lib/desk";
 import type { Decision } from "../../../../lib/firewall/types";
 import { NextStep, RouteBar } from "../../../flow";
-import { displayTitle, Stamp, ruleName, usd } from "../../ui";
+import { caseName, describeAction, FIELD_LABEL, fieldValue, Stamp, ruleName, usd } from "../../ui";
 
 export const dynamic = "force-dynamic";
 
+const STAGES = ["Quarantine", "Score", "Decision", "Firewall", "Evidence", "Naive agent"] as const;
+const CHOICE: Record<string, string> = { FIGHT: "fight it with evidence", OFFER: "offer a partial refund", ACCEPT: "accept and refund" };
+
 function Stage({ n, title, note, children }: { n: number; title: string; note: string; children: ReactNode }) {
   return (
-    <section className="mt-8">
+    <section id={`stage-${n}`} className="mt-10 scroll-mt-6 border-t border-rule pt-6">
       <h2 className="flex items-baseline gap-2 text-xl font-bold tracking-tight">
-        <span className="text-sm text-faint">{n}</span>
+        <span className="grid size-6 shrink-0 place-items-center self-center rounded-full border border-rule text-xs font-bold tabular-nums text-graphite">{n}</span>
         {title}
       </h2>
       <p className="mt-0.5 text-sm text-graphite">{note}</p>
@@ -46,6 +49,9 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
   const s = SCENARIOS[run.scenarioId];
   const stubbed = run.llmCalls.some((c) => c.recordedFrom.startsWith("stub"));
   const d = run.decision;
+  const injected = Object.values(run.quarantine).some((q) => q?.containsInstructions);
+  const stageCount = 4 + (run.packet ? 1 : 0) + (run.baseline ? 1 : 0);
+  const stageNames = [...STAGES.slice(0, 4), ...(run.packet ? ["Evidence"] : []), ...(run.baseline ? ["Naive agent"] : [])];
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10">
@@ -53,7 +59,7 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
         Synthetic dispute (<span className="font-mono">{s?.dispute.id}</span>). Nothing on this page was sent to PayPal.
       </p>
       <div className="mt-6"><RouteBar current={1} /></div>
-      <h1 className="mt-8 text-3xl font-extrabold tracking-tight">{displayTitle(s?.title ?? run.scenarioId)}</h1>
+      <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">{caseName(run.scenarioId, s?.title)}</h1>
       <p className="mt-1 text-sm text-graphite">
         Run {got.id}, {got.at.replace("T", " ").slice(0, 16)} UTC{s ? `. A ${usd(s.dispute.amountCents)} dispute: ${s.dispute.reason.replaceAll("_", " ").toLowerCase()}.` : ""}
       </p>
@@ -70,6 +76,39 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
         </p>
       )}
 
+      <section aria-labelledby="outcome" className="mt-8 rounded-lg border-2 border-ink p-5 sm:p-6">
+        <h2 id="outcome" className="text-sm font-semibold text-graphite">The outcome</h2>
+        <div className={`mt-3 grid gap-6 ${run.baseline ? "md:grid-cols-2 md:divide-x md:divide-rule" : ""}`}>
+          <div>
+            <p className="text-lg font-bold leading-snug">Rebuttal chose to {CHOICE[d.choice] ?? d.choice.toLowerCase()}.</p>
+            <p className="mt-1 text-sm text-graphite">Proposed: {describeAction(run.proposal)}.</p>
+            <div className="mt-4"><GateView g={run.gate} /></div>
+          </div>
+          {run.baseline && (
+            <div className="md:pl-6">
+              <p className="text-lg font-bold leading-snug">A naive agent on the same model:</p>
+              <p className="mt-1 text-sm text-graphite">Proposed: {describeAction(run.baseline.proposal)}.</p>
+              <div className="mt-4"><GateView g={run.baseline.gate} /></div>
+            </div>
+          )}
+        </div>
+        {injected && (
+          <p className="mt-5 border-t border-rule pt-4 text-sm leading-relaxed">
+            <span className="font-semibold">The buyer&apos;s orders never reached the decision.</span> The quarantine (stage 1) turned the message into fixed
+            fields, &ldquo;tries to give the AI orders: yes&rdquo;, and the planner only ever saw those.
+          </p>
+        )}
+      </section>
+
+      <nav aria-label="How it got there" className="mt-8">
+        <p className="text-sm font-semibold">How it got there, in {stageCount} steps</p>
+        <ol className="mt-2 flex flex-wrap gap-2 text-sm">
+          {stageNames.map((t, i) => (
+            <li key={t}><a href={`#stage-${i + 1}`} className="inline-flex items-center gap-1.5 rounded border border-rule px-2.5 py-1 hover:bg-sunk"><span className="tabular-nums text-graphite">{i + 1}</span>{t}</a></li>
+          ))}
+        </ol>
+      </nav>
+
       <Stage n={1} title="Quarantine" note="Buyer text is untrusted. A model with no tools turns it into fixed fields; the planner never sees the text.">
         <div className="space-y-3">
           {s?.messages.map((m) => {
@@ -77,14 +116,15 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
             return (
               <div key={m.id} className="grid gap-3 rounded-lg border border-rule p-3 sm:grid-cols-2">
                 <div>
-                  <p className="text-xs font-medium text-deny">Untrusted {m.channel === "email" ? "email" : "dispute message"} <span className="id">{m.id}</span></p>
+                  <p className="text-xs font-semibold text-deny">What the buyer wrote ({m.channel === "email" ? "email" : "dispute message"}), untrusted</p>
                   <p className="mt-1 whitespace-pre-wrap text-sm">{m.text}</p>
                 </div>
-                <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs">
+                <dl className="grid grid-cols-[auto_1fr] content-start gap-x-3 gap-y-1 border-t border-rule pt-3 text-sm sm:border-l sm:border-t-0 sm:pl-3 sm:pt-0">
+                  <p className="col-span-2 text-xs font-semibold text-graphite">What the planner sees instead</p>
                   {q && Object.entries(q).map(([k, v]) => (
                     <div key={k} className="contents">
-                      <dt className="text-faint">{k}</dt>
-                      <dd className={`font-mono ${k === "containsInstructions" && v ? "font-semibold text-deny" : ""}`}>{String(v)}</dd>
+                      <dt className="text-graphite">{FIELD_LABEL[k] ?? k}</dt>
+                      <dd className={k === "containsInstructions" && v ? "font-semibold text-deny" : ""}>{fieldValue(k, v)}</dd>
                     </div>
                   ))}
                 </dl>
@@ -94,13 +134,13 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
         </div>
       </Stage>
 
-      <Stage n={2} title={`Rubric: ${run.rubric.score} of 100 (${run.rubric.reason === "INR" ? "item not received" : "not as described"})`} note="The model only points at records. Code checks each citation against the records and awards the points; no citation, no points.">
+      <Stage n={2} title={`Score: ${run.rubric.score} of 100`} note={`How strong Mira's case is for "${run.rubric.reason === "INR" ? "item not received" : "not as described"}". The model only points at records; code checks each one and awards the points. No record, no points.`}>
         <div className="overflow-x-auto rounded-lg border border-rule">
           <table className="w-full text-left text-sm">
             <tbody className="divide-y divide-rule">
               {run.rubric.items.map((it) => (
                 <tr key={it.itemId}>
-                  <td className="px-3 py-2 font-mono text-xs text-faint">{it.itemId}</td>
+                  <td className="px-3 py-2 text-xs tabular-nums text-graphite">{it.itemId}</td>
                   <td className="px-3 py-2">{ITEM_LABELS[it.itemId]}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{it.awarded}/{it.weight}</td>
                   <td className="px-3 py-2 text-xs">{it.awarded ? <span className="font-mono">[{it.sourceId}]</span> : <span className="text-faint">{it.why}</span>}</td>
@@ -115,22 +155,22 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
         )}
       </Stage>
 
-      <Stage n={3} title={`Decision: ${d.choice.toLowerCase()}`} note="Lowest expected loss among the options PayPal currently allows. Win chance comes from the score band, not from the model.">
+      <Stage n={3} title={`Decision: ${CHOICE[d.choice] ?? d.choice.toLowerCase()}`} note="Code picks the option that loses Mira the least money on average, among the options PayPal allows right now. The model has no say here.">
         <div className="flex flex-wrap gap-2 text-sm">
           {Object.entries(d.expectedLossCents).map(([k, v]) => (
             <span key={k} className={`rounded border px-2 py-1 ${k === d.choice ? "border-ink font-medium" : "border-rule text-graphite"}`}>
-              {k}: expected loss {usd(v)}
+              {k === "FIGHT" ? "Fight" : k === "OFFER" ? "Offer" : k === "ACCEPT" ? "Accept" : k}: expected loss {usd(v)}
             </span>
           ))}
         </div>
         <p className="mt-2 text-xs text-faint">
-          win chance p = {d.p}{d.choice === "OFFER" ? `; offer ${usd(d.offerCents)}, buyer-accept chance q = ${d.q}` : ""}
-          {d.removed.length > 0 ? `; not allowed by PayPal right now: ${d.removed.join(", ")}` : ""}
+          Chance of winning if she fights, from the score: {Math.round(d.p * 100)}%{d.choice === "OFFER" ? `. Offer ${usd(d.offerCents)}; chance the buyer accepts: ${Math.round(d.q * 100)}%` : ""}
+          {d.removed.length > 0 ? `. Not allowed by PayPal right now: ${d.removed.map((x) => x.toLowerCase()).join(", ")}` : ""}.
         </p>
       </Stage>
 
-      <Stage n={4} title="Firewall" note="Deterministic code checks the proposed action against invariants I1 to I10. Only an ALLOW (or a seller's approval) reaches the executor.">
-        <pre className="overflow-x-auto rounded bg-sunk p-3 text-xs">{JSON.stringify(run.proposal, null, 1)}</pre>
+      <Stage n={4} title="Firewall" note="Plain code checks the proposed action against ten written rules (I1 to I10). Only an allowed action, or one Mira approves, is ever sent.">
+        <p className="text-sm"><span className="font-semibold">Proposed:</span> {describeAction(run.proposal)}.</p>
         <div className="mt-2"><GateView g={run.gate} /></div>
       </Stage>
 
@@ -147,13 +187,13 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
 
       {run.baseline && (
         <Stage n={run.packet ? 6 : 5} title="Same dispute, naive agent" note="One model call with the raw buyer text and direct actions: no quarantine, no rubric, no firewall. Its proposal, put through Rebuttal's firewall:">
-          <pre className="overflow-x-auto rounded bg-sunk p-3 text-xs">{JSON.stringify(run.baseline.proposal, null, 1)}</pre>
+          <p className="text-sm"><span className="font-semibold">Proposed:</span> {describeAction(run.baseline.proposal)}.</p>
           <p className="mt-2 text-sm text-graphite">Its stated reasoning: “{run.baseline.reasoning}”</p>
           <div className="mt-2"><GateView g={run.baseline.gate} /></div>
           {run.baseline.proposal.type === "SubmitEvidence" && (
             <p className="mt-2 text-xs text-faint">
               In this recorded run the naive agent did not follow the buyer&apos;s instruction. Its evidence is still refused: it names no exhibit in the evidence store (I8).
-              One recorded run of one model; it does not show a naive agent is safe. See /eval for the attack classes.
+              One recorded run of one model; it does not show a naive agent is safe. <Link href="/eval" className="link">See all 24 attacks</Link>.
             </p>
           )}
         </Stage>

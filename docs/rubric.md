@@ -1,6 +1,6 @@
 # Rubric: scoring and decision rules
 
-> Drafted by Claude Code on 2026-11-03 at Shaurya's request (overriding the "human-written first" rule). **Review before `src/lib/agent/rubric.ts` is built against it.** Every probability below is a **modelling assumption on synthetic data**, not a measured win rate; values marked *(default)* are to be tuned in the eval.
+> First drafted on 2026-11-03 with an AI assistant, at Shaurya's request. **Review before `src/lib/agent/rubric.ts` is built against it.** Every probability below is a **modelling assumption on synthetic data**, not a measured win rate; values marked *(default)* are to be tuned in the eval.
 
 ## Rules that apply to every item
 

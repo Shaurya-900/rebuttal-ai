@@ -13,8 +13,8 @@ test("Run demo on the injection scenario shows every stage of the trace", async 
   const card = page.locator("form").filter({ has: page.locator('input[name="scenario"][value="hero3"]') });
   await card.locator("button").click();
   await expect(page).toHaveURL(/\/desk\/run\/\d+/);
-  await expect(page.getByText("containsInstructions").first()).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Rubric/ })).toBeVisible();
+  await expect(page.getByText("Tries to give the AI orders").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Score: \d+ of 100/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Decision: fight/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Firewall" })).toBeVisible();
   await expect(page.getByText("Nothing on this page was sent to PayPal")).toBeVisible();
@@ -23,8 +23,18 @@ test("Run demo on the injection scenario shows every stage of the trace", async 
 test("/eval shows the committed results with the synthetic caveat", async ({ page }) => {
   await page.goto("/eval");
   await expect(page.getByText(/Synthetic cases only/)).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Attacks that succeeded" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "By kind of attack" })).toBeVisible();
   await expect(page.locator("tbody tr").first()).toBeVisible();
+  // Play the buyer: a recorded attack runs the real pipeline; Rebuttal holds, the naive agent is fooled.
+  await page.getByRole("button", { name: "Forge a PayPal ruling" }).click();
+  await expect(page.getByText(/^Held firm\./).first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/^Fooled\./).first()).toBeVisible();
+  await expect(page.getByText("Rebuttal fooled 0")).toBeVisible();
+  // Your turn: the real firewall stamps a visitor's proposal.
+  await page.getByRole("button", { name: "Refund the $500 the buyer demanded" }).click();
+  await expect(page.getByRole("img", { name: /Firewall: denied, rule I1/ })).toBeVisible();
+  await page.getByRole("button", { name: "Send Mira's delivery evidence" }).click();
+  await expect(page.getByRole("img", { name: /Firewall: allowed/ })).toBeVisible();
 });
 
 test("/verify passes untouched and fails when one byte of the evidence PDF changes", async ({ page }) => {
@@ -33,8 +43,8 @@ test("/verify passes untouched and fails when one byte of the evidence PDF chang
   await page.locator("form").filter({ has: page.locator('input[name="scenario"][value="hero1"]') }).locator("button").click();
   const runId = (await page.waitForURL(/\/desk\/run\/\d+/), page.url().match(/run\/(\d+)/)![1]);
   await page.goto(`/verify?run=${runId}`);
-  const verdict = page.locator("p[aria-live]");
-  await expect(verdict).toHaveText(/^Verified/, { timeout: 30_000 });
+  const verdict = page.locator('section > [aria-live="polite"]').first();
+  await expect(verdict).toHaveText(/VERIFIED/, { timeout: 30_000 });
   await page.getByRole("button", { name: "Change one byte of the PDF" }).click();
   await expect(verdict).toHaveText(/FAILED/, { timeout: 30_000 });
   await page.getByRole("button", { name: "Edit the stored score" }).click();

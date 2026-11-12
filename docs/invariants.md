@@ -1,6 +1,6 @@
 # Firewall invariants
 
-> Drafted by Claude Code on 2026-11-03 at Shaurya's request (overriding the "human-written first" rule). **Review before any test is written against it.** Values marked *(default)* are policy placeholders Shaurya should confirm.
+> First drafted on 2026-11-03 with an AI assistant, at Shaurya's request. **Review before any test is written against it.** Values marked *(default)* are policy placeholders Shaurya should confirm.
 
 The firewall (`src/lib/firewall/gate.ts`) takes one **proposed action** plus a **snapshot** of trusted state and returns exactly one decision:
 
