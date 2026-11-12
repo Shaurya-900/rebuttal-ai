@@ -103,3 +103,13 @@
 .intro-veil { display: none; }
 html[data-intro] .intro-veil { display: block; }
 html[data-intro] body { overflow: hidden; }
+
+/* The intro's one line of text: a soft highlight sweeps across it, like the reference. */
+.intro-hint {
+  color: var(--graphite);
+  background: linear-gradient(90deg, var(--graphite) 40%, var(--ink) 50%, var(--graphite) 60%) 0 0 / 300% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: hint 3.2s ease-in-out infinite;
+}
+@keyframes hint { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .intro-hint { animation: none; -webkit-text-fill-color: currentColor; } }

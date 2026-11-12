@@ -169,3 +169,12 @@ Recall: (a) What three parts does `PageHead` draw? (b) Why fix the test's spelli
 5. A browser test covers it: intro shows once, Enter approves, the choice is remembered.
 
 Recall: (a) Why check localStorage in a head script instead of inside React? (b) What decides whether a release falls or gets ejected? (c) Why is the card clipped at the slot line?
+
+## A real 3D card and a solid reader (Nov 12)
+1. The intro is now a 3D scene (three.js through react-three-fiber) with a physics engine (Rapier): the card is a rigid body, the reader is solid.
+2. While you hold the card, our code places it ("kinematic"); when you let go, physics owns it ("dynamic"): it falls, and bounces off the reader unless it lands edge-first in the groove.
+3. Continuous collision detection (CCD) stops fast objects tunnelling through walls, but it also blocked our own placements, so it is on only while the card falls.
+4. Card faces and the reader's display are drawn on canvases in code: no image files, nothing to license, and no copied trademarks.
+5. The 3D code loads only when the intro shows, and "/?intro=1" (the footer's "Replay the intro") brings it back.
+
+Recall: (a) What is the difference between a kinematic and a dynamic body? (b) Why was the card getting stuck when it respawned? (c) Why does releasing the card in the groove set its speed to zero?

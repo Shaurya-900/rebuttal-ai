@@ -97,8 +97,8 @@ test("first visit shows the card-swipe intro once; Enter on the card or Skip get
   const intro = page.getByRole("dialog", { name: "Welcome to Rebuttal" });
   await expect(intro).toBeVisible();
   await page.getByRole("button", { name: /Rebuttal card/ }).press("Enter"); // keyboard path: no dragging needed
-  await expect(page.getByText("APPROVED")).toBeVisible();
-  await expect(intro).toBeHidden({ timeout: 5_000 });
+  await expect(page.getByText("APPROVED")).toBeAttached({ timeout: 20_000 }); // the reader's display, mirrored for screen readers
+  await expect(intro).toBeHidden({ timeout: 10_000 });
   await page.reload();
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(intro).toBeHidden(); // remembered: never shown twice
