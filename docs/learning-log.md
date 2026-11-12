@@ -151,3 +151,12 @@ Recall questions:
 1. Why can't the buyer's words appear in Rebuttal's reply, even if the model were fooled?
 2. Why do the suggested attacks still work when the live model is rate-limited?
 3. Why did the naive agent fall for the forged ruling but not for "SYSTEM OVERRIDE"?
+
+## One look on every page (Nov 12)
+1. The redesign from the `clever-dijkstra` branch (three chapters, Velora look, plain verdict boxes) is now the base.
+2. Pages outside the chapters (store, policy, live disputes, dashboard) used to open with a bare title; they now share one `PageHead`.
+3. A shared component means a change to how pages open happens in one file, not five.
+4. A test written for the redesign looked for "allowed" while the widget printed "Allowed"; tests need running, not just editing.
+5. The design notes (DESIGN.md) were updated to match the CSS, because the CSS is what judges actually see.
+
+Recall: (a) What three parts does `PageHead` draw? (b) Why fix the test's spelling instead of the widget? (c) Where do the design token values really live?
