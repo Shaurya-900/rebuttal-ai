@@ -3,12 +3,12 @@
 /* Rebuttal design tokens. Paper and ink: a filing desk, not a dashboard.
    Stamp inks are the only saturated colours, and they carry meaning (allowed / denied / held). */
 :root {
-  --paper: #f7f8f6;
-  --sunk: #eef0ed;
+  --paper: #fbfbf9;
+  --sunk: #f0f2ef;
   --ink: #1b2430;
   --graphite: #5b6573;
   --faint: #687280; /* 4.6:1 on paper: small text must pass WCAG AA */
-  --rule: #d9ddd8;
+  --rule: #e2e5e0;
   --act: #1f4fd1;
   --act-ink: #ffffff;
   --allow: #1e6b45;
@@ -20,25 +20,7 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #12161b;
-    --sunk: #1a2027;
-    --ink: #e6e9ec;
-    --graphite: #a3acb7;
-    --faint: #848d98;
-    --rule: #2c333c;
-    --act: #8aa6ff;
-    --act-ink: #0d1530;
-    --allow: #6cc896;
-    --allow-tint: #15291f;
-    --deny: #f2837a;
-    --deny-tint: #33191a;
-    --hold: #e6b04a;
-    --hold-tint: #2e2412;
-    color-scheme: dark;
-  }
-}
+/* One light theme on purpose: judges see the same calm paper page whatever their OS is set to. */
 
 @theme inline {
   --color-paper: var(--paper);
@@ -110,4 +92,12 @@
     from { transform: rotate(-7deg) scale(1.12); }
     to { transform: rotate(-2.5deg) scale(1); opacity: 1; }
   }
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [class*="animate-[fade"] { animation: none !important; }
 }

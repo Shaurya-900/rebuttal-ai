@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { getDb } from "../../lib/db/client";
 import { recentRuns } from "../../lib/desk";
 import Verifier from "./verifier";
-import { NextStep, RouteBar } from "../flow";
+import { NextStep } from "../flow";
 
 export const dynamic = "force-dynamic";
 
@@ -10,12 +9,11 @@ export default async function Verify({ searchParams }: { searchParams: Promise<{
   const { run } = await searchParams;
   const runs = (await recentRuns(getDb(), 20)).map((r) => ({ id: Number(r.id), scenario: r.scenario, choice: r.choice }));
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <RouteBar current={3} />
-      <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">Check the receipts</h1>
-      <p className="mt-3 max-w-2xl leading-relaxed text-graphite">
-        Every run is written to a log that can&apos;t be edited, with each entry chained to the one before by its hash. Your browser re-checks
-        it below with its own maths, without trusting the server. Then tamper with it and watch the check fail.
+    <main className="mx-auto max-w-3xl px-4 py-12">
+      <p className="text-sm font-semibold text-act">Chapter 3 of 3</p>
+      <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Check the receipts</h1>
+      <p className="mt-3 max-w-2xl text-lg leading-relaxed text-graphite">
+        Every run is written to a signed log that can&apos;t be edited. Your browser has just re-checked it on its own. Now tamper with it and watch it fail.
       </p>
       <details className="mt-3 max-w-2xl text-sm text-graphite">
         <summary className="cursor-pointer font-medium text-ink">How it works</summary>
@@ -30,8 +28,8 @@ export default async function Verify({ searchParams }: { searchParams: Promise<{
         Limits: timestamps are the server&apos;s own, and the head is signed when this page asks for it. This shows the stored history has not been
         rewritten since it was chained; it does not prove when each row was written. Data in the runs is synthetic.
       </p>
-      <NextStep href="/desk/live" action="Last stop: real PayPal disputes">
-        You have walked all three doors. One more thing worth a look: the same firewall reading real PayPal sandbox disputes, live, with nothing sent.
+      <NextStep href="/desk/live" action="Bonus: real PayPal disputes">
+        That&apos;s the story. One more thing worth a look: the same firewall reading real PayPal sandbox disputes, live, with nothing sent.
       </NextStep>
     </main>
   );

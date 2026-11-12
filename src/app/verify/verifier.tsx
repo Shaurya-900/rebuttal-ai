@@ -100,7 +100,7 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
   const failed = checks.some((c) => c.ok === false);
   return (
-    <section className="mt-6 rounded-lg border-2 border-ink p-5 sm:p-6">
+    <section className="mt-8 rounded-xl border border-rule bg-white p-5 sm:p-7">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-live="polite">
         <span className={`stamp ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`}>
           <span className="text-lg">{busy ? "CHECKING" : failed ? "FAILED" : "VERIFIED"}</span>
@@ -113,18 +113,18 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
       <div className="mt-6 grid gap-5 border-t border-rule pt-5">
         <label className="text-sm">
-          <span className="block font-semibold">1. Pick a run</span>
+          <span className="block font-semibold">Which run</span>
           <select className="field block w-auto max-w-full" value={runId ?? ""} onChange={(e) => setRunId(e.target.value ? Number(e.target.value) : null)}>
             <option value="">Chain only</option>
             {runs.map((r) => <option key={r.id} value={r.id}>Run {r.id}: {caseName(r.scenario)} ({r.choice?.toLowerCase()})</option>)}
           </select>
         </label>
         <div className="text-sm">
-          <span className="block font-semibold">2. Try to tamper with it</span>
+          <span className="block font-semibold">Now tamper with it</span>
           <div className="mt-1 flex flex-wrap gap-2" role="group" aria-label="Tamper demo">
           {([["none", "Leave it untouched"], ["pdf", "Change one byte of the PDF"], ["record", "Edit the stored score"]] as const).map(([t, label]) => (
             <button key={t} type="button" onClick={() => setTamper(t)} aria-pressed={tamper === t}
-              className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-ink bg-ink text-paper" : "border-rule hover:bg-sunk"}`}>
+              className={`rounded-md border px-3 py-1.5 ${tamper === t ? "border-act bg-act text-act-ink" : "border-rule bg-white hover:bg-sunk"}`}>
               {label}
             </button>
           ))}

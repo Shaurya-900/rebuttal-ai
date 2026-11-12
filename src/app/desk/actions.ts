@@ -35,10 +35,10 @@ function tokenOk(given: string): boolean {
 export async function answer(form: FormData) {
   const id = Number(form.get("intentId"));
   const choice = form.get("answer") === "approve" ? "approve" : "reject";
-  if (!Number.isInteger(id) || !tokenOk(String(form.get("token") ?? ""))) redirect("/desk?approval=denied");
+  if (!Number.isInteger(id) || !tokenOk(String(form.get("token") ?? ""))) redirect("/desk/live?approval=denied");
   const moved = await answerApproval(getDb(), id, choice);
   revalidatePath("/desk");
-  redirect(`/desk?approval=${moved ? (choice === "approve" ? "approved" : "rejected") : "stale"}`);
+  redirect(`/desk/live?approval=${moved ? (choice === "approve" ? "approved" : "rejected") : "stale"}`);
 }
 
 /** /desk/policy: the seller's password is required, because the policy changes what the firewall allows. */

@@ -29,15 +29,15 @@ export default function TryFirewall() {
   const [r, act, busy] = useActionState(tryAction, null);
   const chip = (key: string, label: string, tone: string) => (
     <button key={key} name="preset" value={key} disabled={busy}
-      className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 ${r && "key" in r && r.key === key ? "border-ink bg-ink text-paper" : `${tone} hover:bg-sunk`}`}>
+      className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 ${r && "key" in r && r.key === key ? "border-act bg-act text-act-ink" : `${tone} bg-white hover:bg-sunk`}`}>
       {label}
     </button>
   );
   return (
-    <section aria-labelledby="your-turn" className="mt-10 rounded-lg border border-rule p-5 sm:p-6">
-      <h2 id="your-turn" className="text-xl font-bold tracking-tight">Skip the AI: hand the firewall a bad action</h2>
+    <section aria-labelledby="your-turn" className="rounded-xl border border-rule bg-white p-5 sm:p-7">
+      <h2 id="your-turn" className="font-bold">Suppose an attack did fool the AI</h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-graphite">
-        Suppose an attack did fool the AI and it proposed something. Click one, and the real firewall judges it against the injection dispute ({usd(1000)} camera order). No model, nothing sent.
+        Pick what it proposes, and the real firewall judges it against the {usd(1000)} camera order. No model, nothing sent.
       </p>
       <form action={act} className="mt-5">
         <p className="text-xs font-semibold text-graphite">Things an attacker wants</p>
