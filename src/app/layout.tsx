@@ -19,7 +19,11 @@ const MORE = [
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Before paint: mark first visits so the home page's card-swipe intro shows without a flash (see intro.tsx). */}
+        <script dangerouslySetInnerHTML={{ __html: `try{if(location.pathname==="/"&&!localStorage.getItem("rebuttal-entered"))document.documentElement.dataset.intro="1"}catch(e){}` }} />
+      </head>
       <body className="min-h-dvh font-sans antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-10 focus:rounded focus:bg-act focus:px-3 focus:py-1.5 focus:text-act-ink">Skip to content</a>
         <header className="sticky top-0 z-20 border-b border-rule/70 bg-white/70 backdrop-blur-md">

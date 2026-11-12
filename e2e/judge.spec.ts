@@ -91,3 +91,19 @@ test("/dashboard renders AG Studio with the verdict counts and per-agent attack 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 });
+
+test("first visit shows the card-swipe intro once; Enter on the card or Skip gets in", async ({ page }) => {
+  await page.goto("/");
+  const intro = page.getByRole("dialog", { name: "Welcome to Rebuttal" });
+  await expect(intro).toBeVisible();
+  await page.getByRole("button", { name: /Rebuttal card/ }).press("Enter"); // keyboard path: no dragging needed
+  await expect(page.getByText("APPROVED")).toBeVisible();
+  await expect(intro).toBeHidden({ timeout: 5_000 });
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(intro).toBeHidden(); // remembered: never shown twice
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.getByRole("button", { name: "Skip" }).click();
+  await expect(intro).toBeHidden();
+});
