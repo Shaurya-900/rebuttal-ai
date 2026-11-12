@@ -100,7 +100,7 @@ export default function Verifier({ runs, initialRun }: { runs: { id: number; sce
 
   const failed = checks.some((c) => c.ok === false);
   return (
-    <section className="mt-8 rounded-xl border border-rule bg-white p-5 sm:p-7">
+    <section className="mt-8 card p-5 sm:p-7">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3" aria-live="polite">
         <span className={`stamp ${busy ? "text-faint" : failed ? "text-deny" : "text-allow"}`}>
           <span className="text-lg">{busy ? "CHECKING" : failed ? "FAILED" : "VERIFIED"}</span>

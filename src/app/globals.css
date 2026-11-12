@@ -1,26 +1,32 @@
 @import "tailwindcss";
 
-/* Rebuttal design tokens. Paper and ink: a filing desk, not a dashboard.
-   Stamp inks are the only saturated colours, and they carry meaning (allowed / denied / held). */
+/* Rebuttal design tokens, in the look of Velora UI (github.com/ColorlibHQ/velora-ui, MIT): white, near-black ink,
+   one brand blue with a soft gradient. Stamp inks stay the only other saturated colours, and they carry meaning. */
 :root {
-  --paper: #fbfbf9;
-  --sunk: #f0f2ef;
-  --ink: #1b2430;
-  --graphite: #5b6573;
-  --faint: #687280; /* 4.6:1 on paper: small text must pass WCAG AA */
-  --rule: #e2e5e0;
-  --act: #1f4fd1;
+  --paper: #ffffff;
+  --sunk: oklch(0.97 0.004 260);
+  --ink: oklch(0.145 0 0);
+  --graphite: oklch(0.47 0.01 260);
+  --faint: oklch(0.52 0.01 260); /* about 5:1 on white: small text passes WCAG AA */
+  --rule: oklch(0.922 0.004 260);
+  --act: oklch(0.546 0.245 263);
   --act-ink: #ffffff;
+  --brand-from: oklch(0.546 0.245 263);
+  --brand-via: oklch(0.623 0.214 260);
+  --brand-to: oklch(0.685 0.169 237);
   --allow: #1e6b45;
   --allow-tint: #e3f0e8;
   --deny: #b3261e;
   --deny-tint: #f8e4e2;
   --hold: #8a5a00;
   --hold-tint: #f6ecd6;
+  --muted: var(--sunk);
+  --border: var(--rule);
+  --muted-foreground: var(--graphite);
   color-scheme: light;
 }
 
-/* One light theme on purpose: judges see the same calm paper page whatever their OS is set to. */
+/* One light theme on purpose: judges see the same page whatever their OS is set to. */
 
 @theme inline {
   --color-paper: var(--paper);
@@ -37,13 +43,23 @@
   --color-deny-tint: var(--deny-tint);
   --color-hold: var(--hold);
   --color-hold-tint: var(--hold-tint);
-  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --color-brand-from: var(--brand-from);
+  --color-brand-via: var(--brand-via);
+  --color-brand-to: var(--brand-to);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @layer base {
   body {
-    background: var(--paper);
+    /* Velora's soft blue glow at the top of every page. */
+    background:
+      radial-gradient(60rem 28rem at 50% -8rem, color-mix(in oklch, var(--brand-to) 16%, transparent), transparent 70%),
+      var(--paper);
+    background-repeat: no-repeat;
     color: var(--ink);
     font-feature-settings: "tnum" 1; /* money and counts line up */
   }
@@ -59,12 +75,12 @@
 }
 
 @layer components {
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40;
-  }
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 bg-act text-act-ink hover:bg-act/85; }
-  .btn-quiet { @apply inline-flex items-center justify-center gap-2 rounded px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 border border-rule text-ink hover:bg-sunk; }
-  .field { @apply mt-1 w-full rounded border border-rule bg-paper px-2.5 py-1.5 text-sm text-ink; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 bg-ink text-white shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)] hover:bg-ink/85 active:scale-[0.98]; }
+  .btn-quiet { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 border border-rule bg-white text-ink hover:bg-sunk active:scale-[0.98]; }
+  .card { @apply relative rounded-2xl border border-rule bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-16px_color-mix(in_oklch,var(--brand-from)_28%,transparent)]; }
+  .pill { @apply inline-flex items-center gap-2 rounded-full border border-rule bg-white/80 py-1 pl-1 pr-3 text-sm text-ink shadow-sm backdrop-blur; }
+  .text-brand { @apply bg-gradient-to-r from-brand-from via-brand-via to-brand-to bg-clip-text text-transparent; }
+  .field { @apply mt-1 w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink; }
   .link { @apply text-act underline decoration-act/40 hover:decoration-act; }
   .id { @apply font-mono text-[0.8em] text-graphite; }
 }

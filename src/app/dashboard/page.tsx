@@ -16,7 +16,7 @@ export default async function Dashboard() {
   const data = await dashboardData(db, policy);
   return (
     <main className="mx-auto flex max-w-6xl flex-col px-4 py-8">
-      <h1 className="text-3xl font-extrabold tracking-tight">Dashboard</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
       <p className="mt-2 max-w-3xl text-sm leading-relaxed text-graphite">
         Every agent run on this site, the attack evaluation, and the real sandbox disputes, built with AG Studio. Run a demo on the{" "}
         <Link href="/desk" className="link">desk</Link> and it appears here on reload. Scenario data is synthetic; PayPal state on the live page is real.

@@ -44,7 +44,7 @@ export function VerdictStamps({ widgetApi, dataMapping }: AgWidgetParams) {
           <span className={`stamp ${INK[r.label.toLowerCase()] ?? "text-ink"}`}>
             <span className="text-base sm:text-lg">{r.label.toUpperCase()}</span>
           </span>
-          <span className="text-2xl font-extrabold tabular-nums">{r.count}</span>
+          <span className="text-2xl font-semibold tabular-nums">{r.count}</span>
         </div>
       ))}
     </div>

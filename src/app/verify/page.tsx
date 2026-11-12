@@ -10,8 +10,8 @@ export default async function Verify({ searchParams }: { searchParams: Promise<{
   const runs = (await recentRuns(getDb(), 20)).map((r) => ({ id: Number(r.id), scenario: r.scenario, choice: r.choice }));
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
-      <p className="text-sm font-semibold text-act">Chapter 3 of 3</p>
-      <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Check the receipts</h1>
+      <p className="pill w-fit"><span className="rounded-full bg-gradient-to-r from-brand-from to-brand-to px-2 py-0.5 text-xs font-medium text-white">Chapter 3</span>of 3</p>
+      <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">Check the receipts</h1>
       <p className="mt-3 max-w-2xl text-lg leading-relaxed text-graphite">
         Every run is written to a signed log that can&apos;t be edited. Your browser has just re-checked it on its own. Now tamper with it and watch it fail.
       </p>

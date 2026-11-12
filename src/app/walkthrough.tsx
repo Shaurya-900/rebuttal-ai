@@ -2,6 +2,7 @@
 // A story told one step at a time: the visitor clicks Next to reveal each stage, can jump back to any step, or open
 // them all at once. Stage content is rendered on the server and passed in, so nothing here knows about disputes.
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { BorderBeam } from "../components/velora/border-beam";
 
 export type Step = { label: string; title: string; lead: string; body: ReactNode };
 
@@ -20,7 +21,7 @@ export function Walkthrough({ steps, finish }: { steps: Step[]; finish?: ReactNo
   const go = (n: number) => { moved.current = true; setI(Math.max(0, Math.min(steps.length - 1, n))); };
 
   return (
-    <div ref={top} className="scroll-mt-4">
+    <div ref={top} className="scroll-mt-24">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <ol aria-label="Steps" className="flex flex-wrap gap-1.5">
           {steps.map((s, n) => (
@@ -48,7 +49,7 @@ export function Walkthrough({ steps, finish }: { steps: Step[]; finish?: ReactNo
       ) : (
         <>
           <div key={i} className="mt-6 animate-[fade_200ms_ease-out]">
-            <Panel n={i} total={steps.length} s={steps[i]!} />
+            <Panel n={i} total={steps.length} s={steps[i]!} beam />
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {i > 0 && <button type="button" onClick={() => go(i - 1)} className="btn-quiet">← Back</button>}
@@ -65,10 +66,11 @@ export function Walkthrough({ steps, finish }: { steps: Step[]; finish?: ReactNo
   );
 }
 
-function Panel({ n, total, s }: { n: number; total: number; s: Step }) {
+function Panel({ n, total, s, beam = false }: { n: number; total: number; s: Step; beam?: boolean }) {
   return (
-    <section aria-labelledby={`step-${n}`} className="rounded-xl border border-rule bg-white p-5 sm:p-7">
-      <p className="text-xs font-semibold text-faint">Step {n + 1} of {total}</p>
+    <section aria-labelledby={`step-${n}`} className="card p-5 sm:p-7">
+      {beam && <BorderBeam size={80} duration={7} />}
+      <p className="text-xs font-medium uppercase tracking-wider text-act">Step {n + 1} of {total}</p>
       <h2 id={`step-${n}`} className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">{s.title}</h2>
       <p className="mt-2 max-w-2xl leading-relaxed text-graphite">{s.lead}</p>
       <div className="mt-5">{s.body}</div>

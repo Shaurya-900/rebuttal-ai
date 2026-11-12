@@ -23,8 +23,8 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
-      <p className="text-sm font-semibold text-act">Chapter 1 of 3</p>
-      <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Watch it decide</h1>
+      <p className="pill w-fit"><span className="rounded-full bg-gradient-to-r from-brand-from to-brand-to px-2 py-0.5 text-xs font-medium text-white">Chapter 1</span>of 3</p>
+      <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">Watch it decide</h1>
       <p className="mt-3 max-w-2xl text-lg leading-relaxed text-graphite">
         A buyer has opened a dispute against Mira. Run it, then step through what the agent did, one stage at a time.
       </p>
@@ -35,7 +35,7 @@ export default async function Desk({ searchParams }: { searchParams: Promise<{ l
         </p>
       )}
 
-      <form action={runScenario} className="mt-8 rounded-xl border border-rule bg-white p-5 sm:p-7">
+      <form action={runScenario} className="mt-8 card p-5 sm:p-7">
         <input type="hidden" name="scenario" value={lead.id} />
         <p className="text-xs font-semibold uppercase tracking-wide text-faint">The case · {usd(lead.dispute.amountCents)} · synthetic</p>
         <h2 className="mt-2 text-xl font-bold tracking-tight">{NAME[lead.id]}</h2>

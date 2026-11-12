@@ -1,6 +1,6 @@
 ---
 name: Rebuttal
-description: A PayPal dispute agent that cannot be talked out of the rules. Paper and ink, a filing desk, not a dashboard.
+description: A PayPal dispute agent that cannot be talked out of the rules. Light, white and blue, in the look of Velora UI; the firewall stamp is the one loud element.
 colors:
   paper: "#f7f8f6"
   sunk: "#eef0ed"
@@ -130,6 +130,13 @@ components:
 ---
 
 # Design System: Rebuttal
+
+> **Nov 2026 overhaul.** The visual layer now follows [Velora UI](https://github.com/ColorlibHQ/velora-ui) (MIT): Geist and Geist Mono,
+> a white page with a soft blue glow and grid pattern at the top, near-black pill buttons (`.btn-primary`), outline pills (`.btn-quiet`),
+> rounded-2xl `.card` sheets with a faint blue shadow, `.text-brand` gradient words, and a frosted sticky header. Three Velora components are
+> vendored in `src/components/velora/` with their licence: `GridPattern` (home hero), `BorderBeam` (opening scene, current walkthrough step)
+> and `NumberTicker` (attack counts). Token values live in `src/app/globals.css`. Where this file's older notes on Public Sans, IBM Plex Mono,
+> paper tones or flat sheets disagree with that, the overhaul wins; the stamp inks, the stamp itself and the story rules are unchanged.
 
 ## Overview
 

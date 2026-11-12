@@ -13,8 +13,8 @@ export function NextStep({ href, action, children }: { href: string; action: str
   const external = href.startsWith("http");
   const cls = "btn-primary px-6 py-3 text-base";
   return (
-    <section aria-label="Next step" className="mt-16 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-t border-rule pt-8">
-      <p className="max-w-xl text-base leading-relaxed text-graphite">{children}</p>
+    <section aria-label="Next step" className="card mt-16 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 overflow-hidden bg-gradient-to-br from-white to-sunk p-6 sm:p-8">
+      <p className="max-w-md text-base leading-relaxed text-graphite">{children}</p>
       {external ? <a href={href} className={cls}>{action}</a> : <Link href={href} className={cls}>{action} →</Link>}
     </section>
   );

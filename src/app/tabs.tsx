@@ -12,7 +12,7 @@ export function Tabs({ tabs, label }: { tabs: { id: string; label: string; hint:
           const sel = t.id === on;
           return (
             <button key={t.id} id={`tab-${t.id}`} role="tab" type="button" aria-selected={sel} aria-controls={`panel-${t.id}`} onClick={() => setOn(t.id)}
-              className={`rounded-xl border p-2.5 text-left text-sm sm:p-3 sm:text-base transition-colors ${sel ? "border-act bg-white ring-1 ring-act" : "border-rule hover:border-graphite hover:bg-white"}`}>
+              className={`rounded-2xl border p-2.5 text-left text-sm sm:p-3 sm:text-base transition-colors ${sel ? "border-act bg-white shadow-[0_12px_32px_-16px_var(--brand-from)] ring-1 ring-act" : "border-rule bg-white/60 hover:border-graphite/40 hover:bg-white"}`}>
               <span className={`hidden text-xs font-semibold tabular-nums sm:block ${sel ? "text-act" : "text-faint"}`}>{n + 1}</span>
               <span className="block font-semibold leading-snug sm:mt-0.5">{t.label}</span>
               <span className="mt-0.5 hidden text-xs text-graphite sm:block">{t.hint}</span>

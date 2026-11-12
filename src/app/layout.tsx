@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { IBM_Plex_Mono, Public_Sans } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { StoryNav } from "./nav";
 
-const sans = Public_Sans({ subsets: ["latin"], variable: "--font-public-sans", display: "swap" });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
+const sans = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata = { title: "Rebuttal", description: "A PayPal dispute agent that cannot be talked out of the rules." };
 
@@ -22,11 +22,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body className="min-h-dvh font-sans antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-10 focus:rounded focus:bg-act focus:px-3 focus:py-1.5 focus:text-act-ink">Skip to content</a>
-        <header className="border-b border-rule">
+        <header className="sticky top-0 z-20 border-b border-rule/70 bg-white/70 backdrop-blur-md">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3">
-            <Link href="/" className="flex items-baseline gap-2">
-              <span className="text-lg font-extrabold tracking-tight text-ink">Rebuttal</span>
-              <span className="hidden text-xs text-hold sm:inline">PayPal sandbox · synthetic data</span>
+            <Link href="/" className="flex items-center gap-2">
+              <span aria-hidden className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-brand-from to-brand-to text-sm font-bold text-white shadow-sm">R</span>
+              <span className="text-lg font-semibold tracking-tight text-ink">Rebuttal</span>
+              <span className="hidden rounded-full bg-hold-tint px-2 py-0.5 text-xs text-hold sm:inline">PayPal sandbox · synthetic data</span>
             </Link>
             <nav aria-label="Main"><StoryNav /></nav>
           </div>

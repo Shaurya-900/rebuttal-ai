@@ -76,7 +76,7 @@ export default async function Live({ searchParams }: { searchParams: Promise<{ a
   const approvalsOn = (process.env.DESK_APPROVER_TOKEN ?? "").length >= 12;
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-extrabold tracking-tight">Real sandbox disputes</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Real sandbox disputes</h1>
       <p className="mt-3 leading-relaxed text-graphite">
         These disputes were opened by hand on real PayPal sandbox payments. Their status, deadline and the actions PayPal allows are read live,
         and the decision and firewall run on that live state. Nothing is sent from this page.

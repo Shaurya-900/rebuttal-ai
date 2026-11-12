@@ -33,7 +33,7 @@ export default async function Store({ searchParams }: { searchParams: Promise<{ 
   const { cancelled } = await searchParams;
   return (
     <main className="mx-auto max-w-xl px-4 py-12">
-      <h1 className="text-3xl font-extrabold tracking-tight">Mira&apos;s Cameras</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Mira&apos;s Cameras</h1>
       <p className="mt-2 text-sm text-graphite">A synthetic shop with a real PayPal sandbox checkout, so a dispute can be opened on a real sandbox payment.</p>
       <div className="mt-6 rounded border border-rule bg-paper p-5">
         <h2 className="text-xl font-bold tracking-tight">{PRODUCT.name}</h2>

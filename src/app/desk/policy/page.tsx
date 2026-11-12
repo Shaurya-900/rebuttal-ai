@@ -28,7 +28,7 @@ export default async function PolicyPage({ searchParams }: { searchParams: Promi
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <Link href="/desk" className="text-sm text-graphite hover:underline">← Back to the desk</Link>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight">Mira&apos;s policy</h1>
+      <h1 className="mt-2 text-3xl font-semibold tracking-tight">Mira&apos;s policy</h1>
       <p className="mt-2 text-sm text-graphite">
         These numbers bound what Rebuttal may do. The decision code sizes offers from them, and the firewall checks every action against them
         (the rule each one feeds is shown). The model never sees them and cannot change them. {since ? `Last changed ${since.slice(0, 16).replace("T", " ")} UTC.` : "Using the built-in defaults."}

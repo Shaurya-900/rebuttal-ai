@@ -88,7 +88,7 @@ export default function BuyerChat() {
   }
 
   return (
-    <section aria-labelledby="play" className="overflow-hidden rounded-xl border border-rule bg-white">
+    <section aria-labelledby="play" className="overflow-hidden card">
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-rule px-5 py-4 sm:px-6">
         <h2 id="play" className="font-bold">Get your $10 back</h2>
         <dl className="flex gap-x-5 text-sm" aria-label="Scoreboard">
