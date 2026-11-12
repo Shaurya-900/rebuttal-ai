@@ -97,3 +97,9 @@
 @media (prefers-reduced-motion: reduce) {
   [class*="animate-[fade"] { animation: none !important; }
 }
+
+/* First-visit intro (src/app/intro.tsx): hidden unless the inline script in the layout found no "entered" flag, so
+   returning visitors never see it flash. */
+.intro-veil { display: none; }
+html[data-intro] .intro-veil { display: block; }
+html[data-intro] body { overflow: hidden; }

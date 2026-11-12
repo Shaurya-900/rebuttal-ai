@@ -10,6 +10,7 @@ import { Verdict, usd } from "./desk/ui";
 import { GridPattern } from "../components/velora/grid-pattern";
 import { BorderBeam } from "../components/velora/border-beam";
 import { NumberTicker } from "../components/velora/number-ticker";
+import Intro from "./intro";
 // The opening of the story: one buyer trying to give the agent orders, the firewall's answer, and one button to begin.
 // Every figure is computed or read from committed files (eval/results/report.json, the recorded hero-3 run).
 
@@ -54,6 +55,7 @@ export default async function Home() {
 
   return (
     <main>
+      <Intro />
       <section className="relative overflow-hidden">
         <GridPattern width={44} height={44} className="[mask-image:radial-gradient(42rem_26rem_at_50%_0%,#000,transparent)]" />
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-12 sm:pt-20 sm:pb-16 lg:grid-cols-[1.05fr_1fr]">

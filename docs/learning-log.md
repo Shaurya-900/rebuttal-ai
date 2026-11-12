@@ -160,3 +160,12 @@ Recall questions:
 5. The design notes (DESIGN.md) were updated to match the CSS, because the CSS is what judges actually see.
 
 Recall: (a) What three parts does `PageHead` draw? (b) Why fix the test's spelling instead of the widget? (c) Where do the design token values really live?
+
+## Card-swipe intro (Nov 12)
+1. First visit to the home page shows a Rebuttal card and a reader; dragging the card into the slot and across opens the site.
+2. The card is plain HTML with CSS 3D transforms; its tilt comes from how fast you drag, and a small loop adds gravity when you let go.
+3. A tiny script in the page head checks localStorage before the first paint, so returning visitors never see a flash of the intro.
+4. Skip, Esc and Enter on the card get in without dragging, for keyboards and impatient judges.
+5. A browser test covers it: intro shows once, Enter approves, the choice is remembered.
+
+Recall: (a) Why check localStorage in a head script instead of inside React? (b) What decides whether a release falls or gets ejected? (c) Why is the card clipped at the slot line?
