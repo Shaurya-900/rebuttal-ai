@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* Before paint: mark first visits so the home page's card-swipe intro shows without a flash (see intro.tsx). */}
-        <script dangerouslySetInnerHTML={{ __html: `try{if(location.pathname==="/"&&!localStorage.getItem("rebuttal-entered"))document.documentElement.dataset.intro="1"}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var r=/[?&]intro=1/.test(location.search);if(location.pathname==="/"&&(r||(!localStorage.getItem("rebuttal-entered")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)))document.documentElement.dataset.intro="1"}catch(e){}` }} />
       </head>
       <body className="min-h-dvh font-sans antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-10 focus:rounded focus:bg-act focus:px-3 focus:py-1.5 focus:text-act-ink">Skip to content</a>
@@ -42,6 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <nav aria-label="More" className="flex flex-wrap gap-x-5 gap-y-1">
               {MORE.map(([href, label]) => <Link key={href} href={href} className="text-graphite hover:text-ink hover:underline">{label}</Link>)}
               <a href="https://github.com/Shaurya-900/rebuttal-ai" className="text-graphite hover:text-ink hover:underline">Code (MIT)</a>
+              <a href="/?intro=1" className="text-graphite hover:text-ink hover:underline">Replay the intro</a>
             </nav>
             <p className="text-xs text-faint">PayPal sandbox only; every buyer, order and message in the demo is synthetic. Built for the PayPal AI Hackathon 2026. Not affiliated with PayPal.</p>
           </div>
